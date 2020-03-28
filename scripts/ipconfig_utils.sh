@@ -101,6 +101,19 @@ function addIpToIpConfiguration() {
         exit 1
     fi
 
+    # validate if IP address is valid (maybe double check, but ensures, that nothing will fail)
+    local __INTERNAL_IP_VALID
+    validateIpAddress "${ARG_NEW_IP_ADDRESS}" __INTERNAL_IP_VALID
+    if [[ "${__INTERNAL_IP_VALID}" == "false" ]]; then
+        exit 1
+    fi
+    # validate if namespace is valid (maybe double check, but ensures, that nothing will fail)
+    local __INTERNAL_NAMESPACE_VALID
+    validateNamespace "${ARG_NEW_NAMESPACE}" __INTERNAL_NAMESPACE_VALID
+    if [[ "${__INTERNAL_NAMESPACE_VALID}" == "false" ]]; then
+        exit 1
+    fi
+
     # first check if IP already exists, to avoid conflicts
     local DOES_IP_ALREADY_EXIST
     validateIfIpAlreadyExists "${ARG_NEW_IP_ADDRESS}" DOES_IP_ALREADY_EXIST

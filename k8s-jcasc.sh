@@ -3,7 +3,8 @@
 # read configuration
 source ./config/k8s_jcasc_mgmt.cnf
 
-# import subscripts
+# import subscripts (take care with order!)
+source ./scripts/validator_utils.sh
 source ./scripts/arguments.sh
 source ./scripts/sed_utils.sh
 source ./scripts/ipconfig_utils.sh
