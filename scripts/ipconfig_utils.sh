@@ -80,3 +80,39 @@ function validateIfIpAlreadyExists() {
         fi
     fi
 }
+
+##########
+# This functions adds a namespace and IP address to the defined IP configuration file in IP_CONFIG_FILE.
+#
+# argument 1: The new IP address
+# argument 2: The new Namespace
+##########
+function addIpToIpConfiguration() {
+    local ARG_NEW_IP_ADDRESS=$1
+    local ARG_NEW_NAMESPACE=$2
+
+    # validate arguments
+    if [[ -z "${ARG_NEW_IP_ADDRESS}" ]]; then
+        echo "ERROR ipconfig_utils.sh: No new IP was given as argument."
+        exit 1
+    fi
+    if [[ -z "${ARG_NEW_NAMESPACE}" ]]; then
+        echo "ERROR ipconfig_utils.sh: No new namespace was given as argument."
+        exit 1
+    fi
+
+    # first check if IP already exists, to avoid conflicts
+    local DOES_IP_ALREADY_EXIST
+    validateIfIpAlreadyExists "${ARG_NEW_IP_ADDRESS}" DOES_IP_ALREADY_EXIST
+
+    if [[ "${DOES_IP_ALREADY_EXIST}" == "false" ]]; then
+        # add the new IP address to the IP configuration file
+        echo "${ARG_NEW_NAMESPACE} ${ARG_NEW_IP_ADDRESS}" >> ${IP_CONFIG_FILE}
+    else
+        # something went wrong. No previous check has detected, that the IP already exists.
+        echo "ERROR ipconfig_utils.sh: You try to add the IP address '${ARG_NEW_IP_ADDRESS}' to the namespace '${ARG_NEW_NAMESPACE}'."
+        echo "ERROR ipconfig_utils.sh: This IP address was already assigned to the namespace '${DOES_IP_ALREADY_EXIST}'"
+        echo "ERROR ipconfig_utils.sh: Please check your '${IP_CONFIG_FILE}' file."
+        exit 1
+    fi
+}
