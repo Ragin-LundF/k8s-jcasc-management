@@ -9,3 +9,32 @@ PROJECTS_DIRECTORY=./projects/
 # Use this file as a global secrets file. If you want to use different secrets for each project, comment this line.
 # If this line is commented, then the secrets will be stored under PROJECTS_DIRECTORY/secrets.sh.enc
 GLOBAL_SECRETS_FILE=./projects/default/secrets.sh
+
+# This variable configures the URL, where the Jenkins configuration was checked in. This URL must have public access!
+# You can use the '##PROJECT_DIRECTORY##' template variable here to
+JENKINS_JCASC_CONFIGURATION_URL=https://raw.githubusercontent.com/Ragin-LundF/k8s-jcasc-project-config/master/##PROJECT_DIRECTORY##/jcasc_config.yaml
+
+# Default label for the jenkins master to execute the seed job, which will be bind to this label.
+JENKINS_MASTER_DEFAULT_LABEL=jenkins-master-for-seed
+
+# Deny or allow anonymous read access to the Jenkins master
+JENKINS_MASTER_DENY_ANONYMOUS_READ_ACCESS=false
+
+# Default prefix for each jenkins instance on the Kubernetes cluster.
+# This value defines the path, that has to specified for the ingress routing and ensures, that this "proxy" will be correctly used by Jenkins.
+JENKINS_MASTER_DEFAULT_URI_PREFIX=/jenkins
+
+# Jenkins Master deployment name. This will be configured globally, which makes it easier to cleanup.
+JENKINS_MASTER_DEPLOYMENT_NAME=jenkins-master
+
+# Define the persistence storage class for the Kubernetes
+JENKINS_MASTER_PERSISTENCE_STORAGE_CLASS=nfs-client
+
+# Define the Jenkins master accessMode for the PVC (ReadWriteMany or ReadWriteOnce)
+JENKINS_MASTER_PERSISTENCE_ACCESS_MODE=ReadWriteMany
+
+# Define the default storage size for the Jenkins master
+JENKINS_MASTER_PERSISTENCE_STORAGE_SIZE=8Gi
+
+# Image of the Nginx ingress controller
+NGINX_INGRESS_CONTROLLER_CONTAINER_IMAGE=bitnami/nginx-ingress-controller:latest

@@ -1,0 +1,15 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: jenkins-ingress-nginx
+  namespace: {{ .Values.k8sJenkinsMgmt.ingress.namespace }}
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+    - http:
+        paths:
+          - path: ##JENKINS_MASTER_DEFAULT_URI_PREFIX##
+            backend:
+              serviceName: ##JENKINS_MASTER_DEPLOYMENT_NAME##
+              servicePort: 8080
