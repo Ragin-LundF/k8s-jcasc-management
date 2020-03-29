@@ -4,7 +4,7 @@ LOG_LEVEL=INFO
 IP_CONFIG_FILE=./config/ip_config.cnf
 
 # directory, where the projects are located. Must contain a trailing slash!
-PROJECTS_DIRECTORY=./projects/
+PROJECTS_BASE_DIRECTORY=./projects/
 
 # Use this file as a global secrets file. If you want to use different secrets for each project, comment this line.
 # If this line is commented, then the secrets will be stored under PROJECTS_DIRECTORY/secrets.sh.enc
