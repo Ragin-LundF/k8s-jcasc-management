@@ -160,7 +160,7 @@ function uninstallIngressControllerFromNamespace() {
     dialogAskForNamespace __INTERNAL_NAMESPACE
 
     # uninstall the nginx-ingress controller
-    helm delete ${NGINX_INGRESS_DEPLOYMENT_NAME} -n ${__INTERNAL_NAMESPACE}
+    helm uninstall ${NGINX_INGRESS_DEPLOYMENT_NAME} -n ${__INTERNAL_NAMESPACE}
 }
 
 ##########
@@ -170,8 +170,8 @@ function uninstallIngressControllerFromNamespace() {
 function uninstallJenkins() {
     local __INTERNAL_NAMESPACE
     dialogAskForNamespace __INTERNAL_NAMESPACE
-    local __INTERNAL_DEPLOYMENT_NAME
-    dialogAskForDeploymentName __INTERNAL_DEPLOYMENT_NAME
+    local __INTERNAL_HELM_DEPLOYMENT_NAME
+    dialogAskForDeploymentName __INTERNAL_HELM_DEPLOYMENT_NAME
 
-    helm uninstall ${__INTERNAL_DEPLOYMENT_NAME} -n ${__INTERNAL_NAMESPACE}
+    helm uninstall ${__INTERNAL_HELM_DEPLOYMENT_NAME} -n ${__INTERNAL_NAMESPACE}
 }
