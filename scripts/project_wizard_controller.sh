@@ -34,6 +34,13 @@ function processTemplatesWithNamespace() {
     local ARG_NAMESPACE=$2
 
     replaceStringInFile "##NAMESPACE##" "${ARG_NAMESPACE}" ${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml
+
+    # if a persistence volume claim exists, replace values there
+    if [[ -f "${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml" ]]; then
+        # Name of the Jenkins deployment
+        replaceStringInFile "##NAMESPACE##" "${ARG_NAMESPACE}" ${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml
+    fi
+
 }
 
 ##########
@@ -89,7 +96,14 @@ function processTemplatesWithPersistenceExistingClaim() {
     local ARG_FULL_PROJECT_DIRECTORY=$1
     local ARG_EXISTING_PERSISTENCE_CLAIM=$2
 
-    replaceStringInFile "##JENKINS_MASTER_PERSISTENCE_EXISTING_CLAIM##" "${ARG_EXISTING_PERSISTENCE_CLAIM}" ${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
+    replaceStringInFile "##JENKINS_MASTER_PERSISTENCE_EXISTING_CLAIM##" "${ARG_EXISTING_PERSISTENCE_CLAIM} " ${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
+
+    # if a persistence volume claim exists, replace values there
+    if [[ -f "${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml" ]]; then
+        # Name of the PVC
+        replaceStringInFile "##K8S_MGMT_PERSISTENCE_VOLUME_CLAIM_NAME##" "${ARG_EXISTING_PERSISTENCE_CLAIM}" ${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml
+    fi
+
 }
 
 ##########
@@ -105,6 +119,12 @@ function processTemplatesWithGlobalConfiguration() {
     replaceStringInFile "##KUBERNETES_SERVER_CERTIFICATE##" "${KUBERNETES_SERVER_CERTIFICATE}" ${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml
     # Name of the Jenkins deployment
     replaceStringInFile "##JENKINS_MASTER_DEPLOYMENT_NAME##" "${JENKINS_MASTER_DEPLOYMENT_NAME}" ${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml
+    # if a persistence volume claim exists, replace values there
+    if [[ -f "${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml" ]]; then
+        # Name of the Jenkins deployment
+        replaceStringInFile "##JENKINS_MASTER_DEPLOYMENT_NAME##" "${JENKINS_MASTER_DEPLOYMENT_NAME}" ${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml
+    fi
+
     # Docker Registry Credentials ID for Kubernetes
     replaceStringInFile "##KUBERNETES_DOCKER_REGISTRY_CREDENTIALS_ID##" "${KUBERNETES_DOCKER_REGISTRY_CREDENTIALS_ID}" ${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml
     # Maven Repository Credentials ID
@@ -127,10 +147,26 @@ function processTemplatesWithGlobalConfiguration() {
     replaceStringInFile "##JENKINS_JCASC_CONFIGURATION_URL##" "${JENKINS_JCASC_CONFIGURATION_URL}" ${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
     # Replace Jenkins persistence storage class
     replaceStringInFile "##JENKINS_MASTER_PERSISTENCE_STORAGE_CLASS##" "${JENKINS_MASTER_PERSISTENCE_STORAGE_CLASS}" ${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
+    # if a persistence volume claim exists, replace values there
+    if [[ -f "${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml" ]]; then
+        # Name of the Jenkins deployment
+        replaceStringInFile "##JENKINS_MASTER_PERSISTENCE_STORAGE_CLASS##" "${JENKINS_MASTER_PERSISTENCE_STORAGE_CLASS}" ${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml
+    fi
     # Replace Jenkins persistence access mode
     replaceStringInFile "##JENKINS_MASTER_PERSISTENCE_ACCESS_MODE##" "${JENKINS_MASTER_PERSISTENCE_ACCESS_MODE}" ${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
+    # if a persistence volume claim exists, replace values there
+    if [[ -f "${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml" ]]; then
+        # Name of the Jenkins deployment
+        replaceStringInFile "##JENKINS_MASTER_PERSISTENCE_ACCESS_MODE##" "${JENKINS_MASTER_PERSISTENCE_ACCESS_MODE}" ${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml
+    fi
     # Replace Jenkins persistence storage size
     replaceStringInFile "##JENKINS_MASTER_PERSISTENCE_STORAGE_SIZE##" "${JENKINS_MASTER_PERSISTENCE_STORAGE_SIZE}" ${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
+    # if a persistence volume claim exists, replace values there
+    if [[ -f "${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml" ]]; then
+        # Name of the Jenkins deployment
+        replaceStringInFile "##JENKINS_MASTER_PERSISTENCE_STORAGE_SIZE##" "${JENKINS_MASTER_PERSISTENCE_STORAGE_SIZE}" ${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml
+    fi
+    # replace Jenkins admin password
     replaceStringInFile "##JENKINS_MASTER_ADMIN_PASSWORD##" "${JENKINS_MASTER_ADMIN_PASSWORD}" ${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
 }
 
@@ -138,10 +174,12 @@ function processTemplatesWithGlobalConfiguration() {
 # Create project directory and copy needed files
 #
 # argument 1: Path to the project directory
+# argument 2: Name of the PVC (optional, if existing pvc should be used)
 ##########
 function createProjectFromTemplate() {
     # arguments
     local ARG_PROJECT_DIRECTORY=$1
+    local ARG_PVC_CLAIM=$2
 
     # create new project directory
     mkdir -p ${ARG_PROJECT_DIRECTORY}
@@ -154,6 +192,10 @@ function createProjectFromTemplate() {
     cp templates/jenkins_helm_values.yaml ${ARG_PROJECT_DIRECTORY}/
     # copy JcasC file to project
     cp templates/jcasc_config.yaml ${ARG_PROJECT_DIRECTORY}/
+
+    if [[ ! -z "${ARG_PVC_CLAIM}" ]]; then
+        cp templates/pvc_claim.yaml ${ARG_PROJECT_DIRECTORY}/
+    fi
 }
 
 ##########
@@ -190,7 +232,7 @@ function projectWizard() {
     local __INTERNAL_FULL_PROJECT_DIRECTORY="${PROJECTS_BASE_DIRECTORY}${VAR_PROJECT_DIRECTORY}"
 
     # all data collected -> start create new project
-    createProjectFromTemplate "${__INTERNAL_FULL_PROJECT_DIRECTORY}"
+    createProjectFromTemplate "${__INTERNAL_FULL_PROJECT_DIRECTORY}" "${VAR_EXISTING_PERSISTENCE_CLAIM}"
 
     # everything looks fine, lets add the IP address and namespace name to the configuration
     addIpToIpConfiguration "${VAR_IP_ADDRESS}" "${VAR_NAMESPACE}"
