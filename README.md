@@ -15,10 +15,24 @@ To simplify the installation and the project settings, it has a small helper too
     * install
     * uninstall
 
+## Configuration ##
+
+The system has a basic configuration file to pre-configure some global settings.
+This file is located under [config/k8s_jcasc_mgmt.cnf](config/k8s_jcasc_mgmt.cnf).
+
+It is recommended to change the `PROJECTS_BASE_DIRECTORY` to a directory outside of this project.
+The `createproject` command will create new projects as subfolders of this directory.
+All files and directories under the `PROJECTS_BASE_DIRECTORY' should be passed to a git repository which is backed up.
+
+Then your existing Jenkins projects can be fully recovered from this repository.
 
 ## How to use ##
 
-The simplest way is to call the `k8s-jcasc.sh` file. Everything else will be asked by the script.
+The simplest way is to call the script without arguments. Everything else will be asked by the script.
+
+```bash
+./k8s-jcasc.sh
+```
 
 For less selection and more control you can also give some arguments and the command to the script:
 
@@ -53,6 +67,14 @@ The following commands are supported:
 | `applysecrets` | Apply the secrets to the Kubernetes namespace (global secrets or project secrets, depending on configuration). |
 | `createproject` | Create a new Jenkins project for the configuration and deployment values from the templates. It uses a wizard to ask for relevant data. |
 
+## IP Management ##
+
+For greater installations and also after a recovery case, it is helpful to know which Jenkins instance is running behind which loadbalancer IP on which namespace.
+
+To provide a simple solution, the system stores these information (namespace and IP) into a configuration file, which can also be backed up.
+For every deployment of Jenkins, the system looks into this file and configures the loadbalancer with the IP. This also allows static DNS records.
+
+If you create a new project via the wizard, the system also checks, if a IP address already exists to avoid IP conflicts.
 
 # Helpful links #
 
