@@ -4,6 +4,11 @@
 
 This project offers a template for managing Jenkins instances on Kubernetes with a JobDSL and Jenkins Configuration as Code (JcasC).
 
+
+![alt text](docs/images/k8s-mgmt-workflow.png "K8S Workflow")
+
+
+
 To simplify the installation and the project settings, it has a small helper tool `k8s-jcasc.sh`, which can be used in wizard mode or via arguments to
 * create new projects for Jenkins administration
 * manage secrets
@@ -17,9 +22,6 @@ To simplify the installation and the project settings, it has a small helper too
     * upgrade
 
 *The password for the preconfigured secrets file is `admin`. There is no valid data inside this file! Please change it for your own project!*
-
-
-![alt text](docs/images/k8s-mgmt-workflow.png "K8S Workflow")
 
 
 ## Configuration ##
