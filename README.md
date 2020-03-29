@@ -18,6 +18,10 @@ To simplify the installation and the project settings, it has a small helper too
 
 *The password for the preconfigured secrets file is `admin`. There is no valid data inside this file! Please change it for your own project!*
 
+
+![alt text](docs/images/k8s-mgmt-workflow.png "K8S Workflow")
+
+
 ## Configuration ##
 
 The system has a basic configuration file to pre-configure some global settings.
