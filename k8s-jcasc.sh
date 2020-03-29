@@ -7,6 +7,7 @@ source ./config/k8s_jcasc_mgmt.cnf
 source ./scripts/arguments_utils.sh
 source ./scripts/dialogs.sh
 source ./scripts/ipconfig_utils.sh
+source ./scripts/install_controller.sh
 source ./scripts/project_wizard_controller.sh
 source ./scripts/secrets_controller.sh
 source ./scripts/sed_utils.sh
@@ -53,6 +54,8 @@ function run() {
             echo ""
             exit 1
         fi
+    elif [[ "${_K8S_MGMT_COMMAND_INSTALL}" == "${K8S_MGMT_COMMAND}" ]]; then
+        installJenkins
     fi
 }
 

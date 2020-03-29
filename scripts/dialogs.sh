@@ -4,6 +4,28 @@
 ## This script will be loaded by the 'k8s-jcasc.sh' script.
 
 ##########
+# Ask for deployment name if it was not already set.
+#
+# argument 1: variable in which the result should be written (return value)
+##########
+function dialogAskForDeploymentName() {
+    # arguments
+    local ARG_RETVALUE=$1
+
+    # first check, if global deployment name variable was not set
+    local __INTERNAL_DEPLOYMENT_NAME
+    if [[ -z "${K8S_MGMT_DEPLOYMENTNAME}" ]]; then
+        # get data from user
+        echo "Please enter the deployment name."
+        read -p "Deployment name: " __INTERNAL_DEPLOYMENT_NAME
+    else
+        __INTERNAL_DEPLOYMENT_NAME="${K8S_MGMT_DEPLOYMENTNAME}"
+    fi
+
+    eval ${ARG_RETVALUE}="\${__INTERNAL_DEPLOYMENT_NAME}"
+}
+
+##########
 # Ask for Project directory if it was not already set.
 #
 # argument 1: variable in which the result should be written (return value)
@@ -12,7 +34,7 @@ function dialogAskForProjectDirectory() {
     # arguments
     local ARG_RETVALUE=$1
 
-    # first check, if global IP variable was not set
+    # first check, if global project directory variable was not set
     local __INTERNAL_PROJECT_DIRECTORY
     if [[ -z "${K8S_MGMT_PROJECT_DIRECTORY}" ]]; then
         # get data from user

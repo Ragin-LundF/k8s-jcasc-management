@@ -1,0 +1,47 @@
+#!/bin/bash
+#########
+## DO NOT USE THIS SCRIPT DIRECTLY!
+## This script will be loaded by the 'k8s-jcasc.sh' script.
+
+##########
+# This function installs the Jenkins instance
+##########
+function installJenkins() {
+    ## install Jenkins to Kubernetes
+    local __INTERNAL_HELM_JENKINS_PATH="./charts/jenkins-master"
+    # get namespace from global variables or ask for the name
+    local __INTERNAL_NAMESPACE
+    dialogAskForNamespace __INTERNAL_NAMESPACE
+    # get project directory
+    local __INTERNAL_PROJECT_DIRECTORY
+    dialogAskForProjectDirectory __INTERNAL_PROJECT_DIRECTORY
+    # get deployment name
+    local __INTERNAL_DEPLOYMENT_NAME
+    dialogAskForDeploymentName __INTERNAL_DEPLOYMENT_NAME
+    # get IP address of the installation
+    local __INTERNAL_IP_ADDRESS
+    readIpForNamespaceFromFile "${__INTERNAL_NAMESPACE}" __INTERNAL_IP_ADDRESS
+
+    # create new variable with full project directory
+    local __INTERNAL_FULL_PROJECT_DIRECTORY="${PROJECTS_BASE_DIRECTORY}${__INTERNAL_PROJECT_DIRECTORY}"
+
+    # set global variables
+    if [[ ! -z "${__INTERNAL_NAMESPACE}" ]]; then
+        K8S_MGMT_NAMESPACE="${__INTERNAL_NAMESPACE}"
+    fi
+    if [[ ! -z "${__INTERNAL_PROJECT_DIRECTORY}" ]]; then
+        K8S_MGMT_PROJECT_DIRECTORY="${__INTERNAL_PROJECT_DIRECTORY}"
+    fi
+    if [[ ! -z "${__INTERNAL_DEPLOYMENT_NAME}" ]]; then
+        K8S_MGMT_DEPLOYMENTNAME="${__INTERNAL_DEPLOYMENT_NAME}"
+    fi
+
+    # start with apply secrets to kubernetes
+    echo ""
+    echo "  INFO: Apply secrets..."
+    echo ""
+    applySecrets "${K8S_MGMT_NAMESPACE}"
+
+    # install the Jenkins Helm Chart
+    helm install ${K8S_MGMT_DEPLOYMENTNAME} ${__INTERNAL_HELM_JENKINS_PATH} -n ${K8S_MGMT_NAMESPACE} -f ${K8S_MGMT_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
+}
