@@ -1,7 +1,5 @@
 # Kubernetes Jenkins as Code management #
 
-!!! UNDER CONSTRUCTION !!!
-
 This project offers a template for managing Jenkins instances on Kubernetes with a JobDSL and Jenkins Configuration as Code (JcasC).
 
 To simplify the installation and the project settings, it has a small helper tool `k8s-jcasc.sh`, which can be used in wizard mode or via arguments to
@@ -41,6 +39,85 @@ Also every develops maybe can have admin access to play around with the Jenkins,
 
 If the K8S cluster or server crashes, it is possible to redeploy everything as it was in minutes, because also the job definition is stored in a VCS repository.
 
+## Build slaves ##
+The pre-defined slave-containers will not work directly.
+Every build slave container needs to setup the jenkins home work directory and jenkins user/group with `uid`/`gid` `1000`.
+
+Also the build slaves did not need to have any jenkins agent or something else. Only the user/group and the workdir is needed.
+
+To resolve the problem, that build containers directly shut down, simply add an entrypoint with a `tail -f /dev/null`.
+
+You can also create a Jenkins build slave base container and build your own build tools container on top of it.
+
+Example of a jenkins-build-slave-base-container:
+
+```Dockerfile
+FROM alpine:3.10
+
+ARG VERSION=1.0.0
+LABEL Description="Jenkins Build Slave Base Container" Vendor="K8S_MGMT" Version="${VERSION}"
+
+###### GLIBC for alpine image
+# GLIBC-ENVIROMENT
+ENV GLIBC_LANG=en_US
+ENV GLIBC_VERSION=2.28-r0
+ENV LANG=${GLIBC_LANG}.UTF-8
+ENV LANGUAGE=${GLIBC_LANG}.UTF-8
+
+# install base packages, that will be used in most containers
+RUN apk update && apk -U upgrade -a && \
+    apk add --no-cache xz tar zip unzip sudo curl wget bash git git-lfs procps ca-certificates
+
+# GET GLIBC FROM SGERRAND: https://github.com/sgerrand/alpine-pkg-glibc
+RUN wget -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub && \
+    wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk && \
+    wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-bin-${GLIBC_VERSION}.apk && \
+    wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-i18n-${GLIBC_VERSION}.apk && \
+    apk add --no-cache glibc-${GLIBC_VERSION}.apk glibc-bin-${GLIBC_VERSION}.apk glibc-i18n-${GLIBC_VERSION}.apk && \
+    rm -f /etc/apk/keys/sgerrand.* && \
+    echo "export GLIBC_LANG=${LANG}" > /etc/profile.d/locale.sh && \
+    echo "LANG=${LANG}" >> /etc/environment && \
+    /usr/glibc-compat/bin/localedef -i ${GLIBC_LANG} -f UTF-8 ${GLIBC_LANG}.UTF-8 && \
+    rm *.apk && \
+    echo "Installing additional packages... done"
+
+###### Jenkins setup
+# Required Jenkins user/group/gid/uid/workdir
+ARG user=jenkins
+ARG group=jenkins
+ARG uid=1000
+ARG gid=1000
+ARG AGENT_WORKDIR=/home/${user}/agent
+
+# create jenkins user
+RUN addgroup -g ${gid} ${group} && adduser -h /home/${user} -u ${uid} -G ${group} -D ${user}
+
+# create directories and permissions
+RUN mkdir /home/${user}/.jenkins && mkdir -p ${AGENT_WORKDIR}
+
+VOLUME /home/${user}/.jenkins
+VOLUME ${AGENT_WORKDIR}
+
+WORKDIR /home/${user}
+
+# let the container tail /dev/null, that Kubernetes will not shut down the container directly after startup.
+ENTRYPOINT ["tail", "-f", "/dev/null"]
+```
+
+A build-slave container for docker can look then like this:
+
+```Dockerfile
+FROM jenkins-slave-base
+ARG VERSION=1.0.0
+LABEL Description="Docker container with Docker for executing docker build and docker push" Vendor="K8S_MGMT" Version="${VERSION}"
+
+# Installing docker
+RUN apk update && apk -U upgrade -a && \
+    apk add --no-cache docker
+
+# adding jenkins user to docker group
+RUN addgroup -S ${user} docker
+```
 
 ## Configuration ##
 
