@@ -9,7 +9,7 @@ spec:
   rules:
     - http:
         paths:
-          - path: ##JENKINS_MASTER_DEFAULT_URI_PREFIX##
+          - path: {{ .Values.k8sJenkinsMgmt.ingress.jenkinsUriPrefix }}
             backend:
-              serviceName: ##JENKINS_MASTER_DEPLOYMENT_NAME##
+              serviceName: {{ .Values.k8sJenkinsMgmt.ingress.jenkinsDeploymentName }}
               servicePort: 8080

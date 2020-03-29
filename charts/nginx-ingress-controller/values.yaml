@@ -1,5 +1,8 @@
 k8sJenkinsMgmt:
   ingress:
-    namespace: ##JENKINS_NAMESPACE##
-    loadbalancerip: ##JENKINS_NAMESPACE_LOADBALANCER_IP##
-    containerImage: ##NGINX_INGRESS_CONTROLLER_CONTAINER_IMAGE##
+    namespace: ""
+    loadbalancerip: ""
+    containerImage: ""
+    deploymentName: ""
+    jenkinsDeploymentName: ""
+    jenkinsUriPrefix: ""

@@ -1,5 +1,5 @@
 jenkins:
-  systemMessage: "##PROJECT_NAME## Jenkins in namespace ##NAMESPACE##"
+  systemMessage: "##PROJECT_DIRECTORY## Jenkins in namespace ##NAMESPACE##"
 
   clouds:
     - kubernetes:

@@ -18,6 +18,11 @@ function replaceStringInFile() {
     local ARG_STR_REPLACEMENT=$2
     local ARG_FILE_TO_PROCESS=$3
 
+    # debug output, if something is wrong
+    if [[ "${LOG_LEVEL}" == "DEBUG" ]]; then
+        echo "  DEBUG: Replacing (${ARG_STR_TO_REPLACE}) with (${ARG_STR_REPLACEMENT}) in file (${ARG_FILE_TO_PROCESS})".
+    fi
+
     # validate arguments
     if [[ -z "${ARG_STR_TO_REPLACE}" ]]; then
         echo ""
@@ -27,13 +32,13 @@ function replaceStringInFile() {
     fi
     if [[ -z "${ARG_STR_REPLACEMENT}" ]]; then
         echo ""
-        echo "  ERROR sed_utils.sh: No argument of the replacement string found."
+        echo "  ERROR sed_utils.sh: No argument for the replacement string found."
         echo ""
         exit 1
     fi
     if [[ -z "${ARG_FILE_TO_PROCESS}" ]]; then
         echo ""
-        echo "  ERROR sed_utils.sh: No argument of the file found, were something should be replaced."
+        echo "  ERROR sed_utils.sh: No file argument found. Do not know what to replace."
         echo ""
         exit 1
     fi

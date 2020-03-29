@@ -126,7 +126,41 @@ function installOrUpgradeJenkins() {
     installPersistenceVolumeClaim
 
     # install or upgrade the Jenkins Helm Chart
-    helm ${__INTERNAL_HELM_COMMAND} ${K8S_MGMT_DEPLOYMENTNAME} ${__INTERNAL_HELM_JENKINS_PATH} -n ${K8S_MGMT_NAMESPACE} -f ${K8S_MGMT_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
+    helm ${__INTERNAL_HELM_COMMAND} ${K8S_MGMT_DEPLOYMENTNAME} ${__INTERNAL_HELM_JENKINS_PATH} -n ${K8S_MGMT_NAMESPACE} -f ${__INTERNAL_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
+}
+
+##########
+# This function installs the Nginx-Ingress controller instance and loadbalancer
+#
+##########
+function installIngressControllerToNamespace() {
+    # path to helm charts
+    local __INTERNAL_HELM_NGINX_INGRESS_PATH="./charts/nginx-ingress-controller"
+    # get namespace from global variables or ask for the name
+    local __INTERNAL_NAMESPACE
+    dialogAskForNamespace __INTERNAL_NAMESPACE
+    # get project directory
+    local __INTERNAL_PROJECT_DIRECTORY
+    dialogAskForProjectDirectory __INTERNAL_PROJECT_DIRECTORY
+
+    # create new variable with full project directory
+    local __INTERNAL_FULL_PROJECT_DIRECTORY="${PROJECTS_BASE_DIRECTORY}${__INTERNAL_PROJECT_DIRECTORY}"
+
+    # install the nginx-ingress controller with loadbalancer and default route
+    helm install ${NGINX_INGRESS_DEPLOYMENT_NAME} ${__INTERNAL_HELM_NGINX_INGRESS_PATH} -n ${__INTERNAL_NAMESPACE} -f ${__INTERNAL_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml
+}
+
+##########
+# This function installs the Nginx-Ingress controller instance and loadbalancer
+#
+##########
+function uninstallIngressControllerFromNamespace() {
+    # get namespace from global variables or ask for the name
+    local __INTERNAL_NAMESPACE
+    dialogAskForNamespace __INTERNAL_NAMESPACE
+
+    # uninstall the nginx-ingress controller
+    helm delete ${NGINX_INGRESS_DEPLOYMENT_NAME} -n ${__INTERNAL_NAMESPACE}
 }
 
 ##########

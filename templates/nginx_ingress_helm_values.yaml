@@ -1,0 +1,7 @@
+k8sJenkinsMgmt:
+    ingress:
+        namespace: ##NAMESPACE##
+        loadbalancerIp: ##PUBLIC_IP_ADDRESS##
+        deploymentName: ##NGINX_INGRESS_DEPLOYMENT_NAME##
+        jenkinsDeploymentName: ##JENKINS_MASTER_DEPLOYMENT_NAME##
+        jenkinsUriPrefix: ##JENKINS_MASTER_DEFAULT_URI_PREFIX##

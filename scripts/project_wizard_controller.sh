@@ -4,7 +4,7 @@
 ## This script will be loaded by the 'k8s-jcasc.sh' script.
 
 ##########
-# Process '##PROJECT_NAME## Jenkins in namespace ##NAMESPACE##' placeholder in the new project directory
+# Process '##PROJECT_DIRECTORY## Jenkins in namespace ##NAMESPACE##' placeholder in the new project directory
 # with a new Jenkins system message.
 # !!! This should be the first replacement call !!!
 #
@@ -18,7 +18,7 @@ function processTemplatesWithJenkinsSystemMessage() {
 
     # If a custom message should be set, overwrite the message
     if [[ ! -z "${ARG_JENKINS_SYSTEM_MESSAGE}" ]]; then
-        replaceStringInFile "##PROJECT_NAME## Jenkins in namespace ##NAMESPACE##" "${ARG_JENKINS_SYSTEM_MESSAGE}" ${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml
+        replaceStringInFile "##PROJECT_DIRECTORY## Jenkins in namespace ##NAMESPACE##" "${ARG_JENKINS_SYSTEM_MESSAGE}" ${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml
     fi
 }
 
@@ -34,6 +34,7 @@ function processTemplatesWithNamespace() {
     local ARG_NAMESPACE=$2
 
     replaceStringInFile "##NAMESPACE##" "${ARG_NAMESPACE}" ${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml
+    replaceStringInFile "##NAMESPACE##" "${ARG_NAMESPACE}" ${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml
 
     # if a persistence volume claim exists, replace values there
     if [[ -f "${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml" ]]; then
@@ -55,6 +56,7 @@ function processTemplatesWithIpAddress() {
     local ARG_IP_ADDRESS=$2
 
     replaceStringInFile "##PUBLIC_IP_ADDRESS##" "${ARG_IP_ADDRESS}" ${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml
+    replaceStringInFile "##PUBLIC_IP_ADDRESS##" "${ARG_IP_ADDRESS}" ${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml
 }
 
 ##########
@@ -65,10 +67,10 @@ function processTemplatesWithIpAddress() {
 ##########
 function processTemplatesWithJenkinsJobRepository() {
     # arguments
-    local ARG_JENKINS_JOB_REPOSITORY_=$1
-    local ARG_FULL_PROJECT_DIRECTORY=$2
+    local ARG_FULL_PROJECT_DIRECTORY=$1
+    local ARG_JENKINS_JOB_REPOSITORY=$2
 
-    replaceStringInFile "##PROJECT_JENKINS_JOB_DEFINITION_REPOSITORY##" "${ARG_JENKINS_JOB_REPOSITORY_}" ${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml
+    replaceStringInFile "##PROJECT_JENKINS_JOB_DEFINITION_REPOSITORY##" "${ARG_JENKINS_JOB_REPOSITORY}" ${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml
 }
 
 ##########
@@ -83,6 +85,7 @@ function processTemplatesWithProjectDirectory() {
     local ARG_PROJECT_DIRECTORY=$2
 
     replaceStringInFile "##PROJECT_DIRECTORY##" "${ARG_PROJECT_DIRECTORY}" ${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml
+    replaceStringInFile "##PROJECT_DIRECTORY##" "${ARG_PROJECT_DIRECTORY}" ${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
 }
 
 ##########
@@ -101,9 +104,8 @@ function processTemplatesWithPersistenceExistingClaim() {
     # if a persistence volume claim exists, replace values there
     if [[ -f "${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml" ]]; then
         # Name of the PVC
-        replaceStringInFile "##K8S_MGMT_PERSISTENCE_VOLUME_CLAIM_NAME##" "${ARG_EXISTING_PERSISTENCE_CLAIM}" ${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml
+        replaceStringInFile "##K8S_MGMT_PERSISTENCE_VOLUME_CLAIM_NAME##" "${ARG_EXISTING_PERSISTENCE_CLAIM} " ${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml
     fi
-
 }
 
 ##########
@@ -119,6 +121,7 @@ function processTemplatesWithGlobalConfiguration() {
     replaceStringInFile "##KUBERNETES_SERVER_CERTIFICATE##" "${KUBERNETES_SERVER_CERTIFICATE}" ${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml
     # Name of the Jenkins deployment
     replaceStringInFile "##JENKINS_MASTER_DEPLOYMENT_NAME##" "${JENKINS_MASTER_DEPLOYMENT_NAME}" ${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml
+    replaceStringInFile "##JENKINS_MASTER_DEPLOYMENT_NAME##" "${JENKINS_MASTER_DEPLOYMENT_NAME}" ${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml
     # if a persistence volume claim exists, replace values there
     if [[ -f "${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml" ]]; then
         # Name of the Jenkins deployment
@@ -136,6 +139,7 @@ function processTemplatesWithGlobalConfiguration() {
     # Jenkins master default URI prefix
     replaceStringInFile "##JENKINS_MASTER_DEFAULT_URI_PREFIX##" "${JENKINS_MASTER_DEFAULT_URI_PREFIX}" ${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml
     replaceStringInFile "##JENKINS_MASTER_DEFAULT_URI_PREFIX##" "${JENKINS_MASTER_DEFAULT_URI_PREFIX}" ${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
+    replaceStringInFile "##JENKINS_MASTER_DEFAULT_URI_PREFIX##" "${JENKINS_MASTER_DEFAULT_URI_PREFIX}" ${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml
     # Jenkins master label for seed job binding
     replaceStringInFile "##JENKINS_MASTER_DEFAULT_LABEL##" "${JENKINS_MASTER_DEFAULT_LABEL}" ${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml
     replaceStringInFile "##JENKINS_MASTER_DEFAULT_LABEL##" "${JENKINS_MASTER_DEFAULT_LABEL}" ${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
@@ -166,8 +170,15 @@ function processTemplatesWithGlobalConfiguration() {
         # Name of the Jenkins deployment
         replaceStringInFile "##JENKINS_MASTER_PERSISTENCE_STORAGE_SIZE##" "${JENKINS_MASTER_PERSISTENCE_STORAGE_SIZE}" ${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml
     fi
+    # replace the container image
+    replaceStringInFile "##JENKINS_MASTER_CONTAINER_IMAGE##" "${JENKINS_MASTER_CONTAINER_IMAGE}" ${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
+    replaceStringInFile "##JENKINS_MASTER_CONTAINER_IMAGE_TAG##" "${JENKINS_MASTER_CONTAINER_IMAGE_TAG}" ${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
+    replaceStringInFile "##JENKINS_MASTER_CONTAINER_PULL_POLICY##" "${JENKINS_MASTER_CONTAINER_PULL_POLICY}" ${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
+    replaceStringInFile "##JENKINS_MASTER_CONTAINER_IMAGE_PULL_SECRET_NAME##" "${JENKINS_MASTER_CONTAINER_IMAGE_PULL_SECRET_NAME} " ${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
     # replace Jenkins admin password
     replaceStringInFile "##JENKINS_MASTER_ADMIN_PASSWORD##" "${JENKINS_MASTER_ADMIN_PASSWORD}" ${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
+    # nginx-ingress-controller deployment name
+    replaceStringInFile "##NGINX_INGRESS_DEPLOYMENT_NAME##" "${NGINX_INGRESS_DEPLOYMENT_NAME} " ${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml
 }
 
 ##########
@@ -192,6 +203,8 @@ function createProjectFromTemplate() {
     cp templates/jenkins_helm_values.yaml ${ARG_PROJECT_DIRECTORY}/
     # copy JcasC file to project
     cp templates/jcasc_config.yaml ${ARG_PROJECT_DIRECTORY}/
+    # copy ingress values template
+    cp templates/nginx_ingress_helm_values.yaml ${ARG_PROJECT_DIRECTORY}/
 
     if [[ ! -z "${ARG_PVC_CLAIM}" ]]; then
         cp templates/pvc_claim.yaml ${ARG_PROJECT_DIRECTORY}/
@@ -240,6 +253,7 @@ function projectWizard() {
     # start processing the templates
     ## Jenkins system message should be the first, because it overwrites the message, if a custom message was defined
     processTemplatesWithJenkinsSystemMessage "${__INTERNAL_FULL_PROJECT_DIRECTORY}" "${VAR_JENKINS_SYSTEM_MESSAGE}"
+    processTemplatesWithJenkinsJobRepository "${__INTERNAL_FULL_PROJECT_DIRECTORY}" "${VAR_JENKINS_JOB_CONFIGURATION_REPOSITORY}"
     ## second should be the global configuration, because it can contain further templates like project name directory
     processTemplatesWithGlobalConfiguration "${__INTERNAL_FULL_PROJECT_DIRECTORY}"
     ## process all other

@@ -5,6 +5,7 @@ source ./config/k8s_jcasc_mgmt.cnf
 
 # import subscripts (take care with order!)
 source ./scripts/arguments_utils.sh
+source ./scripts/cleanup_k8s_utils.sh
 source ./scripts/dialogs.sh
 source ./scripts/ipconfig_utils.sh
 source ./scripts/install_controller.sh
@@ -57,12 +58,17 @@ function run() {
     elif [[ "${_K8S_MGMT_COMMAND_INSTALL}" == "${K8S_MGMT_COMMAND}" ]]; then
         ## install Jenkins
         installOrUpgradeJenkins "${_K8S_MGMT_COMMAND_INSTALL}"
+        installIngressControllerToNamespace
     elif [[ "${_K8S_MGMT_COMMAND_UPGRADE}" == "${K8S_MGMT_COMMAND}" ]]; then
         ## upgrade Jenkins
         installOrUpgradeJenkins "${_K8S_MGMT_COMMAND_UPGRADE}"
     elif [[ "${_K8S_MGMT_COMMAND_UNINSTALL}" == "${K8S_MGMT_COMMAND}" ]]; then
         ## uninstall Jenkins
         uninstallJenkins
+        ## uninstall nginx-ingress controller
+        uninstallIngressControllerFromNamespace
+        ## remove nginx-ingress-controller sa,roles,clusterroes....
+        cleanupK8sNginxIngressControllerComplete
     fi
 }
 

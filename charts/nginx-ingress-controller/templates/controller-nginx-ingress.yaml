@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-ingress-controller
+  name: {{ .Values.k8sJenkinsMgmt.ingress.deploymentName }}-controller
   namespace: {{ .Values.k8sJenkinsMgmt.ingress.namespace }}
   labels:
     app.kubernetes.io/name: ingress-nginx
@@ -24,7 +24,7 @@ spec:
       # like with kubeadm
       # hostNetwork: true
       terminationGracePeriodSeconds: 60
-      serviceAccountName: nginx-ingress-serviceaccount-{{ .Values.k8sJenkinsMgmt.ingress.namespace }}
+      serviceAccountName: {{ .Values.k8sJenkinsMgmt.ingress.deploymentName }}-serviceaccount-{{ .Values.k8sJenkinsMgmt.ingress.namespace }}
       imagePullSecrets:
         - name: {{ .Values.k8sJenkinsMgmt.ingress.imagePullSecrets }}
       containers:
@@ -53,5 +53,5 @@ spec:
                   fieldPath: metadata.namespace
           args:
             - /nginx-ingress-controller
-            - --publish-service=$(POD_NAMESPACE)/nginx-ingress-lb
+            - --publish-service=$(POD_NAMESPACE)/{{ .Values.k8sJenkinsMgmt.ingress.deploymentName }}-lb
             - --watch-namespace=$(POD_NAMESPACE)
