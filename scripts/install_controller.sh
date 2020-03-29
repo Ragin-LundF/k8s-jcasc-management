@@ -10,6 +10,8 @@ _K8S_MGMT_HELM_UPGRADE_COMMAND="upgrade"
 
 ##########
 # This function installs the Jenkins instance
+#
+# argument 1: INSTALL or UPGRADE (see _K8S_MGMT_COMMAND_INSTALL or _K8S_MGMT_COMMAND_UPGRADE at the arguments_utils.sh file)
 ##########
 function installOrUpgradeJenkins() {
     ## install Jenkins to Kubernetes
@@ -64,6 +66,21 @@ function installOrUpgradeJenkins() {
     echo ""
     applySecrets "${K8S_MGMT_NAMESPACE}"
 
+    ## TODO: install persistence volume claim
+
     # install or upgrade the Jenkins Helm Chart
     helm ${__INTERNAL_HELM_COMMAND} ${K8S_MGMT_DEPLOYMENTNAME} ${__INTERNAL_HELM_JENKINS_PATH} -n ${K8S_MGMT_NAMESPACE} -f ${K8S_MGMT_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
+}
+
+##########
+# This function uninstalls the Jenkins instance
+#
+##########
+function uninstallJenkins() {
+    local __INTERNAL_NAMESPACE
+    dialogAskForNamespace __INTERNAL_NAMESPACE
+    local __INTERNAL_DEPLOYMENT_NAME
+    dialogAskForDeploymentName __INTERNAL_DEPLOYMENT_NAME
+
+    helm uninstall ${__INTERNAL_DEPLOYMENT_NAME} -n ${__INTERNAL_NAMESPACE}
 }

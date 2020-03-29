@@ -60,6 +60,9 @@ function run() {
     elif [[ "${_K8S_MGMT_COMMAND_UPGRADE}" == "${K8S_MGMT_COMMAND}" ]]; then
         ## upgrade Jenkins
         installOrUpgradeJenkins "${_K8S_MGMT_COMMAND_UPGRADE}"
+    elif [[ "${_K8S_MGMT_COMMAND_UNINSTALL}" == "${K8S_MGMT_COMMAND}" ]]; then
+        ## uninstall Jenkins
+        uninstallJenkins
     fi
 }
 

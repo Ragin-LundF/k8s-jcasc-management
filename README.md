@@ -11,7 +11,7 @@ To simplify the installation and the project settings, it has a small helper too
     * apply secrets to kubernetes
     * manage secrets globally for easy administration
     * manage secrets per project for more security
-* manage the Jenkins instances for a namespace with the project configuration (not ready yet)
+* manage the Jenkins instances for a namespace with the project configuration
     * install
     * uninstall
 
