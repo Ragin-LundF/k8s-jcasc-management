@@ -4,11 +4,6 @@
 
 This project offers a template for managing Jenkins instances on Kubernetes with a JobDSL and Jenkins Configuration as Code (JcasC).
 
-
-![alt text](docs/images/k8s-mgmt-workflow.png "K8S Workflow")
-
-
-
 To simplify the installation and the project settings, it has a small helper tool `k8s-jcasc.sh`, which can be used in wizard mode or via arguments to
 * create new projects for Jenkins administration
 * manage secrets
@@ -22,6 +17,29 @@ To simplify the installation and the project settings, it has a small helper too
     * upgrade
 
 *The password for the preconfigured secrets file is `admin`. There is no valid data inside this file! Please change it for your own project!*
+
+
+## Basic concept ##
+
+![alt text](docs/images/k8s-mgmt-workflow.png "K8S Workflow")
+
+* A namespace contains one Jenkins instance.
+* The namespace is more or less equal to a k8s-mgmt project
+    * Projects are stored in a separate repository in a VCS
+    * The project contains
+        * the Jenkins Helm Chart values.yaml overwrites
+        * one JCasC file
+* The Jenkins for each namespace will be deployed via k8s-mgmt from the cloned Git repository
+* Jenkins loads its main configuration from the project repository (and only from this, which means you can play around and reload configuration directly from the remote URL)
+* This main configuration also contains a very simple `seed-job`, which does a scm checkout of a Groovy script to manage jobs and a repository, which contains the job definition
+
+### Advantages ##
+By having all things stored in VCS repositories, which are normally backed up, it is possible to recreate every instance in no-time.
+It is impossible to misconfigure a Jenkins instance, because the configuration can be reloaded from this remote repository and all configurations are completely versioned.
+
+Also every develops maybe can have admin access to play around with the Jenkins, because they can not destroy the system permanently with the beloved "I have nothing done..." statement. 
+
+If the K8S cluster or server crashes, it is possible to redeploy everything as it was in minutes, because also the job definition is stored in a VCS repository.
 
 
 ## Configuration ##
