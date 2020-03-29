@@ -113,7 +113,7 @@ metadata:
     "jenkins.io/credentials-description" : "credentials from Kubernetes"
 type: Opaque
 stringData:
-  username: registry-service-account
+  username: repository-service-account
   password: password-for-the-service-account
 EOF
 
@@ -138,6 +138,6 @@ metadata:
     "jenkins.io/credentials-description" : "credentials from Kubernetes"
 type: Opaque
 stringData:
-  username: docker-registry-service-account
+  username: docker-repository-service-account
   password: password-for-the-service-account
 EOF
