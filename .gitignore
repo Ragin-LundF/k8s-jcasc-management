@@ -1,2 +1,7 @@
 /.idea/
 *.iml
+
+# secrets.sh should never be commited unencrypted!
+secrets.sh
+# the only exception is the template file, because it should not contain real data
+!/templates/secrets.sh
