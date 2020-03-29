@@ -60,8 +60,9 @@ The following commands are supported:
 
 | Command | Description |
 | --- | --- |
-| `install` | Install Jenkins to a Kubernetes namespace. |
-| `uninstall` | Uninstall the Jenkins instance from a Kubernetes namespace. |
+| `install` | Install Jenkins to a Kubernetes namespace (helm install). |
+| `uninstall` | Uninstall the Jenkins instance of a Kubernetes namespace (helm uninstall). |
+| `upgrade` | Upgrade the Jenkins instance of a Kubernetes namespace (helm upgrade). |
 | `encryptsecrets` | Encrypt the secrets (global secrets or project secrets, depending on configuration). |
 | `decryptsecrets` | Decrypt the secrets (global secrets or project secrets, depending on configuration). |
 | `applysecrets` | Apply the secrets to the Kubernetes namespace (global secrets or project secrets, depending on configuration). |

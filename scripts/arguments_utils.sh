@@ -6,6 +6,7 @@
 ##########
 # Global command variables
 _K8S_MGMT_COMMAND_INSTALL="INSTALL"
+_K8S_MGMT_COMMAND_UPGRADE="UPGRADE"
 _K8S_MGMT_COMMAND_UNINSTALL="UNINSTALL"
 _K8S_MGMT_COMMAND_SECRETS_ENCRYPT="SECRETS_ENCRYPT"
 _K8S_MGMT_COMMAND_SECRETS_DECRYPT="SECRETS_DECRYPT"
@@ -19,6 +20,9 @@ function setCommandToInstall() {
 }
 function setCommandToUnInstall() {
     K8S_MGMT_COMMAND="${_K8S_MGMT_COMMAND_UNINSTALL}"
+}
+function setCommandToUpgrade() {
+    K8S_MGMT_COMMAND="${_K8S_MGMT_COMMAND_UPGRADE}"
 }
 function setCommandToSecretsEncrypt() {
     K8S_MGMT_COMMAND="${_K8S_MGMT_COMMAND_SECRETS_ENCRYPT}"
@@ -39,10 +43,11 @@ function setCommandToCreateProject() {
 function selectInstallationType() {
     if [[ -z "${K8S_MGMT_COMMAND}" ]]; then
         echo "Please select the command you want to execute:"
-            select WIZARD in "install" "uninstall" "encryptSecrets" "decryptSecrets" "applySecrets" "createProject"; do
+            select WIZARD in "install" "uninstall" "upgrade" "encryptSecrets" "decryptSecrets" "applySecrets" "createProject"; do
                 case $WIZARD in
                     install) setCommandToInstall; break;;
                     uninstall) setCommandToUnInstall; break;;
+                    upgrade) setCommandToUpgrade; break;;
                     encryptSecrets) setCommandToSecretsEncrypt; break;;
                     decryptSecrets) setCommandToSecretDecrypt; break;;
                     applySecrets) setCommandToSecretsApply; break;;
@@ -86,6 +91,11 @@ function processArguments() {
             # uninstall Jenkins
             uninstall)
                 setCommandToUnInstall
+                shift # past argument=value
+            ;;
+            # upgrade Jenkins installation
+            upgrade)
+                setCommandToUpgrade
                 shift # past argument=value
             ;;
             # encrypt the secrets

@@ -55,7 +55,11 @@ function run() {
             exit 1
         fi
     elif [[ "${_K8S_MGMT_COMMAND_INSTALL}" == "${K8S_MGMT_COMMAND}" ]]; then
-        installJenkins
+        ## install Jenkins
+        installOrUpgradeJenkins "${_K8S_MGMT_COMMAND_INSTALL}"
+    elif [[ "${_K8S_MGMT_COMMAND_UPGRADE}" == "${K8S_MGMT_COMMAND}" ]]; then
+        ## upgrade Jenkins
+        installOrUpgradeJenkins "${_K8S_MGMT_COMMAND_UPGRADE}"
     fi
 }
 

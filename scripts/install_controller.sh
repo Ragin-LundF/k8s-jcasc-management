@@ -3,11 +3,33 @@
 ## DO NOT USE THIS SCRIPT DIRECTLY!
 ## This script will be loaded by the 'k8s-jcasc.sh' script.
 
+# Variables
+_K8S_MGMT_HELM_INSTALL_COMMAND="install"
+_K8S_MGMT_HELM_UPGRADE_COMMAND="upgrade"
+
+
 ##########
 # This function installs the Jenkins instance
 ##########
-function installJenkins() {
+function installOrUpgradeJenkins() {
     ## install Jenkins to Kubernetes
+    # arguments
+    local ARG_INSTALL_UPGRADE_COMMAND=$1
+
+    # validate helm command
+    local __INTERNAL_HELM_COMMAND
+    if [[ "${ARG_INSTALL_UPGRADE_COMMAND}" == "${_K8S_MGMT_COMMAND_INSTALL}" ]]; then
+        __INTERNAL_HELM_COMMAND="${_K8S_MGMT_HELM_INSTALL_COMMAND}"
+    elif [[ "${ARG_INSTALL_UPGRADE_COMMAND}" == "${_K8S_MGMT_COMMAND_UPGRADE}" ]]; then
+        __INTERNAL_HELM_COMMAND="${_K8S_MGMT_HELM_UPGRADE_COMMAND}"
+    else
+        echo ""
+        echo "  ERROR: Unknown command used! Please do not use the install_controller.sh script directly."
+        echo ""
+        exit 1
+    fi
+
+    # path to helm charts
     local __INTERNAL_HELM_JENKINS_PATH="./charts/jenkins-master"
     # get namespace from global variables or ask for the name
     local __INTERNAL_NAMESPACE
@@ -42,6 +64,6 @@ function installJenkins() {
     echo ""
     applySecrets "${K8S_MGMT_NAMESPACE}"
 
-    # install the Jenkins Helm Chart
-    helm install ${K8S_MGMT_DEPLOYMENTNAME} ${__INTERNAL_HELM_JENKINS_PATH} -n ${K8S_MGMT_NAMESPACE} -f ${K8S_MGMT_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
+    # install or upgrade the Jenkins Helm Chart
+    helm ${__INTERNAL_HELM_COMMAND} ${K8S_MGMT_DEPLOYMENTNAME} ${__INTERNAL_HELM_JENKINS_PATH} -n ${K8S_MGMT_NAMESPACE} -f ${K8S_MGMT_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
 }
