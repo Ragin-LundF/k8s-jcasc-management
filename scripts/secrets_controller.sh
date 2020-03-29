@@ -12,6 +12,8 @@ function encryptSecrets() {
         echo "  INFO secrets_controller.sh: Encrypt the secrets..."
         echo ""
     fi
+
+    # resolve secrets file
     local VAR_SECRETS_FILE
     resolveSecretsFile VAR_SECRETS_FILE
 
@@ -21,7 +23,7 @@ function encryptSecrets() {
         echo ""
     fi
 
-    openssl aes-256-cbc -a -salt -in ${VAR_SECRETS_FILE} -out ${VAR_SECRETS_FILE}.enc
+    openssl enc -e -a -aes-256-cbc -pbkdf2 -salt -in ${VAR_SECRETS_FILE} -out ${VAR_SECRETS_FILE}.enc
     rm ${VAR_SECRETS_FILE}
 
 
@@ -39,7 +41,7 @@ function decryptSecrets() {
     local VAR_SECRETS_FILE
     resolveSecretsFile VAR_SECRETS_FILE
 
-    openssl aes-256-cbc -d -a -in ${VAR_SECRETS_FILE}.enc -out ${VAR_SECRETS_FILE}
+    openssl enc -d -a -aes-256-cbc -pbkdf2 -salt -in ${VAR_SECRETS_FILE}.enc -out ${VAR_SECRETS_FILE}
 }
 
 ##########
@@ -61,7 +63,7 @@ function applySecrets() {
     # decrypt the secrets
     decryptSecrets
     # set namespace variable and execute the secrets file to apply the secrets
-    echo "env NAMESPACE=${ARG_NAMESPACE} sh ${VAR_SECRETS_FILE}"
+    env NAMESPACE=${ARG_NAMESPACE} sh ${VAR_SECRETS_FILE}
     rm ${VAR_SECRETS_FILE}
 }
 
@@ -74,18 +76,16 @@ function applySecrets() {
 ##########
 function resolveSecretsFile() {
     local ARG_RETVAL_SECRET_DIR=$1
-    # optional project name, if it was not set globally
-    local ARG_PROJECT_DIRECTORY=$2
 
     if [[ -z "${GLOBAL_SECRETS_FILE}" ]]; then
-        if [[ -z "${ARG_PROJECT_DIRECTORY}" ]]; then
+        if [[ -z "${K8S_MGMT_PROJECT_DIRECTORY}" ]]; then
             echo ""
             echo "  ERROR secrets_controller.sh: Unable to search for a secrets file!"
             echo "  ERROR secrets_controller.sh: Please configure 'GLOBAL_SECRETS_FILE' or use the '-p' or '--projectdir' option to define the project."
             echo ""
             exit 1
         else
-            eval ${ARG_RETVAL_SECRET_DIR}="\${ARG_PROJECT_DIRECTORY}/secrets.sh"
+            eval ${ARG_RETVAL_SECRET_DIR}="\${PROJECTS_BASE_DIRECTORY}\${K8S_MGMT_PROJECT_DIRECTORY}/secrets.sh"
         fi
     else
         eval ${ARG_RETVAL_SECRET_DIR}="\${GLOBAL_SECRETS_FILE}"

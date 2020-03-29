@@ -8,7 +8,7 @@ PROJECTS_BASE_DIRECTORY=./projects/
 
 # Use this file as a global secrets file. If you want to use different secrets for each project, comment this line.
 # If this line is commented, then the secrets will be stored under PROJECTS_DIRECTORY/secrets.sh.enc
-GLOBAL_SECRETS_FILE=./projects/default/secrets.sh
+GLOBAL_SECRETS_FILE=./config/secrets.sh
 
 # This variable configures the URL, where the Jenkins configuration was checked in. This URL must have public access!
 # You can use the '##PROJECT_DIRECTORY##' template variable here to
