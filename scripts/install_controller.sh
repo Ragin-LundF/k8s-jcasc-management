@@ -93,8 +93,8 @@ function installOrUpgradeJenkins() {
     local __INTERNAL_NAMESPACE
     dialogAskForNamespace __INTERNAL_NAMESPACE
     # get project directory
-    local __INTERNAL_PROJECT_DIRECTORY
-    dialogAskForProjectDirectory __INTERNAL_PROJECT_DIRECTORY
+    local __INTERNAL_PROJECT_DIRECTORY_NAME
+    dialogAskForProjectDirectory __INTERNAL_PROJECT_DIRECTORY_NAME
     # get deployment name
     local __INTERNAL_DEPLOYMENT_NAME
     dialogAskForDeploymentName __INTERNAL_DEPLOYMENT_NAME
@@ -103,14 +103,14 @@ function installOrUpgradeJenkins() {
     readIpForNamespaceFromFile "${__INTERNAL_NAMESPACE}" __INTERNAL_IP_ADDRESS
 
     # create new variable with full project directory
-    local __INTERNAL_FULL_PROJECT_DIRECTORY="${PROJECTS_BASE_DIRECTORY}${__INTERNAL_PROJECT_DIRECTORY}"
+    local __INTERNAL_FULL_PROJECT_DIRECTORY="${PROJECTS_BASE_DIRECTORY}${__INTERNAL_PROJECT_DIRECTORY_NAME}"
 
     # set global variables
     if [[ ! -z "${__INTERNAL_NAMESPACE}" ]]; then
         K8S_MGMT_NAMESPACE="${__INTERNAL_NAMESPACE}"
     fi
-    if [[ ! -z "${__INTERNAL_PROJECT_DIRECTORY}" ]]; then
-        K8S_MGMT_PROJECT_DIRECTORY="${__INTERNAL_PROJECT_DIRECTORY}"
+    if [[ ! -z "${__INTERNAL_PROJECT_DIRECTORY_NAME}" ]]; then
+        K8S_MGMT_PROJECT_DIRECTORY="${__INTERNAL_PROJECT_DIRECTORY_NAME}"
     fi
     if [[ ! -z "${__INTERNAL_DEPLOYMENT_NAME}" ]]; then
         K8S_MGMT_DEPLOYMENTNAME="${__INTERNAL_DEPLOYMENT_NAME}"
@@ -140,11 +140,11 @@ function installIngressControllerToNamespace() {
     local __INTERNAL_NAMESPACE
     dialogAskForNamespace __INTERNAL_NAMESPACE
     # get project directory
-    local __INTERNAL_PROJECT_DIRECTORY
-    dialogAskForProjectDirectory __INTERNAL_PROJECT_DIRECTORY
+    local __INTERNAL_PROJECT_DIRECTORY_NAME
+    dialogAskForProjectDirectory __INTERNAL_PROJECT_DIRECTORY_NAME
 
     # create new variable with full project directory
-    local __INTERNAL_FULL_PROJECT_DIRECTORY="${PROJECTS_BASE_DIRECTORY}${__INTERNAL_PROJECT_DIRECTORY}"
+    local __INTERNAL_FULL_PROJECT_DIRECTORY="${PROJECTS_BASE_DIRECTORY}${__INTERNAL_PROJECT_DIRECTORY_NAME}"
 
     # install the nginx-ingress controller with loadbalancer and default route
     helm install ${NGINX_INGRESS_DEPLOYMENT_NAME} ${__INTERNAL_HELM_NGINX_INGRESS_PATH} -n ${__INTERNAL_NAMESPACE} -f ${__INTERNAL_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml

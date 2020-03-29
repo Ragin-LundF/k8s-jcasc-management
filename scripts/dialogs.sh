@@ -18,6 +18,8 @@ function dialogAskForDeploymentName() {
         # get data from user
         echo "Please enter the deployment name."
         read -p "Deployment name: " __INTERNAL_DEPLOYMENT_NAME
+        # set the deployment name as default
+        K8S_MGMT_DEPLOYMENTNAME="${__INTERNAL_DEPLOYMENT_NAME}"
     else
         __INTERNAL_DEPLOYMENT_NAME="${K8S_MGMT_DEPLOYMENTNAME}"
     fi
@@ -40,6 +42,8 @@ function dialogAskForProjectDirectory() {
         # get data from user
         echo "Please enter the target project directory."
         read -p "Directory: " __INTERNAL_PROJECT_DIRECTORY
+        # set the directory as default directory
+        K8S_MGMT_PROJECT_DIRECTORY="${__INTERNAL_PROJECT_DIRECTORY}"
     else
         __INTERNAL_PROJECT_DIRECTORY="${K8S_MGMT_PROJECT_DIRECTORY}"
     fi
@@ -72,6 +76,8 @@ function dialogAskForNamespace() {
             local __INTERNAL_NAMESPACE_RECURSIVE_DUMMY
             dialogAskForNamespace __INTERNAL_NAMESPACE_RECURSIVE_DUMMY
         fi
+        # set namespace as default
+        K8S_MGMT_NAMESPACE="${__INTERNAL_NAMESPACE}"
     else
         __INTERNAL_NAMESPACE="${K8S_MGMT_NAMESPACE}"
     fi
