@@ -11,7 +11,8 @@ function validateNamespaceArgument() {
 
     # validate arguments
     if [[ -z "${ARG_NAMESPACE}" ]]; then
-        echo "ERROR cleanup_k8s_utils.sh: No namespace was defined."
+        echo ""
+        echo "  ERROR cleanup_k8s_utils.sh: No namespace was defined."
         echo ""
         exit 1
     fi

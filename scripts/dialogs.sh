@@ -62,10 +62,19 @@ function dialogAskForNamespace() {
 # enters a valid IP
 #
 # argument 1: variable in which the result should be written (return value)
+# argument 2: namespace as optional argument, to search for IP with namespace
 ##########
 function dialogAskForIpAddress() {
     # arguments
     local ARG_RETVALUE=$1
+    local ARG_NAMESPACE=$2
+
+    # if a namespace was give, try to resolve IP by namespace name
+    local __INTERNAL_IP_ADDRESS_BY_NAMESPACE
+    readIpForNamespaceFromFile "${ARG_NAMESPACE}" __INTERNAL_IP_ADDRESS_BY_NAMESPACE
+    if [[ ! -z "${__INTERNAL_IP_ADDRESS_BY_NAMESPACE}" ]]; then
+        K8S_MGMT_IP_ADDRESS="${__INTERNAL_IP_ADDRESS_BY_NAMESPACE}"
+    fi
 
     # first check, if global IP variable was not set
     local __INTERNAL_IP_ADDRESS_VALID

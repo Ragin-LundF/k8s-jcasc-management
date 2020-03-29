@@ -20,7 +20,8 @@ function validateIpAddress() {
     local __INTERNAL_IP_REGEX_PATTERN="^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$"
 
     if [[ ! "${ARG_IP_ADDRESS}" =~ ^[0-9]+(\.[0-9]+){3}$ ]]; then
-        echo "ERROR validator_utils.sh: IP address validation failed. Please check your IP!"
+        echo ""
+        echo "  ERROR validator_utils.sh: IP address validation failed. Please check your IP!"
         echo ""
         eval ${ARG_RETVALUE}="false"
     else
@@ -49,14 +50,16 @@ function validateNamespace() {
 
     # check max length of namespaces
     if [[ ${#ARG_NAMESPACE} -ge ${__INTERNAL_NAMESPACE_MAX_LENGTH} ]]; then
-        echo "ERROR validator_utils.sh: Namespace is too long!"
+        echo ""
+        echo "  ERROR validator_utils.sh: Namespace is too long!"
         echo ""
         __INTERNAL_RETVALUE="false"
     fi
 
     # check if namespace fits to RFC 952 and RFC 1123 (DNS LABEL)
     if [[ ! "${ARG_NAMESPACE}" =~ ${__INTERNAL_NAMESPACE_PATTERN} ]]; then
-        echo "ERROR validator_utils.sh: Namespace has syntactical error!"
+        echo ""
+        echo "  ERROR validator_utils.sh: Namespace has syntactical error!"
         echo ""
         __INTERNAL_RETVALUE="false"
     fi

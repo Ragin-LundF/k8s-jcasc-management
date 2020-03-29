@@ -20,19 +20,27 @@ function replaceStringInFile() {
 
     # validate arguments
     if [[ -z "${ARG_STR_TO_REPLACE}" ]]; then
-        echo "ERROR sed_utils.sh: No argument of the string to replace found."
+        echo ""
+        echo "  ERROR sed_utils.sh: No argument of the string to replace found."
+        echo ""
         exit 1
     fi
     if [[ -z "${ARG_STR_REPLACEMENT}" ]]; then
-        echo "ERROR sed_utils.sh: No argument of the replacement string found."
+        echo ""
+        echo "  ERROR sed_utils.sh: No argument of the replacement string found."
+        echo ""
         exit 1
     fi
     if [[ -z "${ARG_FILE_TO_PROCESS}" ]]; then
-        echo "ERROR sed_utils.sh: No argument of the file found, were something should be replaced."
+        echo ""
+        echo "  ERROR sed_utils.sh: No argument of the file found, were something should be replaced."
+        echo ""
         exit 1
     fi
     if [[ ! -f "${ARG_FILE_TO_PROCESS}" ]]; then
-        echo "ERROR sed_utils.sh: File (${ARG_FILE_TO_PROCESS}) in which something should be replaced does not exist."
+        echo ""
+        echo "  ERROR sed_utils.sh: File (${ARG_FILE_TO_PROCESS}) in which something should be replaced does not exist."
+        echo ""
         exit 1
     fi
 

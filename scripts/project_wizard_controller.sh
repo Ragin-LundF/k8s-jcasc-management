@@ -158,7 +158,7 @@ function projectWizard() {
 
     # collect all information from dialogs
     dialogAskForNamespace VAR_NAMESPACE
-    dialogAskForIpAddress VAR_IP_ADDRESS
+    dialogAskForIpAddress VAR_IP_ADDRESS "${VAR_NAMESPACE}"
     dialogAskForJenkinsSystemMessage VAR_JENKINS_SYSTEM_MESSAGE
     dialogAskForJenkinsJobConfigurationRepository VAR_JENKINS_JOB_CONFIGURATION_REPOSITORY
 

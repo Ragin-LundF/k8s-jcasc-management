@@ -4,8 +4,9 @@
 ## This script will be loaded by the 'k8s-jcasc.sh' script.
 ## The following check ensures, that everything was correct to use this script
 if [[ -z "${IP_CONFIG_FILE}" ]]; then
-    echo "ERROR ipconfig_utils.sh: Configuration file was not read correctly. Could not find the 'IP_CONFIG_FILE' variable."
-    echo "ERROR ipconfig_utils.sh: Please do not use this file directly and check your configuration under 'config/k8s_jcasc_mgmt.cnf'."
+    echo ""
+    echo "  ERROR ipconfig_utils.sh: Configuration file was not read correctly. Could not find the 'IP_CONFIG_FILE' variable."
+    echo "  ERROR ipconfig_utils.sh: Please do not use this file directly and check your configuration under 'config/k8s_jcasc_mgmt.cnf'."
     echo ""
     exit 1
 fi
@@ -22,7 +23,8 @@ function readIpForNamespaceFromFile() {
 
     # validate, if namespace was defined
     if [[ -z "${ARG_USED_NAMESPACE}" ]]; then
-        echo "ERROR ipconfig_utils.sh: No namespace was given as argument."
+        echo ""
+        echo "  ERROR ipconfig_utils.sh: No namespace was given as argument."
         echo ""
     else
         # if namespace was defined, try to read the IP from the config file
@@ -30,15 +32,17 @@ function readIpForNamespaceFromFile() {
             while read VAR VALUE
             do
                 if [[ "${VAR}" == "${ARG_USED_NAMESPACE}" ]]; then
-                    if [[ "${LOG_LEVEL}" != "NONE" ]]; then
-                        echo "INFO ipconfig_utils.sh: IP '${VALUE}' found for namespace '${ARG_USED_NAMESPACE}'."
-                    fi
+                    echo ""
+                    echo "  INFO ipconfig_utils: IP ${VALUE} found for namespace ${ARG_USED_NAMESPACE}."
+                    echo ""
                     eval ${ARG_RETVAL_FOUND_IP_ADDRESS}="${VALUE}"
                 fi
             done < ${IP_CONFIG_FILE}
         else
             if [[ "${LOG_LEVEL}" != "NONE" ]]; then
-                echo "INFO ipconfig_utils.sh: File '${IP_CONFIG_FILE}' not found. Create a new one!"
+                echo ""
+                echo "  INFO ipconfig_utils.sh: File ${IP_CONFIG_FILE} not found. Create a new one!"
+                echo ""
             fi
             # no file found. create new file
             touch "${IP_CONFIG_FILE}"
@@ -68,7 +72,9 @@ function validateIfIpAlreadyExists() {
         do
             if [[ "${ARG_IP_TO_CHECK}" == "${VALUE}" ]]; then
                 if [[ "${LOG_LEVEL}" != "NONE" ]]; then
-                    echo "INFO ipconfig_utils.sh: IP address '${VALUE}' already exists for namespace '${VAR}'"
+                    echo ""
+                    echo "  INFO ipconfig_utils.sh: IP address ${VALUE} already exists for namespace ${VAR}"
+                    echo ""
                 fi
                 eval ${ARG_RETVAL_NAMESPACE}="${VAR}"
                 break
@@ -76,7 +82,9 @@ function validateIfIpAlreadyExists() {
         done < ${IP_CONFIG_FILE}
     else
         if [[ "${LOG_LEVEL}" != "NONE" ]]; then
-            echo "WARN ipconfig_utils.sh: File '${IP_CONFIG_FILE}' not found."
+            echo ""
+            echo "  WARN ipconfig_utils.sh: File '${IP_CONFIG_FILE}' not found."
+            echo ""
         fi
     fi
 }
@@ -93,11 +101,15 @@ function addIpToIpConfiguration() {
 
     # validate arguments
     if [[ -z "${ARG_NEW_IP_ADDRESS}" ]]; then
-        echo "ERROR ipconfig_utils.sh: No new IP was given as argument."
+        echo ""
+        echo "  ERROR ipconfig_utils.sh: No new IP was given as argument."
+        echo ""
         exit 1
     fi
     if [[ -z "${ARG_NEW_NAMESPACE}" ]]; then
-        echo "ERROR ipconfig_utils.sh: No new namespace was given as argument."
+        echo ""
+        echo "  ERROR ipconfig_utils.sh: No new namespace was given as argument."
+        echo ""
         exit 1
     fi
 
@@ -123,9 +135,11 @@ function addIpToIpConfiguration() {
         echo "${ARG_NEW_NAMESPACE} ${ARG_NEW_IP_ADDRESS}" >> ${IP_CONFIG_FILE}
     else
         # something went wrong. No previous check has detected, that the IP already exists.
-        echo "ERROR ipconfig_utils.sh: You try to add the IP address '${ARG_NEW_IP_ADDRESS}' to the namespace '${ARG_NEW_NAMESPACE}'."
-        echo "ERROR ipconfig_utils.sh: This IP address was already assigned to the namespace '${DOES_IP_ALREADY_EXIST}'"
-        echo "ERROR ipconfig_utils.sh: Please check your '${IP_CONFIG_FILE}' file."
+        echo ""
+        echo "  ERROR ipconfig_utils.sh: You try to add the IP address '${ARG_NEW_IP_ADDRESS}' to the namespace '${ARG_NEW_NAMESPACE}'."
+        echo "  ERROR ipconfig_utils.sh: This IP address was already assigned to the namespace '${DOES_IP_ALREADY_EXIST}'"
+        echo "  ERROR ipconfig_utils.sh: Please check your '${IP_CONFIG_FILE}' file."
+        echo ""
         exit 1
     fi
 }

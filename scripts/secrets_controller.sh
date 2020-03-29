@@ -8,13 +8,17 @@
 ##########
 function encryptSecrets() {
     if [[ "${LOG_LEVEL}" != "NONE" ]]; then
-        echo "INFO secrets_controller.sh: Encrypt the secrets..."
+        echo ""
+        echo "  INFO secrets_controller.sh: Encrypt the secrets..."
+        echo ""
     fi
     local VAR_SECRETS_FILE
     resolveSecretsFile VAR_SECRETS_FILE
 
     if [[ "${LOG_LEVEL}" == "DEBUG" ]]; then
-        echo "INFO secrets_controller.sh: Secrets file resolved under '${VAR_SECRETS_FILE}'"
+        echo ""
+        echo "  INFO secrets_controller.sh: Secrets file resolved under '${VAR_SECRETS_FILE}'"
+        echo ""
     fi
 
     openssl aes-256-cbc -a -salt -in ${VAR_SECRETS_FILE} -out ${VAR_SECRETS_FILE}.enc
@@ -22,7 +26,9 @@ function encryptSecrets() {
 
 
     if [[ "${LOG_LEVEL}" != "NONE" ]]; then
-        echo "INFO secrets_controller.sh: Encryption finished..."
+        echo ""
+        echo "  INFO secrets_controller.sh: Encryption finished..."
+        echo ""
     fi
 }
 
@@ -73,8 +79,9 @@ function resolveSecretsFile() {
 
     if [[ -z "${GLOBAL_SECRETS_FILE}" ]]; then
         if [[ -z "${ARG_PROJECT_DIRECTORY}" ]]; then
-            echo "ERROR secrets_controller.sh: Unable to search for a secrets file!"
-            echo "ERROR secrets_controller.sh: Please configure 'GLOBAL_SECRETS_FILE' or use the '-p' or '--projectdir' option to define the project."
+            echo ""
+            echo "  ERROR secrets_controller.sh: Unable to search for a secrets file!"
+            echo "  ERROR secrets_controller.sh: Please configure 'GLOBAL_SECRETS_FILE' or use the '-p' or '--projectdir' option to define the project."
             echo ""
             exit 1
         else
