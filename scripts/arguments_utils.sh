@@ -3,6 +3,58 @@
 ## DO NOT USE THIS SCRIPT DIRECTLY!
 ## This script will be loaded by the 'k8s-jcasc.sh' script.
 
+##########
+# Global command variables
+_K8S_MGMT_COMMAND_INSTALL="INSTALL"
+_K8S_MGMT_COMMAND_UNINSTALL="UNINSTALL"
+_K8S_MGMT_COMMAND_SECRETS_ENCRYPT="SECRETS_ENCRYPT"
+_K8S_MGMT_COMMAND_SECRETS_DECRYPT="SECRETS_DECRYPT"
+_K8S_MGMT_COMMAND_SECRETS_APPLY="SECRETS_APPLY"
+_K8S_MGMT_COMMAND_CREATE_PROJECT="CREATE_PROJECT"
+
+##########
+# Functions to set the K8S_MGMT_COMMAND.
+function setCommandToInstall() {
+    K8S_MGMT_COMMAND="${_K8S_MGMT_COMMAND_INSTALL}"
+}
+function setCommandToUnInstall() {
+    K8S_MGMT_COMMAND="${_K8S_MGMT_COMMAND_UNINSTALL}"
+}
+function setCommandToSecretsEncrypt() {
+    K8S_MGMT_COMMAND="${_K8S_MGMT_COMMAND_SECRETS_ENCRYPT}"
+}
+function setCommandToSecretDecrypt() {
+    K8S_MGMT_COMMAND="${_K8S_MGMT_COMMAND_SECRETS_DECRYPT}"
+}
+function setCommandToSecretsApply() {
+    K8S_MGMT_COMMAND="${_K8S_MGMT_COMMAND_SECRETS_APPLY}"
+}
+function setCommandToCreateProject() {
+    K8S_MGMT_COMMAND="${_K8S_MGMT_COMMAND_CREATE_PROJECT}"
+}
+
+##########
+# If a command was not already set, this function asks for the command
+#
+function selectInstallationType() {
+    if [[ -z "${K8S_MGMT_COMMAND}" ]]; then
+        echo "Please select the command you want to execute:"
+            select WIZARD in "install" "uninstall" "encryptSecrets" "decryptSecrets" "applySecrets" "createProject"; do
+                case $WIZARD in
+                    install) setCommandToInstall; break;;
+                    uninstall) setCommandToUnInstall; break;;
+                    encryptSecrets) setCommandToSecretsEncrypt; break;;
+                    decryptSecrets) setCommandToSecretDecrypt; break;;
+                    applySecrets) setCommandToSecretsApply; break;;
+                    createProject) setCommandToCreateProject; break;;
+                esac
+            done
+    fi
+}
+
+##########
+# Process arguments and set defaults
+#
 function processArguments() {
     # check arguments
     for i in "$@"
@@ -11,13 +63,12 @@ function processArguments() {
             ## options
             # directory, where the project configuration is located
             -p=*|--projectdir=*)
-                PROJECT_NAME="${i#*=}"
-                SED_BASE_DIR=projects/${PROJECT_NAME}
+                K8S_MGMT_PROJECT_DIRECTORY="${i#*=}"
                 shift # past argument=value
             ;;
             # name of the namespace
             -n=*|--namespace=*)
-                NAMESPACE="${i#*=}"
+                K8S_MGMT_NAMESPACE="${i#*=}"
                 shift # past argument=value
             ;;
             # name of the deployment
@@ -29,32 +80,32 @@ function processArguments() {
             ## arguments
             # install Jenkins
             install)
-                TYPE="install"
+                setCommandToInstall
                 shift # past argument=value
             ;;
             # uninstall Jenkins
             uninstall)
-                TYPE="uninstall"
+                setCommandToUnInstall
                 shift # past argument=value
             ;;
             # encrypt the secrets
             encryptsecrets)
-                TYPE="encrypt"
+                setCommandToSecretsEncrypt
                 shift # past argument=value
             ;;
             # decrypt the secrets
             decryptsecrets)
-                TYPE="decrypt"
+                setCommandToSecretDecrypt
                 shift # past argument=value
             ;;
             # apply secrets to kubernetes
             applysecrets)
-                TYPE="applysecrets"
+                applySecrets
                 shift # past argument=value
             ;;
             # create new project
             createproject)
-                TYPE="createproject"
+                setCommandToCreateProject
                 shift # past argument=value
             ;;
             *)
@@ -62,4 +113,6 @@ function processArguments() {
             ;;
         esac
     done
+
+    selectInstallationType
 }

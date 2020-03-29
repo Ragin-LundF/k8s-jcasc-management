@@ -114,6 +114,23 @@ function dialogAskForJenkinsSystemMessage() {
 }
 
 ##########
+# Ask for existing persistence claim.
+#
+# argument 1: variable in which the result should be written (return value)
+##########
+function dialogAskForExistingPersistenceClaim() {
+    # arguments
+    local ARG_RETVALUE=$1
+
+    # get data from user
+    local __INTERNAL_EXISTING_PERSISTENCE_CLAIM
+    echo "Enter an existing claim, that should be reused or leave empty for no persistence claim. You can change it later in the jenkins_helm_values.yaml file."
+    read -p "Existing claim: " __INTERNAL_EXISTING_PERSISTENCE_CLAIM
+
+    eval ${ARG_RETVALUE}="\${__INTERNAL_EXISTING_PERSISTENCE_CLAIM}"
+}
+
+##########
 # Ask for Jenkins job configuration repository.
 #
 # argument 1: variable in which the result should be written (return value)

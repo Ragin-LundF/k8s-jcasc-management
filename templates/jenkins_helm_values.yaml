@@ -16,7 +16,7 @@ master:
       </authorizationStrategy>
   # Define a admin password here. Normally it does not matter who has access, because settings can be reloaded from the repository.
   # But for security reasons try to use a password, that is not easy and avoid to give anonymous read access to the project where Jenkins is located.
-  adminPassword: "##JENKINS_ADMIN_PASSWORD##"
+  adminPassword: "##JENKINS_MASTER_ADMIN_PASSWORD##"
   # We do not want to execute Jenkins as root. The Jenkins container are using 1000:1000 as jenkins:jenkins user/group
   runAsUser: 1000
   fsGroup: 1000

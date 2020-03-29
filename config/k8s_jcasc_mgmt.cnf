@@ -21,6 +21,9 @@ JENKINS_JOBDSL_BASE_URL=http://github.com
 # Validation pattern for Jenkins JobDSL URI/URL
 JENKINS_JOBDSL_REPO_VALIDATE_PATTERN=".*\.git"
 
+# Default admin password for Jenkins
+JENKINS_MASTER_ADMIN_PASSWORD=admin
+
 # Default label for the jenkins master to execute the seed job, which will be bind to this label.
 JENKINS_MASTER_DEFAULT_LABEL=jenkins-master-for-seed
 

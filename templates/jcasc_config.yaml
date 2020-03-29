@@ -201,7 +201,7 @@ unclassified:
           skipUpstreamCause: false
 
 # JobDSL definition of the seed-job.
-# This job creates all other jobs from a bitbucket repository.
+# This job creates all other jobs from a Bitbucket repository.
 # With this mechanism, it is possible to have a simple job definition in your VCS and there is no need to make
 # backups of the jobs. Simply redeploy Jenkins and everything runs as before.
 # This job will also be used to add/delete jobs by simply adding new job definitions to the job file in this repository.
