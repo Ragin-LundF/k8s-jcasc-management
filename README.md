@@ -9,11 +9,14 @@ To simplify the installation and the project settings, it has a small helper too
 * manage secrets
     * encrypt/decrypt secrets for secure commit to a VCS (version control system)
     * apply secrets to kubernetes
-    * manage secrets globally for easy administration
-    * manage secrets per project for more security
+    * store secrets globally for easy administration
+    * store secrets per project for more security
 * manage the Jenkins instances for a namespace with the project configuration
     * install
     * uninstall
+    * upgrade
+
+*The password for the preconfigured secrets file is `admin`. There is no valid data inside this file! Please change it for your own project!*
 
 ## Configuration ##
 
