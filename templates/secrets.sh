@@ -20,10 +20,10 @@
 #
 # Credentials ID for containers in this example: docker-registry-credentialsId
 ##########
-kubectl -n ${NAMESPACE} delete secret docker-registry-credentialsId
+kubectl -n ${NAMESPACE} delete secret docker-registry-credentialsid
 kubectl -n ${NAMESPACE} \
                 create secret docker-registry \
-                docker-registry-credentialsId \
+                docker-registry-credentialsid \
                 --docker-server=hub.docker.com \
                 --docker-username=myUsername \
                 --docker-password=myPassword \
@@ -38,7 +38,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   # this is the jenkins credentials id
-  name: "github-credentialsId"
+  name: "github-credentialsid"
   labels:
     "jenkins.io/credentials-type": "basicSSHUserPrivateKey"
   annotations:
@@ -85,7 +85,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   # this is the jenkins credentials id.
-  name: "vcs-notification-credentialsId"
+  name: "vcs-notification-credentialsid"
   labels:
     "jenkins.io/credentials-type": "usernamePassword"
   annotations:
@@ -106,7 +106,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   # this is the jenkins credentials id.
-  name: "repository-credentialsId"
+  name: "repository-credentialsid"
   labels:
     "jenkins.io/credentials-type": "usernamePassword"
   annotations:
@@ -131,7 +131,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   # this is the jenkins credentials id.
-  name: "docker-repository-credentialsId"
+  name: "docker-repository-credentialsid"
   labels:
     "jenkins.io/credentials-type": "usernamePassword"
   annotations:
