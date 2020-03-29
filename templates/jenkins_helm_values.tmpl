@@ -1,4 +1,8 @@
 master:
+  image: "##JENKINS_MASTER_CONTAINER_IMAGE##"
+  tag: "##JENKINS_MASTER_CONTAINER_IMAGE_TAG##"
+  imagePullPolicy: "##JENKINS_MASTER_CONTAINER_PULL_POLICY##"
+  imagePullSecretName: ##JENKINS_MASTER_CONTAINER_IMAGE_PULL_SECRET_NAME##
   # need 1 executor as default to execute the seed job
   numExecutors: 1
   # give a custom label to the master instance, that the seed job can run in it

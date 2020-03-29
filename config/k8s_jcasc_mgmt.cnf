@@ -14,6 +14,13 @@ GLOBAL_SECRETS_FILE=./projects/default/secrets.sh
 # You can use the '##PROJECT_DIRECTORY##' template variable here to
 JENKINS_JCASC_CONFIGURATION_URL=https://raw.githubusercontent.com/Ragin-LundF/k8s-jcasc-project-config/master/##PROJECT_DIRECTORY##/jcasc_config.yaml
 
+# If this variable is set, it is possible to add only the URI of the JobDSL configuration instead the full URL.
+# Leave empty if only full URLs are allowed
+JENKINS_JOBDSL_BASE_URL=http://github.com
+
+# Validation pattern for Jenkins JobDSL URI/URL
+JENKINS_JOBDSL_REPO_VALIDATE_PATTERN=".*\.git"
+
 # Default label for the jenkins master to execute the seed job, which will be bind to this label.
 JENKINS_MASTER_DEFAULT_LABEL=jenkins-master-for-seed
 
@@ -36,5 +43,12 @@ JENKINS_MASTER_PERSISTENCE_ACCESS_MODE=ReadWriteMany
 # Define the default storage size for the Jenkins master
 JENKINS_MASTER_PERSISTENCE_STORAGE_SIZE=8Gi
 
+# Image of the Jenkins Master
+JENKINS_MASTER_CONTAINER_IMAGE=jenkins/jenkins
+JENKINS_MASTER_CONTAINER_IMAGE_TAG=lts
+JENKINS_MASTER_CONTAINER_PULL_POLICY=Always
+JENKINS_MASTER_CONTAINER_IMAGE_PULL_SECRET_NAME=
+
 # Image of the Nginx ingress controller
 NGINX_INGRESS_CONTROLLER_CONTAINER_IMAGE=bitnami/nginx-ingress-controller:latest
+

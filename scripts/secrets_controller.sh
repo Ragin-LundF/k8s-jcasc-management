@@ -82,9 +82,9 @@ function resolveSecretsFile() {
             echo ""
             exit 1
         else
-            eval ${ARG_RETVAL_SECRET_DIR}="${PROJECTS_DIRECTORY}${PROJECT_NAME}/"
+            eval ${ARG_RETVAL_SECRET_DIR}="\${PROJECTS_DIRECTORY}\${PROJECT_NAME}/"
         fi
     else
-        eval ${ARG_RETVAL_SECRET_DIR}="${GLOBAL_SECRETS_FILE}"
+        eval ${ARG_RETVAL_SECRET_DIR}="\${GLOBAL_SECRETS_FILE}"
     fi
 }

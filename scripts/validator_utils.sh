@@ -12,8 +12,12 @@
 #             false = IP address has not correct syntax
 ##########
 function validateIpAddress() {
+    # arguments
     local ARG_IP_ADDRESS=$1
     local ARG_RETVALUE=$2
+
+    # validation constants
+    local __INTERNAL_IP_REGEX_PATTERN="^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$"
 
     if [[ ! "${ARG_IP_ADDRESS}" =~ ^[0-9]+(\.[0-9]+){3}$ ]]; then
         echo "ERROR validator_utils.sh: IP address validation failed. Please check your IP!"
@@ -56,5 +60,5 @@ function validateNamespace() {
         echo ""
         __INTERNAL_RETVALUE="false"
     fi
-    eval ${ARG_RETVALUE}="${__INTERNAL_RETVALUE}"
+    eval ${ARG_RETVALUE}="\${__INTERNAL_RETVALUE}"
 }
