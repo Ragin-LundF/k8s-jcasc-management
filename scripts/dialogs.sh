@@ -4,6 +4,28 @@
 ## This script will be loaded by the 'k8s-jcasc.sh' script.
 
 ##########
+# Ask for Project directory if it was not already set.
+#
+# argument 1: variable in which the result should be written (return value)
+##########
+function dialogAskForProjectDirectory() {
+    # arguments
+    local ARG_RETVALUE=$1
+
+    # first check, if global IP variable was not set
+    local __INTERNAL_PROJECT_DIRECTORY
+    if [[ -z "${K8S_MGMT_PROJECT_DIRECTORY}" ]]; then
+        # get data from user
+        echo "Please enter the target project directory."
+        read -p "Directory: " __INTERNAL_PROJECT_DIRECTORY
+    else
+        __INTERNAL_PROJECT_DIRECTORY="${K8S_MGMT_PROJECT_DIRECTORY}"
+    fi
+
+    eval ${ARG_RETVALUE}="\${__INTERNAL_PROJECT_DIRECTORY}"
+}
+
+##########
 # Ask for namespace, if global K8S mgmt namespace variable was not set.
 # If the namespace is wrong the dialog calls itself again until the user
 # enters a valid name
@@ -15,12 +37,13 @@ function dialogAskForNamespace() {
     local ARG_RETVALUE=$1
 
     # first check, if global namespace variable was not set
+    local __INTERNAL_NAMESPACE_VALID
     if [[ -z "${K8S_MGMT_NAMESPACE}" ]]; then
         # get data from user
-        read -p "Please enter the namespace for your installation: " __INTERNAL_NAMESPACE
+        echo "Please enter the namespace for your installation."
+        read -p "Namespace: " __INTERNAL_NAMESPACE
 
         # validate
-        local __INTERNAL_NAMESPACE_VALID
         validateNamespace "${__INTERNAL_NAMESPACE}" __INTERNAL_NAMESPACE_VALID
         # if namespace was invalid ask again, else return namespace
         if [[ "${__INTERNAL_NAMESPACE_VALID}" == "false" ]]; then
@@ -45,12 +68,13 @@ function dialogAskForIpAddress() {
     local ARG_RETVALUE=$1
 
     # first check, if global IP variable was not set
+    local __INTERNAL_IP_ADDRESS_VALID
     if [[ -z "${K8S_MGMT_IP_ADDRESS}" ]]; then
         # get data from user
-        read -p "Please enter the loadbalancer IP for your installation: " __INTERNAL_IP_ADDRESS
+        echo "Please enter the loadbalancer IP for your installation."
+        read -p "IP address: " __INTERNAL_IP_ADDRESS
 
         # validate
-        local __INTERNAL_IP_ADDRESS_VALID
         validateIpAddress "${__INTERNAL_IP_ADDRESS}" __INTERNAL_IP_ADDRESS_VALID
         # if IP address was invalid ask again, else return IP
         if [[ "${__INTERNAL_IP_ADDRESS_VALID}" == "false" ]]; then
@@ -74,7 +98,8 @@ function dialogAskForJenkinsSystemMessage() {
 
     # get data from user
     local __INTERNAL_JENKINS_SYSMSG
-    read -p "Please enter the Jenkins system message or leave empty for default (can be changed later in the JCasC file): " __INTERNAL_JENKINS_SYSMSG
+    echo "Please enter the Jenkins system message or leave empty for default (can be changed later in the JCasC file)."
+    read -p "System message: " __INTERNAL_JENKINS_SYSMSG
 
     eval ${ARG_RETVALUE}="\${__INTERNAL_JENKINS_SYSMSG}"
 }
@@ -89,14 +114,13 @@ function dialogAskForJenkinsJobConfigurationRepository() {
     local ARG_RETVALUE=$1
 
     # generate the message
-    local READ_MESSAGE
     if [[ -z "${JENKINS_JOBDSL_BASE_URL}" ]]; then
-        READ_MESSAGE="Please enter the URL to the job configuration repository"
+        echo "Please enter the URL to the job configuration repository"
     else
-        READ_MESSAGE="Please enter the URL or URI to the job configuration repository (URI must be the part after '${JENKINS_JOBDSL_BASE_URL}')"
+        echo "Please enter the URL or URI to the job configuration repository (URI must be the part after '${JENKINS_JOBDSL_BASE_URL}')"
     fi
     # get data from user
-    read -p "${READ_MESSAGE}: " __INTERNAL_JENKINS_JOB_REPO
+    read -p "JobDSL file URL: " __INTERNAL_JENKINS_JOB_REPO
 
     # validate entry if pattern was there
     if [[ ! -z "${JENKINS_JOBDSL_REPO_VALIDATE_PATTERN}" ]]; then

@@ -2,13 +2,6 @@
 #########
 ## DO NOT USE THIS SCRIPT DIRECTLY!
 ## This script will be loaded by the 'k8s-jcasc.sh' script.
-## The following check ensures, that everything was correct to use this script
-if [[ -z "${PROJECTS_DIRECTORY}" ]]; then
-    echo "ERROR secrets_controller.sh: Configuration file was not read correctly. Could not find the 'PROJECTS_DIRECTORY' variable."
-    echo "ERROR secrets_controller.sh: Please do not use this file directly and check your configuration under 'config/k8s_jcasc_mgmt.cnf'."
-    echo ""
-    exit 1
-fi
 
 ##########
 # Function to encrypt the secrets with openssl
@@ -17,15 +10,15 @@ function encryptSecrets() {
     if [[ "${LOG_LEVEL}" != "NONE" ]]; then
         echo "INFO secrets_controller.sh: Encrypt the secrets..."
     fi
-    local SECRETS_FILE
-    resolveSecretsFile SECRETS_FILE
+    local VAR_SECRETS_FILE
+    resolveSecretsFile VAR_SECRETS_FILE
 
     if [[ "${LOG_LEVEL}" == "DEBUG" ]]; then
-        echo "INFO secrets_controller.sh: Secrets file resolved under '${SECRETS_FILE}'"
+        echo "INFO secrets_controller.sh: Secrets file resolved under '${VAR_SECRETS_FILE}'"
     fi
 
-    openssl aes-256-cbc -a -salt -in ${SECRETS_FILE} -out ${SECRETS_FILE}.enc
-    rm ${SECRETS_FILE}
+    openssl aes-256-cbc -a -salt -in ${VAR_SECRETS_FILE} -out ${VAR_SECRETS_FILE}.enc
+    rm ${VAR_SECRETS_FILE}
 
 
     if [[ "${LOG_LEVEL}" != "NONE" ]]; then
@@ -37,10 +30,10 @@ function encryptSecrets() {
 # Function to decrypt the secrets with openssl
 ##########
 function decryptSecrets() {
-    local SECRETS_FILE
-    resolveSecretsFile SECRETS_FILE
+    local VAR_SECRETS_FILE
+    resolveSecretsFile VAR_SECRETS_FILE
 
-    openssl aes-256-cbc -d -a -in ${SECRETS_FILE}.enc -out ${SECRETS_FILE}
+    openssl aes-256-cbc -d -a -in ${VAR_SECRETS_FILE}.enc -out ${VAR_SECRETS_FILE}
 }
 
 ##########
@@ -50,8 +43,8 @@ function decryptSecrets() {
 ##########
 function applySecrets() {
     local ARG_NAMESPACE=$1
-    local SECRETS_FILE
-    resolveSecretsFile SECRETS_FILE
+    local VAR_SECRETS_FILE
+    resolveSecretsFile VAR_SECRETS_FILE
 
     # check if namespace is known, that we can apply the secrets.
     if [[ -z "${ARG_NAMESPACE}" ]]; then
@@ -62,8 +55,8 @@ function applySecrets() {
     # decrypt the secrets
     decryptSecrets
     # set namespace variable and execute the secrets file to apply the secrets
-    echo "env NAMESPACE=${ARG_NAMESPACE} sh ${SECRETS_FILE}"
-    rm ${SECRETS_FILE}
+    echo "env NAMESPACE=${ARG_NAMESPACE} sh ${VAR_SECRETS_FILE}"
+    rm ${VAR_SECRETS_FILE}
 }
 
 ##########
@@ -71,18 +64,21 @@ function applySecrets() {
 #
 # argument 1: variable in which the result should be written (return value)
 #             The result contains the directory with the name of the file without the .enc extension
+# argument 2: optional project directory, if secrets file is not managed in a central place
 ##########
 function resolveSecretsFile() {
     local ARG_RETVAL_SECRET_DIR=$1
+    # optional project name, if it was not set globally
+    local ARG_PROJECT_DIRECTORY=$2
 
     if [[ -z "${GLOBAL_SECRETS_FILE}" ]]; then
-        if [[ -z "${PROJECT_NAME}" ]]; then
+        if [[ -z "${ARG_PROJECT_DIRECTORY}" ]]; then
             echo "ERROR secrets_controller.sh: Unable to search for a secrets file!"
             echo "ERROR secrets_controller.sh: Please configure 'GLOBAL_SECRETS_FILE' or use the '-p' or '--projectdir' option to define the project."
             echo ""
             exit 1
         else
-            eval ${ARG_RETVAL_SECRET_DIR}="\${PROJECTS_DIRECTORY}\${PROJECT_NAME}/"
+            eval ${ARG_RETVAL_SECRET_DIR}="\${ARG_PROJECT_DIRECTORY}/secrets.sh"
         fi
     else
         eval ${ARG_RETVAL_SECRET_DIR}="\${GLOBAL_SECRETS_FILE}"

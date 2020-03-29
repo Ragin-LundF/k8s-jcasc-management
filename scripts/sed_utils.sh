@@ -32,8 +32,13 @@ function replaceStringInFile() {
         exit 1
     fi
     if [[ ! -f "${ARG_FILE_TO_PROCESS}" ]]; then
-        echo "ERROR sed_utils.sh: File in which something should be replaced does not exist."
+        echo "ERROR sed_utils.sh: File (${ARG_FILE_TO_PROCESS}) in which something should be replaced does not exist."
         exit 1
+    fi
+
+    # ensure, that the files does not contain double slashes
+    if [[ "${ARG_FILE_TO_PROCESS}" == *"//"* ]]; then
+        ARG_FILE_TO_PROCESS=$(echo ${ARG_FILE_TO_PROCESS} | sed -e 's|'//'|'/'|')
     fi
 
     # replace the string and write a new file via tee.
