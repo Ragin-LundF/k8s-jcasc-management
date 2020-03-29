@@ -73,7 +73,7 @@ function processArguments() {
             ;;
             # name of the deployment
             -d=*|--deploymentname=*)
-                NAME="${i#*=}"
+                K8S_MGMT_DEPLOYMENTNAME="${i#*=}"
                 shift # past argument=value
             ;;
 
