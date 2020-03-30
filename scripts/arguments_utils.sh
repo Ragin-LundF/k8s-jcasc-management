@@ -11,6 +11,7 @@ _K8S_MGMT_COMMAND_UNINSTALL="UNINSTALL"
 _K8S_MGMT_COMMAND_SECRETS_ENCRYPT="SECRETS_ENCRYPT"
 _K8S_MGMT_COMMAND_SECRETS_DECRYPT="SECRETS_DECRYPT"
 _K8S_MGMT_COMMAND_SECRETS_APPLY="SECRETS_APPLY"
+_K8S_MGMT_COMMAND_SECRETS_APPLY_TO_ALL_NAMESPACES="SECRETS_APPLY_ALL_NAMESPACES"
 _K8S_MGMT_COMMAND_CREATE_PROJECT="CREATE_PROJECT"
 
 ##########
@@ -33,6 +34,9 @@ function setCommandToSecretDecrypt() {
 function setCommandToSecretsApply() {
     K8S_MGMT_COMMAND="${_K8S_MGMT_COMMAND_SECRETS_APPLY}"
 }
+function setCommandToSecretsApplyToAllNamespaces() {
+    K8S_MGMT_COMMAND="${_K8S_MGMT_COMMAND_SECRETS_APPLY_TO_ALL_NAMESPACES}"
+}
 function setCommandToCreateProject() {
     K8S_MGMT_COMMAND="${_K8S_MGMT_COMMAND_CREATE_PROJECT}"
 }
@@ -43,7 +47,7 @@ function setCommandToCreateProject() {
 function selectInstallationType() {
     if [[ -z "${K8S_MGMT_COMMAND}" ]]; then
         echo "Please select the command you want to execute:"
-            select WIZARD in "install" "uninstall" "upgrade" "encryptSecrets" "decryptSecrets" "applySecrets" "createProject"; do
+            select WIZARD in "install" "uninstall" "upgrade" "encryptSecrets" "decryptSecrets" "applySecrets" "applySecretsToAll" "createProject"; do
                 case $WIZARD in
                     install) setCommandToInstall; break;;
                     uninstall) setCommandToUnInstall; break;;
@@ -51,6 +55,7 @@ function selectInstallationType() {
                     encryptSecrets) setCommandToSecretsEncrypt; break;;
                     decryptSecrets) setCommandToSecretDecrypt; break;;
                     applySecrets) setCommandToSecretsApply; break;;
+                    applySecretsToAll) setCommandToSecretsApplyToAllNamespaces; break;;
                     createProject) setCommandToCreateProject; break;;
                 esac
             done
@@ -110,7 +115,12 @@ function processArguments() {
             ;;
             # apply secrets to kubernetes
             applysecrets)
-                applySecrets
+                setCommandToSecretsApply
+                shift # past argument=value
+            ;;
+            # apply secrets to kubernetes
+            applysecretstoallnamespaces)
+                setCommandToSecretsApplyToAllNamespaces
                 shift # past argument=value
             ;;
             # create new project

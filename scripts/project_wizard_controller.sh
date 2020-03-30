@@ -41,7 +41,6 @@ function processTemplatesWithNamespace() {
         # Name of the Jenkins deployment
         replaceStringInFile "##NAMESPACE##" "${ARG_NAMESPACE}" ${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml
     fi
-
 }
 
 ##########

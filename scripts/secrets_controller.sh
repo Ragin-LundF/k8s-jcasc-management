@@ -45,6 +45,19 @@ function decryptSecrets() {
 }
 
 ##########
+# Private function to apply the secrets to the namespace
+#
+# argument 1: namespace to which the secrets should be applied
+# argument 2: secrets file which should be applied
+##########
+function __applySecretsToNamespace() {
+    local ARG_NAMESPACE=$1
+    local ARG_SECRETS_FILE=$2
+
+    env NAMESPACE=${ARG_NAMESPACE} sh ${ARG_SECRETS_FILE}
+}
+
+##########
 # Function to execute the secrets file
 #
 # argument 1: namespace to which the secrets should be applied
@@ -63,8 +76,48 @@ function applySecrets() {
     # decrypt the secrets
     decryptSecrets
     # set namespace variable and execute the secrets file to apply the secrets
-    env NAMESPACE=${ARG_NAMESPACE} sh ${VAR_SECRETS_FILE}
+    __applySecretsToNamespace "${ARG_NAMESPACE}" "${VAR_SECRETS_FILE}"
+    # we are done...remove the decrypted secrets.sh file
     rm ${VAR_SECRETS_FILE}
+}
+
+##########
+# Function to apply the secrets to every namespace, which is defined in the IP_CONFIG_FILE file.
+#
+##########
+function applyGlobalSecretsToAllNamespaces() {
+    if [[ -n "${GLOBAL_SECRETS_FILE}" ]]; then
+        # variables
+        local VAR_SECRETS_FILE
+        resolveSecretsFile VAR_SECRETS_FILE
+
+        # read namespaces from file
+        local VAR_NAMESPACE_FROM_IP_FILE
+        readNamespacesFromFile VAR_NAMESPACE_FROM_IP_FILE
+
+        local array VAR_NAMESPACE_ARRAY=()
+        IFS=',' read -r -a VAR_NAMESPACE_ARRAY <<< "${VAR_NAMESPACE_FROM_IP_FILE}"
+
+        # decrypt the secrets
+        decryptSecrets
+
+        # iterate over the namespaces and apply the secrets
+        for __NAMESPACE in "${VAR_NAMESPACE_ARRAY[@]}"
+        do
+            if [[ -n "${__NAMESPACE}" ]]; then
+                __applySecretsToNamespace "${__NAMESPACE}" "${VAR_SECRETS_FILE}"
+            fi
+        done
+
+        # we are done...remove the decrypted secrets.sh file
+        rm ${VAR_SECRETS_FILE}
+    else
+        echo ""
+        echo "  ERROR: This function is only available for globally configured secrets files!"
+        echo "  ERROR: To use it, please configure the GLOBAL_SECRETS_FILE variable."
+        echo ""
+        exit 1
+    fi
 }
 
 ##########
