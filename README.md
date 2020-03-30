@@ -194,6 +194,7 @@ The following commands are supported:
 | `encryptsecrets` | Encrypt the secrets (global secrets or project secrets, depending on configuration). |
 | `decryptsecrets` | Decrypt the secrets (global secrets or project secrets, depending on configuration). |
 | `applysecrets` | Apply the secrets to the Kubernetes namespace (global secrets or project secrets, depending on configuration). |
+| `applySecretsToAll` | Apply the secrets to all known namespaces in Kubernetes (global secrets only). |
 | `createproject` | Create a new Jenkins project for the configuration and deployment values from the templates. It uses a wizard to ask for relevant data. |
 
 ## IP Management ##
