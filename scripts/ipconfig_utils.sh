@@ -53,6 +53,32 @@ function readIpForNamespaceFromFile() {
 }
 
 ##########
+# This functions is reading all namespaces from the IP_CONFIG_FILE.
+#
+# argument 1: return value variable to store a comma separated list of the namespaces in
+##########
+function readNamespacesFromFile() {
+    # arguments
+    local ARG_RETVALUE=$1
+
+    # variables
+    local __NAMESPACE_LIST
+
+    if [[ -f "${IP_CONFIG_FILE}" ]]; then
+        while read VAR VALUE
+        do
+            __NAMESPACE_LIST="${__NAMESPACE_LIST},${VAR}"
+        done < ${IP_CONFIG_FILE}
+    else
+        echo ""
+        echo "  ERROR: Cannot read IP config file from (${IP_CONFIG_FILE}) to resolve namespaces."
+        echo ""
+        exit 1
+    fi
+    eval ${ARG_RETVALUE}="\${__NAMESPACE_LIST}"
+}
+
+##########
 # This functions is reading the current IP for the given namespace, if it exists
 #
 # argument 1: IP that should be checked against the configuration

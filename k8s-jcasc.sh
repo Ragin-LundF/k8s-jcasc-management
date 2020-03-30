@@ -58,6 +58,12 @@ function run() {
         decryptSecrets
     elif [[ "${_K8S_MGMT_COMMAND_SECRETS_APPLY}" == "${K8S_MGMT_COMMAND}" ]]; then
         ## apply secrets
+        applySecrets
+    elif [[ "${_K8S_MGMT_COMMAND_SECRETS_APPLY_TO_ALL_NAMESPACES}" == "${K8S_MGMT_COMMAND}" ]]; then
+        ## apply secrets to all namespaces
+        applyGlobalSecretsToAllNamespaces
+    elif [[ "${_K8S_MGMT_COMMAND_SECRETS_APPLY}" == "${K8S_MGMT_COMMAND}" ]]; then
+        ## apply secrets
         # resolve namespace from global variable or ask for it
         local __INTERNAL_NAMESPACE
         dialogAskForNamespace __INTERNAL_NAMESPACE
