@@ -130,6 +130,30 @@ All files and directories under the `PROJECTS_BASE_DIRECTORY' should be passed t
 
 Then your existing Jenkins projects can be fully recovered from this repository.
 
+### Configure alternative configuration with overlays ###
+
+To use this repository "as-it-is", it is possible to create a `config/k8s_jcasc_custom.cnf` file.
+
+This file can contain the following configuration:
+
+```bash
+# Define path to alternative configuration file
+K8S_MGMT_ALTERNATIVE_CONFIG_FILE=/my/path/to/my.config
+
+# Is the alternative configuration only a overlay or a full configuration?
+# (true = both config files will be used, false = only the alternative config will be used)
+K8S_MGMT_WORK_AS_OVERLAY=true
+```
+
+The script checks, if this file exists.
+If this is the case, it loads this configuration and checks the argument for the path of the alternative config file.
+
+This means, that the `K8S_MGMT_ALTERNATIVE_CONFIG_FILE` key can define, where the alternative of the `k8s_jcasc_mgmt.cnf` is located.
+In the `.gitignore` file, this file is set to ignore, to prevent a commit.
+
+With the `K8S_MGMT_WORK_AS_OVERLAY` key it is possible to tell the system to first load the original configuration (`k8s_jcasc_mgmt.cnf`) and then the alternative config, which was defined with the `K8S_MGMT_ALTERNATIVE_CONFIG_FILE` key.
+In the new configuration, it is only required to overwrite the options, that has to be changed instead of writing a new file with the complete configuration, which can result in update problems.
+
 ## How to use ##
 
 The simplest way is to call the script without arguments. Everything else will be asked by the script.

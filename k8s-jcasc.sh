@@ -1,7 +1,24 @@
 #!/bin/bash
 
 # read configuration
-source ./config/k8s_jcasc_mgmt.cnf
+if [[ -f "./config/k8s_jcasc_custom.cnf" ]]; then
+    source ./config/k8s_jcasc_custom.cnf
+    if [[ -f "${K8S_MGMT_ALTERNATIVE_CONFIG_FILE}"  ]]; then
+        # if the alternative config file should work as overlay, load the original config first
+        # and then the alternative to reset the overwritten configuration
+        if [[ -n "${K8S_MGMT_WORK_AS_OVERLAY}" && "${K8S_MGMT_WORK_AS_OVERLAY}" == "true" ]]; then
+            source ./config/k8s_jcasc_mgmt.cnf
+        fi
+        source ${K8S_MGMT_ALTERNATIVE_CONFIG_FILE}
+    else
+        echo ""
+        echo "  ERROR: Configured alternative config not found! Please check your config/k8s_jcasc_custom.cnf file!"
+        echo ""
+        exit 1
+    fi
+else
+    source ./config/k8s_jcasc_mgmt.cnf
+fi
 
 # import subscripts (take care with order!)
 source ./scripts/arguments_utils.sh
