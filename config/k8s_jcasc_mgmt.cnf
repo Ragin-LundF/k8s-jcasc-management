@@ -6,6 +6,9 @@ IP_CONFIG_FILE=./config/ip_config.cnf
 # directory, where the projects are located. Must contain a trailing slash!
 PROJECTS_BASE_DIRECTORY=./projects/
 
+# directory for templates. If own templates should be used, it is possible to store them in a separate repository and to configure the path to this repo here.
+TEMPLATES_BASE_DIRECTORY=./templates/
+
 # Use this file as a global secrets file. If you want to use different secrets for each project, comment this line.
 # If this line is commented, then the secrets will be stored under PROJECTS_DIRECTORY/secrets.sh.enc
 GLOBAL_SECRETS_FILE=./config/secrets.sh

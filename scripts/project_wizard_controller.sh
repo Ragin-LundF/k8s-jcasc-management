@@ -197,17 +197,17 @@ function createProjectFromTemplate() {
     # copy files
     ## if project does not use a global secrets file copy it to project directory
     if [[ -z "${GLOBAL_SECRETS_FILE}" ]]; then
-        cp templates/secrets.sh ${ARG_PROJECT_DIRECTORY}/
+        cp ${TEMPLATES_BASE_DIRECTORY}secrets.sh ${ARG_PROJECT_DIRECTORY}/
     fi
     # copy Jenkins Helm Chart values.yaml for project configuration
-    cp templates/jenkins_helm_values.yaml ${ARG_PROJECT_DIRECTORY}/
+    cp ${TEMPLATES_BASE_DIRECTORY}jenkins_helm_values.yaml ${ARG_PROJECT_DIRECTORY}/
     # copy JcasC file to project
-    cp templates/jcasc_config.yaml ${ARG_PROJECT_DIRECTORY}/
+    cp ${TEMPLATES_BASE_DIRECTORY}jcasc_config.yaml ${ARG_PROJECT_DIRECTORY}/
     # copy ingress values template
-    cp templates/nginx_ingress_helm_values.yaml ${ARG_PROJECT_DIRECTORY}/
+    cp ${TEMPLATES_BASE_DIRECTORY}nginx_ingress_helm_values.yaml ${ARG_PROJECT_DIRECTORY}/
 
     if [[ ! -z "${ARG_PVC_CLAIM}" ]]; then
-        cp templates/pvc_claim.yaml ${ARG_PROJECT_DIRECTORY}/
+        cp ${TEMPLATES_BASE_DIRECTORY}pvc_claim.yaml ${ARG_PROJECT_DIRECTORY}/
     fi
 }
 
