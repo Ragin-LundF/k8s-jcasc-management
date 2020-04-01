@@ -29,7 +29,8 @@ To simplify the installation and the project settings, it has a small helper too
         * one JCasC file
 * The Jenkins for each namespace will be deployed via k8s-mgmt from the cloned Git repository
 * Jenkins loads its main configuration from the project repository (and only from this, which means you can play around and reload configuration directly from the remote URL)
-* This main configuration also contains a very simple `seed-job`, which does a scm checkout of a Groovy script to manage jobs and a repository, which contains the job definition
+* This main configuration also contains a very simple `seed-job`, which does a scm checkout of a Groovy script to manage jobs and a repository, which contains the job definition.
+    * you can use the [jenkins-jobdsl-remote](https://github.com/Ragin-LundF/jenkins-jobdsl-remote) script as such an seed-job manager.
 
 ### Advantages ##
 By having all things stored in VCS repositories, which are normally backed up, it is possible to recreate every instance in no-time.
@@ -210,3 +211,4 @@ If you create a new project via the wizard, the system also checks, if a IP addr
 
 - Kubernetes DNS-Based Service Discovery: https://github.com/kubernetes/dns/blob/master/docs/specification.md
 - JCasC Examples: https://github.com/jenkinsci/configuration-as-code-plugin/tree/master/demos
+- Jenkins Seed Job script to create jobs from a JSON in a GIT repository: https://github.com/Ragin-LundF/jenkins-jobdsl-remote

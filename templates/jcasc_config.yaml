@@ -232,7 +232,7 @@ jobs:
           steps {
               dsl {
                   lookupStrategy('SEED_JOB')
-                  external('jobdslscript/seed-job-script.groovy')
+                  external('jobdslscript/JenkinsJobDslRemote.groovy')
               }
           }
           triggers {
