@@ -1,3 +1,4 @@
+{{- if .Values.k8sJenkinsMgmt.ingress.controllerForNamespace.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -55,3 +56,4 @@ spec:
             - /nginx-ingress-controller
             - --publish-service=$(POD_NAMESPACE)/{{ .Values.k8sJenkinsMgmt.ingress.deploymentName }}-lb
             - --watch-namespace=$(POD_NAMESPACE)
+{{- end }}

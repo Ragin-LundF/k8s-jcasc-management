@@ -2,7 +2,18 @@ k8sJenkinsMgmt:
   ingress:
     namespace: ""
     loadbalancerip: ""
-    containerImage: ""
-    deploymentName: ""
-    jenkinsDeploymentName: ""
-    jenkinsUriPrefix: ""
+    containerImage: "bitnami/nginx-ingress-controller:latest"
+    deploymentName: "jenkins-master"
+    jenkinsDeploymentName: "jenkins-master"
+    jenkinsUriPrefix: "/jenkins"
+    controllerForNamespace:
+      enabled: false
+  loadbalancer:
+    enabled: false
+    ports:
+      http:
+        port: 80
+        targetPort: 80
+      https:
+        port: 443
+        targetPort: 443

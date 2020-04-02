@@ -179,6 +179,13 @@ function processTemplatesWithGlobalConfiguration() {
     # nginx-ingress-controller deployment name
     replaceStringInFile "##NGINX_INGRESS_DEPLOYMENT_NAME##" "${NGINX_INGRESS_DEPLOYMENT_NAME} " ${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml
     replaceStringInFile "##NGINX_INGRESS_CONTROLLER_CONTAINER_IMAGE##" "${NGINX_INGRESS_CONTROLLER_CONTAINER_IMAGE}" ${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml
+    replaceStringInFile "##NGINX_INGRESS_CONTROLLER_FOR_NAMESPACE##" "${NGINX_INGRESS_CONTROLLER_FOR_NAMESPACE}" ${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml
+    # configure loadbalancer
+    replaceStringInFile "##NGINX_LOADBALANCER_ENABLED##" "${NGINX_LOADBALANCER_ENABLED} " ${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml
+    replaceStringInFile "##NGINX_LOADBALANCER_HTTP_PORT##" "${NGINX_LOADBALANCER_HTTP_PORT} " ${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml
+    replaceStringInFile "##NGINX_LOADBALANCER_HTTP_TARGETPORT##" "${NGINX_LOADBALANCER_HTTP_TARGETPORT} " ${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml
+    replaceStringInFile "##NGINX_LOADBALANCER_HTTPS_PORT##" "${NGINX_LOADBALANCER_HTTPS_PORT} " ${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml
+    replaceStringInFile "##NGINX_LOADBALANCER_HTTPS_TARGETPORT##" "${NGINX_LOADBALANCER_HTTPS_TARGETPORT} " ${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml
 }
 
 ##########

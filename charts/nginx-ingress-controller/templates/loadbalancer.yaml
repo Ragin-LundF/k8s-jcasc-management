@@ -1,3 +1,4 @@
+{{- if .Values.k8sJenkinsMgmt.loadbalancer.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -11,13 +12,14 @@ spec:
   type: LoadBalancer
   loadBalancerIP: {{ .Values.k8sJenkinsMgmt.ingress.loadbalancerIp }}
   ports:
-    - port: 80
+    - port: {{ .Values.k8sJenkinsMgmt.loadbalancer.ports.http.port }}
       name: http
-      targetPort: 80
-    - port: 443
+      targetPort: {{ .Values.k8sJenkinsMgmt.loadbalancer.ports.http.targetPort }}
+    - port: {{ .Values.k8sJenkinsMgmt.loadbalancer.ports.https.port }}
       name: https
-      targetPort: 443
+      targetPort: {{ .Values.k8sJenkinsMgmt.loadbalancer.ports.https.targetPort }}
   selector:
     # Selects nginx-ingress-controller pods
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
+{{- end }}
