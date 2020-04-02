@@ -44,7 +44,7 @@ JENKINS_MASTER_DEPLOYMENT_NAME=jenkins-master
 JENKINS_MASTER_PERSISTENCE_STORAGE_CLASS=nfs-client
 
 # Define the Jenkins master accessMode for the PVC (ReadWriteMany or ReadWriteOnce)
-JENKINS_MASTER_PERSISTENCE_ACCESS_MODE=ReadWriteMany
+JENKINS_MASTER_PERSISTENCE_ACCESS_MODE=ReadWriteOnce
 
 # Define the default storage size for the Jenkins master
 JENKINS_MASTER_PERSISTENCE_STORAGE_SIZE=8Gi
