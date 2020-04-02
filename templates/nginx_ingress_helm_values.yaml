@@ -5,3 +5,4 @@ k8sJenkinsMgmt:
         deploymentName: ##NGINX_INGRESS_DEPLOYMENT_NAME##
         jenkinsDeploymentName: ##JENKINS_MASTER_DEPLOYMENT_NAME##
         jenkinsUriPrefix: ##JENKINS_MASTER_DEFAULT_URI_PREFIX##
+        containerImage: ##NGINX_INGRESS_CONTROLLER_CONTAINER_IMAGE##
