@@ -159,6 +159,8 @@ In the new configuration, it is only required to overwrite the options, that has
 
 The simplest way is to call the script without arguments. Everything else will be asked by the script.
 
+*Hint: Before you install the Jenkins, you have to commit the files of your project directory and to ensure, that the `jasc_config.yaml` file is readable for Jenkins (public)*
+
 ```bash
 ./k8s-jcasc.sh
 ```
