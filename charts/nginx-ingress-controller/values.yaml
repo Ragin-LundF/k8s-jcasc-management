@@ -3,6 +3,7 @@ k8sJenkinsMgmt:
     namespace: ""
     loadbalancerip: ""
     containerImage: "bitnami/nginx-ingress-controller:latest"
+    imagePullSecrets: ""
     deploymentName: "jenkins-master"
     jenkinsDeploymentName: "jenkins-master"
     jenkinsUriPrefix: "/jenkins"
