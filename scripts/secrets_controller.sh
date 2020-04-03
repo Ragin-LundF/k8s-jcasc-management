@@ -23,7 +23,7 @@ function encryptSecrets() {
         echo ""
     fi
 
-    openssl enc -e -a -aes-256-cbc -pbkdf2 -salt -in ${VAR_SECRETS_FILE} -out ${VAR_SECRETS_FILE}.enc
+    openssl enc -e -a -aes-256-cbc -salt -in ${VAR_SECRETS_FILE} -out ${VAR_SECRETS_FILE}.enc
     rm ${VAR_SECRETS_FILE}
 
 
@@ -41,7 +41,7 @@ function decryptSecrets() {
     local VAR_SECRETS_FILE
     resolveSecretsFile VAR_SECRETS_FILE
 
-    openssl enc -d -a -aes-256-cbc -pbkdf2 -salt -in ${VAR_SECRETS_FILE}.enc -out ${VAR_SECRETS_FILE}
+    openssl enc -d -a -aes-256-cbc -salt -in ${VAR_SECRETS_FILE}.enc -out ${VAR_SECRETS_FILE}
 }
 
 ##########
