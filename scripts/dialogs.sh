@@ -67,7 +67,15 @@ function dialogAskForNamespace() {
     if [[ -z "${K8S_MGMT_NAMESPACE}" ]]; then
         # get data from user
         echo "Please enter the namespace for your installation."
+        if [[ -n "${K8S_MGMT_PROJECT_DIRECTORY}" ]]; then
+            echo "Press <return> if you want to use the directory name as namespace (${K8S_MGMT_PROJECT_DIRECTORY})"
+        fi
         read -p "Namespace: " __INTERNAL_NAMESPACE
+
+        # check namespace and if it was empty and the directory set, then set namespace=directory
+        if [[ -z "${__INTERNAL_NAMESPACE}" && -n "${K8S_MGMT_PROJECT_DIRECTORY}" ]]; then
+            __INTERNAL_NAMESPACE=${K8S_MGMT_PROJECT_DIRECTORY}
+        fi
 
         # validate
         validateNamespace "${__INTERNAL_NAMESPACE}" __INTERNAL_NAMESPACE_VALID

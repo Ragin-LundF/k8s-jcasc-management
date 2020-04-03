@@ -89,12 +89,12 @@ function installOrUpgradeJenkins() {
 
     # path to helm charts
     local __INTERNAL_HELM_JENKINS_PATH="./charts/jenkins-master"
-    # get namespace from global variables or ask for the name
-    local __INTERNAL_NAMESPACE
-    dialogAskForNamespace __INTERNAL_NAMESPACE
     # get project directory
     local __INTERNAL_PROJECT_DIRECTORY_NAME
     dialogAskForProjectDirectory __INTERNAL_PROJECT_DIRECTORY_NAME
+    # get namespace from global variables or ask for the name
+    local __INTERNAL_NAMESPACE
+    dialogAskForNamespace __INTERNAL_NAMESPACE
     # get deployment name
     local __INTERNAL_DEPLOYMENT_NAME
     dialogAskForDeploymentName __INTERNAL_DEPLOYMENT_NAME
@@ -136,12 +136,12 @@ function installOrUpgradeJenkins() {
 function installIngressControllerToNamespace() {
     # path to helm charts
     local __INTERNAL_HELM_NGINX_INGRESS_PATH="./charts/nginx-ingress-controller"
-    # get namespace from global variables or ask for the name
-    local __INTERNAL_NAMESPACE
-    dialogAskForNamespace __INTERNAL_NAMESPACE
     # get project directory
     local __INTERNAL_PROJECT_DIRECTORY_NAME
     dialogAskForProjectDirectory __INTERNAL_PROJECT_DIRECTORY_NAME
+    # get namespace from global variables or ask for the name
+    local __INTERNAL_NAMESPACE
+    dialogAskForNamespace __INTERNAL_NAMESPACE
 
     # create new variable with full project directory
     local __INTERNAL_FULL_PROJECT_DIRECTORY="${PROJECTS_BASE_DIRECTORY}${__INTERNAL_PROJECT_DIRECTORY_NAME}"
