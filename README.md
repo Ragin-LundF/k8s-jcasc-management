@@ -16,6 +16,14 @@ To simplify the installation and the project settings, it has a small helper too
 
 *The password for the preconfigured secrets file is `admin`. There is no valid data inside this file! Please change it for your own project!*
 
+## Prerequisites ##
+
+To use this tool, you need to have the following tools installed:
+
+* bash
+* openssl
+* [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+* [helm 3](https://helm.sh/)
 
 ## Basic concept ##
 
@@ -208,6 +216,12 @@ To provide a simple solution, the system stores these information (namespace and
 For every deployment of Jenkins, the system looks into this file and configures the loadbalancer with the IP. This also allows static DNS records.
 
 If you create a new project via the wizard, the system also checks, if a IP address already exists to avoid IP conflicts.
+
+# Additional tools #
+## k8sfullconfigexport ##
+
+You can use this tool to export the complete Kubernetes configuration to a local `k8s-manifests` directory.
+This can help to figure out differences between clusters.
 
 # Helpful links #
 
