@@ -83,7 +83,7 @@ function processArguments() {
             ;;
             # name of the deployment
             -d=*|--deploymentname=*)
-                K8S_MGMT_DEPLOYMENTNAME="${i#*=}"
+                JENKINS_MASTER_DEPLOYMENT_NAME="${i#*=}"
                 shift # past argument=value
             ;;
 

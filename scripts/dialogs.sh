@@ -14,14 +14,14 @@ function dialogAskForDeploymentName() {
 
     # first check, if global deployment name variable was not set
     local __INTERNAL_DEPLOYMENT_NAME
-    if [[ -z "${K8S_MGMT_DEPLOYMENTNAME}" ]]; then
+    if [[ -z "${JENKINS_MASTER_DEPLOYMENT_NAME}" ]]; then
         # get data from user
         echo "Please enter the deployment name."
         read -p "Deployment name: " __INTERNAL_DEPLOYMENT_NAME
         # set the deployment name as default
-        K8S_MGMT_DEPLOYMENTNAME="${__INTERNAL_DEPLOYMENT_NAME}"
+        JENKINS_MASTER_DEPLOYMENT_NAME="${__INTERNAL_DEPLOYMENT_NAME}"
     else
-        __INTERNAL_DEPLOYMENT_NAME="${K8S_MGMT_DEPLOYMENTNAME}"
+        __INTERNAL_DEPLOYMENT_NAME="${JENKINS_MASTER_DEPLOYMENT_NAME}"
     fi
 
     eval ${ARG_RETVALUE}="\${__INTERNAL_DEPLOYMENT_NAME}"

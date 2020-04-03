@@ -113,7 +113,7 @@ function installOrUpgradeJenkins() {
         K8S_MGMT_PROJECT_DIRECTORY="${__INTERNAL_PROJECT_DIRECTORY_NAME}"
     fi
     if [[ ! -z "${__INTERNAL_DEPLOYMENT_NAME}" ]]; then
-        K8S_MGMT_DEPLOYMENTNAME="${__INTERNAL_DEPLOYMENT_NAME}"
+        JENKINS_MASTER_DEPLOYMENT_NAME="${__INTERNAL_DEPLOYMENT_NAME}"
     fi
 
     # start with apply secrets to kubernetes
@@ -126,7 +126,7 @@ function installOrUpgradeJenkins() {
     installPersistenceVolumeClaim
 
     # install or upgrade the Jenkins Helm Chart
-    helm ${__INTERNAL_HELM_COMMAND} ${K8S_MGMT_DEPLOYMENTNAME} ${__INTERNAL_HELM_JENKINS_PATH} -n ${K8S_MGMT_NAMESPACE} -f ${__INTERNAL_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
+    helm ${__INTERNAL_HELM_COMMAND} ${JENKINS_MASTER_DEPLOYMENT_NAME} ${__INTERNAL_HELM_JENKINS_PATH} -n ${K8S_MGMT_NAMESPACE} -f ${__INTERNAL_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
 }
 
 ##########
