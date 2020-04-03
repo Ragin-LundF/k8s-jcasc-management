@@ -65,6 +65,25 @@ function installPersistenceVolumeClaim() {
 }
 
 ##########
+# This function checks the cluster, if namespace already exists.
+# If this is not the case, it creates the namespace.
+# If the namespace argument is empty, it does nothing.
+#
+# argument 1: Namespace name
+##########
+function checkAndInstallNamespace() {
+    local __INTERNAL_NAMESPACE_TO_CHECK=$1
+
+    if [[ -n "${__INTERNAL_NAMESPACE_TO_CHECK}" ]]; then
+        # lookup if namespace already exists
+        local __INTERNAL_NS_EXISTS=$(kubectl get namespaces | awk '{print $1}' | grep '${__INTERNAL_NAMESPACE_TO_CHECK}')
+        if [[ -z "${__INTERNAL_NS_EXISTS}" ]]; then
+            kubectl create namespace ${__INTERNAL_NAMESPACE_TO_CHECK}
+        fi
+    fi
+}
+
+##########
 # This function installs the Jenkins instance
 #
 # argument 1: INSTALL or UPGRADE (see _K8S_MGMT_COMMAND_INSTALL or _K8S_MGMT_COMMAND_UPGRADE at the arguments_utils.sh file)
@@ -116,6 +135,9 @@ function installOrUpgradeJenkins() {
         JENKINS_MASTER_DEPLOYMENT_NAME="${__INTERNAL_DEPLOYMENT_NAME}"
     fi
 
+    # check namespace and install it if it does not exist
+    checkAndInstallNamespace "${K8S_MGMT_NAMESPACE}"
+
     # start with apply secrets to kubernetes
     echo ""
     echo "  INFO: Apply secrets..."
@@ -147,7 +169,7 @@ function installIngressControllerToNamespace() {
     local __INTERNAL_FULL_PROJECT_DIRECTORY="${PROJECTS_BASE_DIRECTORY}${__INTERNAL_PROJECT_DIRECTORY_NAME}"
 
     # install the nginx-ingress controller with loadbalancer and default route
-    helm install ${NGINX_INGRESS_DEPLOYMENT_NAME} ${__INTERNAL_HELM_NGINX_INGRESS_PATH} -n ${__INTERNAL_NAMESPACE} -f ${__INTERNAL_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml
+    echo helm install ${NGINX_INGRESS_DEPLOYMENT_NAME} ${__INTERNAL_HELM_NGINX_INGRESS_PATH} -n ${__INTERNAL_NAMESPACE} -f ${__INTERNAL_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml
 }
 
 ##########
