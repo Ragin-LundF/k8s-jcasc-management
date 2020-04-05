@@ -50,5 +50,4 @@ function checkVersion() {
             echo ""
         fi
     fi
-    exit 0
 }
