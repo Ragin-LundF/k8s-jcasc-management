@@ -30,6 +30,10 @@ source ./scripts/project_wizard_controller.sh
 source ./scripts/secrets_controller.sh
 source ./scripts/sed_utils.sh
 source ./scripts/validator_utils.sh
+source ./scripts/version_utils.sh
+
+# first check version
+checkVersion
 
 # start the script
 processArguments $@
