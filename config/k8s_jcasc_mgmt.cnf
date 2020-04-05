@@ -93,7 +93,7 @@ NPM_REPOSITORY_SECRETS_CREDENTIALS_ID=repository-credentialsid
 VCS_REPOSITORY_SECRETS_CREDENTIALS_ID=vcs-notification-credentialsid
 
 # URL to the seed job script, that creates/deletes jobs from a simple repository file
-JENKINS_JOBDSL_SEED_JOB_SCRIPT_URL=https://github.com/Ragin-LundF/jenkins-jobdsl-seed-script.git
+JENKINS_JOBDSL_SEED_JOB_SCRIPT_URL=https://github.com/Ragin-LundF/jenkins-jobdsl-remote.git'
 
 # activate version check to get informed about new version
 K8S_MGMT_VERSION_CHECK=true
