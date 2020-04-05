@@ -23,7 +23,11 @@ function encryptSecrets() {
         echo ""
     fi
 
-    openssl enc -e -a -aes-256-cbc -salt -in ${VAR_SECRETS_FILE} -out ${VAR_SECRETS_FILE}.enc
+    if [[ "${K8S_MGMT_ENCRYPTION_TOOL}" == "openssl" ]]; then
+        openssl enc -e -a -aes-256-cbc -salt -in ${VAR_SECRETS_FILE} -out ${VAR_SECRETS_FILE}.enc
+    elif [[ "${K8S_MGMT_ENCRYPTION_TOOL}" == "gpg" ]]; then
+        gpg -c ${VAR_SECRETS_FILE}
+    fi
     rm ${VAR_SECRETS_FILE}
 
 
@@ -41,7 +45,12 @@ function decryptSecrets() {
     local VAR_SECRETS_FILE
     resolveSecretsFile VAR_SECRETS_FILE
 
-    openssl enc -d -a -aes-256-cbc -salt -in ${VAR_SECRETS_FILE}.enc -out ${VAR_SECRETS_FILE}
+    if [[ "${K8S_MGMT_ENCRYPTION_TOOL}" == "openssl" ]]; then
+        openssl enc -d -a -aes-256-cbc -salt -in ${VAR_SECRETS_FILE}.enc -out ${VAR_SECRETS_FILE}
+    elif [[ "${K8S_MGMT_ENCRYPTION_TOOL}" == "gpg" ]]; then
+        gpg ${VAR_SECRETS_FILE}.gpg
+    fi
+
 }
 
 ##########

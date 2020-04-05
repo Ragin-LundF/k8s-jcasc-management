@@ -99,3 +99,6 @@ JENKINS_JOBDSL_SEED_JOB_SCRIPT_URL=https://github.com/Ragin-LundF/jenkins-jobdsl
 K8S_MGMT_VERSION_CHECK=true
 # To check the version, you can choose between curl and wget
 K8S_MGMT_VERSION_CHECK_TOOL=curl
+
+# Which encryption should k8s-jcasc-mgmt use (openssl, gpg)
+K8S_MGMT_ENCRYPTION_TOOL=gpg

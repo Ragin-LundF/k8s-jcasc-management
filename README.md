@@ -33,7 +33,9 @@ To simplify the installation and the project settings, it has a small helper too
 To use this tool, you need to have the following tools installed:
 
 * bash
-* openssl
+* for encryption one of (can be configured):
+    * gpg
+    * openssl
 * [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 * [helm 3](https://helm.sh/)
 
