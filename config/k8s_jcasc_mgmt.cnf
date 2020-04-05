@@ -66,6 +66,9 @@ NGINX_INGRESS_CONTROLLER_FOR_NAMESPACE=false
 # This name will also be used as prefix for roles/rolebindings...
 NGINX_INGRESS_DEPLOYMENT_NAME=nginx-ingress
 
+# Annotation for ingress class. Default is nginx.
+NGINX_INGRESS_ANNOTATION_CLASS=nginx
+
 # enable loadbalancer
 NGINX_LOADBALANCER_ENABLED=false
 NGINX_LOADBALANCER_HTTP_PORT=80
@@ -93,7 +96,7 @@ NPM_REPOSITORY_SECRETS_CREDENTIALS_ID=repository-credentialsid
 VCS_REPOSITORY_SECRETS_CREDENTIALS_ID=vcs-notification-credentialsid
 
 # URL to the seed job script, that creates/deletes jobs from a simple repository file
-JENKINS_JOBDSL_SEED_JOB_SCRIPT_URL=https://github.com/Ragin-LundF/jenkins-jobdsl-remote.git'
+JENKINS_JOBDSL_SEED_JOB_SCRIPT_URL=https://github.com/Ragin-LundF/jenkins-jobdsl-remote.git
 
 # activate version check to get informed about new version
 K8S_MGMT_VERSION_CHECK=true

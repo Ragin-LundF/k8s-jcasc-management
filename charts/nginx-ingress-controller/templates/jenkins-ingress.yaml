@@ -3,8 +3,10 @@ kind: Ingress
 metadata:
   name: jenkins-ingress-nginx
   namespace: {{ .Values.k8sJenkinsMgmt.ingress.namespace }}
+  {{- if .Values.k8sJenkinsMgmt.ingress.annotationIngressClass }}
   annotations:
-    kubernetes.io/ingress.class: "nginx"
+    kubernetes.io/ingress.class: "{{ .Values.k8sJenkinsMgmt.ingress.annotationIngressClass }}"
+  {{- end }}
 spec:
   rules:
     - http:

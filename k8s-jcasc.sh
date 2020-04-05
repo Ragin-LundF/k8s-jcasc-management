@@ -6,9 +6,13 @@ if [[ -f "./config/k8s_jcasc_custom.cnf" ]]; then
     if [[ -f "${K8S_MGMT_ALTERNATIVE_CONFIG_FILE}"  ]]; then
         # if the alternative config file should work as overlay, load the original config first
         # and then the alternative to reset the overwritten configuration
+        echo ""
         if [[ -n "${K8S_MGMT_WORK_AS_OVERLAY}" && "${K8S_MGMT_WORK_AS_OVERLAY}" == "true" ]]; then
+            echo "  INFO: loading original config..."
             source ./config/k8s_jcasc_mgmt.cnf
         fi
+        echo "  INFO: loading overlay config..."
+        echo ""
         source ${K8S_MGMT_ALTERNATIVE_CONFIG_FILE}
     else
         echo ""

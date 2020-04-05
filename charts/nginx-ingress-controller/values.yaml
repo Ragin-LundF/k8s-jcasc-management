@@ -1,5 +1,6 @@
 k8sJenkinsMgmt:
   ingress:
+    annotationIngressClass: nginx
     namespace: ""
     loadbalancerip: ""
     containerImage: "bitnami/nginx-ingress-controller:latest"

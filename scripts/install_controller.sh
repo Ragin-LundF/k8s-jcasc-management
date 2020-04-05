@@ -76,7 +76,8 @@ function checkAndInstallNamespace() {
 
     if [[ -n "${__INTERNAL_NAMESPACE_TO_CHECK}" ]]; then
         # lookup if namespace already exists
-        local __INTERNAL_NS_EXISTS=$(kubectl get namespaces | awk '{print $1}' | grep '${__INTERNAL_NAMESPACE_TO_CHECK}')
+        local __INTERNAL_NS_EXISTS=$(kubectl get namespaces | awk '{print $1}' | grep "${__INTERNAL_NAMESPACE_TO_CHECK}")
+
         if [[ -z "${__INTERNAL_NS_EXISTS}" ]]; then
             kubectl create namespace ${__INTERNAL_NAMESPACE_TO_CHECK}
         fi

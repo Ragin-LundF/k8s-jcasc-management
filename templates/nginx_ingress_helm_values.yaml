@@ -1,5 +1,6 @@
 k8sJenkinsMgmt:
     ingress:
+        annotationIngressClass: ##NGINX_INGRESS_ANNOTATION_CLASS##
         namespace: ##NAMESPACE##
         loadbalancerIp: ##PUBLIC_IP_ADDRESS##
         deploymentName: ##NGINX_INGRESS_DEPLOYMENT_NAME##
