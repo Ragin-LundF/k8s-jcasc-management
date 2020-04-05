@@ -47,7 +47,7 @@ function setCommandToCreateProject() {
 function selectInstallationType() {
     if [[ -z "${K8S_MGMT_COMMAND}" ]]; then
         echo "Please select the command you want to execute:"
-            select WIZARD in "install" "uninstall" "upgrade" "encryptSecrets" "decryptSecrets" "applySecrets" "applySecretsToAll" "createProject"; do
+            select WIZARD in "install" "uninstall" "upgrade" "encryptSecrets" "decryptSecrets" "applySecrets" "applySecretsToAll" "createProject" "quit"; do
                 case $WIZARD in
                     install) setCommandToInstall; break;;
                     uninstall) setCommandToUnInstall; break;;
@@ -57,6 +57,7 @@ function selectInstallationType() {
                     applySecrets) setCommandToSecretsApply; break;;
                     applySecretsToAll) setCommandToSecretsApplyToAllNamespaces; break;;
                     createProject) setCommandToCreateProject; break;;
+                    quit) exit 0; break;;
                 esac
             done
     fi
