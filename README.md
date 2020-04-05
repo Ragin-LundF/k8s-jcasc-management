@@ -6,8 +6,8 @@ To simplify the installation and the project settings, it has a small helper too
 * create new projects for Jenkins administration
 * manage secrets
     * encrypt/decrypt secrets for secure commit to a VCS (version control system)
-    * apply secrets to kubernetes
-        * for each project while installation or as update (`applySecrets`)
+    * apply secrets to Kubernetes
+        * for each project while installation or as an update (`applySecrets`)
         * for all known namespaces, that are configured in the `ip_config.cnf` file (applySecretsToAll)
     * store secrets globally for easy administration
     * store secrets per project for more security
@@ -20,8 +20,9 @@ To simplify the installation and the project settings, it has a small helper too
     * uninstall
         * uninstall Jenkins installation
         * uninstall nginx-ingress-controller per namespace (if configured)
-        * uninstall loadbalancer and ingress for Jenkins (other ingress routes will not changed)
+        * uninstall loadbalancer and ingress for Jenkins (other ingress routes will not be changed)
     * upgrade
+* version check to see a message in the console if a new version is available
 
 *If you want to use existing persistent volume claims, then you have to create a persistent volume before you install the application.*
 
