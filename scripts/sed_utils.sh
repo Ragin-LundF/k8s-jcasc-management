@@ -32,7 +32,7 @@ function replaceStringInFile() {
     fi
     if [[ -z "${ARG_STR_REPLACEMENT}" ]]; then
         echo ""
-        echo "  ERROR sed_utils.sh: No argument for the replacement string found."
+        echo "  ERROR sed_utils.sh: No argument for the replacement string found (${ARG_STR_TO_REPLACE})."
         echo ""
         exit 1
     fi
