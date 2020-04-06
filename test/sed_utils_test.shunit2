@@ -18,5 +18,3 @@ testSedUtilsWithoutThirdArgument() {
 
     assertEquals "sed validation" "0" "$?"
 }
-
-. shunit2
