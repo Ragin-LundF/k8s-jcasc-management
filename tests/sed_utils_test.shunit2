@@ -16,7 +16,7 @@ testSedUtilsWithoutSecondArgument() {
 testSedUtilsWithoutThirdArgument() {
     expected=$(. ../scripts/sed_utils.sh && replaceStringInFile "first" "second" "" > /dev/null)
 
-    assertEquals "sed validation" "1" "$?"
+    assertEquals "sed validation" "0" "$?"
 }
 
 . shunit2
