@@ -22,10 +22,6 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
 
-    # check shell scripts
-    - name: shellcheck
-      uses: ludeeus/action-shellcheck@master
-
     # executing tests
     - name: Generate Shell Script Unit Testing
       uses: vargiuscuola/gen-sh-unittest@master
