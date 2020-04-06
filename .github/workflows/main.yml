@@ -24,5 +24,11 @@ jobs:
 
     # check shell scripts
     - name: shellcheck
-      uses: ludeeus/action-shellcheck@0.1.0
+      uses: ludeeus/action-shellcheck@master
 
+    # executing tests
+    - name: Generate Shell Script Unit Testing
+      uses: vargiuscuola/gen-sh-unittest@master
+      id: action-gen-sh-unittest
+    - name: gensh-unittest result
+      run: echo "The result of gensh-unittest Action was ${{ steps.action-gen-sh-unittest.outputs.result }}"
