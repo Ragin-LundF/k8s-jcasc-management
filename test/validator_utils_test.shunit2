@@ -71,3 +71,5 @@ testValidateNamespaceWithNumbers() {
 
     assertEquals "Namespace validation failed" "true" "${_RETVAL}"
 }
+
+. shunit2
