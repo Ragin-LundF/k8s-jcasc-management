@@ -25,9 +25,9 @@ function installPersistenceVolumeClaim() {
     # if pvc exists, try to install it
     if [[ -f "${__INTERNAL_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml" ]]; then
         # load the name of the PVC
-        local __INTERNAL_PVC_FROM_FILE=$(grep 'name:' ${__INTERNAL_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml | awk '{print $2}' | tr -d '"')
+        local __INTERNAL_PVC_FROM_FILE=$(grep 'name:' "${__INTERNAL_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml" | awk '{print $2}' | tr -d '"')
         # check Kubernetes, which PVC for the namespace are existing
-        local __INTERNAL_EXISTING_PVC_ON_K8S=$(kubectl -n ${__INTERNAL_NAMESPACE} get pvc | awk '{print $1}' | grep ${__INTERNAL_PVC_FROM_FILE})
+        local __INTERNAL_EXISTING_PVC_ON_K8S=$(kubectl -n "${__INTERNAL_NAMESPACE}" get pvc | awk '{print $1}' | grep "${__INTERNAL_PVC_FROM_FILE}")
         # predefine variable to decide if PVC has to be installed or not
         local __INTERNAL_BOOLEAN_CREATE_PVC=true
 
@@ -53,7 +53,7 @@ function installPersistenceVolumeClaim() {
             echo ""
             echo "  INFO: Create PVC ${__INTERNAL_PVC_FROM_FILE}..."
             echo ""
-            kubectl -n ${__INTERNAL_NAMESPACE} apply -f ${__INTERNAL_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml
+            kubectl -n "${__INTERNAL_NAMESPACE}" apply -f "${__INTERNAL_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml"
             # now we should wait shortly, to avoid race conditions
             sleep 1
         else
@@ -79,7 +79,7 @@ function checkAndInstallNamespace() {
         local __INTERNAL_NS_EXISTS=$(kubectl get namespaces | awk '{print $1}' | grep "${__INTERNAL_NAMESPACE_TO_CHECK}")
 
         if [[ -z "${__INTERNAL_NS_EXISTS}" ]]; then
-            kubectl create namespace ${__INTERNAL_NAMESPACE_TO_CHECK}
+            kubectl create namespace "${__INTERNAL_NAMESPACE_TO_CHECK}"
         fi
     fi
 }
@@ -149,7 +149,7 @@ function installOrUpgradeJenkins() {
     installPersistenceVolumeClaim
 
     # install or upgrade the Jenkins Helm Chart
-    helm ${__INTERNAL_HELM_COMMAND} ${JENKINS_MASTER_DEPLOYMENT_NAME} ${__INTERNAL_HELM_JENKINS_PATH} -n ${K8S_MGMT_NAMESPACE} -f ${__INTERNAL_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
+    helm "${__INTERNAL_HELM_COMMAND}" "${JENKINS_MASTER_DEPLOYMENT_NAME}" "${__INTERNAL_HELM_JENKINS_PATH}" -n "${K8S_MGMT_NAMESPACE}" -f "${__INTERNAL_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml"
 }
 
 ##########
@@ -170,7 +170,7 @@ function installIngressControllerToNamespace() {
     local __INTERNAL_FULL_PROJECT_DIRECTORY="${PROJECTS_BASE_DIRECTORY}${__INTERNAL_PROJECT_DIRECTORY_NAME}"
 
     # install the nginx-ingress controller with loadbalancer and default route
-    helm install ${NGINX_INGRESS_DEPLOYMENT_NAME} ${__INTERNAL_HELM_NGINX_INGRESS_PATH} -n ${__INTERNAL_NAMESPACE} -f ${__INTERNAL_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml
+    helm install "${NGINX_INGRESS_DEPLOYMENT_NAME}" "${__INTERNAL_HELM_NGINX_INGRESS_PATH}" -n "${__INTERNAL_NAMESPACE}" -f "${__INTERNAL_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml"
 }
 
 ##########
@@ -183,7 +183,7 @@ function uninstallIngressControllerFromNamespace() {
     dialogAskForNamespace __INTERNAL_NAMESPACE
 
     # uninstall the nginx-ingress controller
-    helm uninstall ${NGINX_INGRESS_DEPLOYMENT_NAME} -n ${__INTERNAL_NAMESPACE}
+    helm uninstall "${NGINX_INGRESS_DEPLOYMENT_NAME}" -n "${__INTERNAL_NAMESPACE}"
 }
 
 ##########
@@ -196,5 +196,5 @@ function uninstallJenkins() {
     local __INTERNAL_HELM_DEPLOYMENT_NAME
     dialogAskForDeploymentName __INTERNAL_HELM_DEPLOYMENT_NAME
 
-    helm uninstall ${__INTERNAL_HELM_DEPLOYMENT_NAME} -n ${__INTERNAL_NAMESPACE}
+    helm uninstall "${__INTERNAL_HELM_DEPLOYMENT_NAME}" -n "${__INTERNAL_NAMESPACE}"
 }
