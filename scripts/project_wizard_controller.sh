@@ -18,7 +18,7 @@ function processTemplatesWithJenkinsSystemMessage() {
 
     # If a custom message should be set, overwrite the message
     if [[ ! -z "${ARG_JENKINS_SYSTEM_MESSAGE}" ]]; then
-        replaceStringInFile "##PROJECT_DIRECTORY## Jenkins in namespace ##NAMESPACE##" "${ARG_JENKINS_SYSTEM_MESSAGE}" ${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml
+        replaceStringInFile "##PROJECT_DIRECTORY## Jenkins in namespace ##NAMESPACE##" "${ARG_JENKINS_SYSTEM_MESSAGE}" "${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml"
     fi
 }
 
@@ -33,13 +33,13 @@ function processTemplatesWithNamespace() {
     local ARG_FULL_PROJECT_DIRECTORY=$1
     local ARG_NAMESPACE=$2
 
-    replaceStringInFile "##NAMESPACE##" "${ARG_NAMESPACE}" ${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml
-    replaceStringInFile "##NAMESPACE##" "${ARG_NAMESPACE}" ${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml
+    replaceStringInFile "##NAMESPACE##" "${ARG_NAMESPACE}" "${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml"
+    replaceStringInFile "##NAMESPACE##" "${ARG_NAMESPACE}" "${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml"
 
     # if a persistence volume claim exists, replace values there
     if [[ -f "${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml" ]]; then
         # Name of the Jenkins deployment
-        replaceStringInFile "##NAMESPACE##" "${ARG_NAMESPACE}" ${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml
+        replaceStringInFile "##NAMESPACE##" "${ARG_NAMESPACE}" "${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml"
     fi
 }
 
@@ -54,8 +54,8 @@ function processTemplatesWithIpAddress() {
     local ARG_FULL_PROJECT_DIRECTORY=$1
     local ARG_IP_ADDRESS=$2
 
-    replaceStringInFile "##PUBLIC_IP_ADDRESS##" "${ARG_IP_ADDRESS}" ${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml
-    replaceStringInFile "##PUBLIC_IP_ADDRESS##" "${ARG_IP_ADDRESS}" ${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml
+    replaceStringInFile "##PUBLIC_IP_ADDRESS##" "${ARG_IP_ADDRESS}" "${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml"
+    replaceStringInFile "##PUBLIC_IP_ADDRESS##" "${ARG_IP_ADDRESS}" "${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml"
 }
 
 ##########
@@ -69,7 +69,7 @@ function processTemplatesWithJenkinsJobRepository() {
     local ARG_FULL_PROJECT_DIRECTORY=$1
     local ARG_JENKINS_JOB_REPOSITORY=$2
 
-    replaceStringInFile "##PROJECT_JENKINS_JOB_DEFINITION_REPOSITORY##" "${ARG_JENKINS_JOB_REPOSITORY}" ${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml
+    replaceStringInFile "##PROJECT_JENKINS_JOB_DEFINITION_REPOSITORY##" "${ARG_JENKINS_JOB_REPOSITORY}" "${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml"
 }
 
 ##########
@@ -83,8 +83,8 @@ function processTemplatesWithProjectDirectory() {
     local ARG_FULL_PROJECT_DIRECTORY=$1
     local ARG_PROJECT_DIRECTORY=$2
 
-    replaceStringInFile "##PROJECT_DIRECTORY##" "${ARG_PROJECT_DIRECTORY}" ${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml
-    replaceStringInFile "##PROJECT_DIRECTORY##" "${ARG_PROJECT_DIRECTORY}" ${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
+    replaceStringInFile "##PROJECT_DIRECTORY##" "${ARG_PROJECT_DIRECTORY}" "${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml"
+    replaceStringInFile "##PROJECT_DIRECTORY##" "${ARG_PROJECT_DIRECTORY}" "${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml"
 }
 
 ##########
@@ -98,12 +98,12 @@ function processTemplatesWithPersistenceExistingClaim() {
     local ARG_FULL_PROJECT_DIRECTORY=$1
     local ARG_EXISTING_PERSISTENCE_CLAIM=$2
 
-    replaceStringInFile "##JENKINS_MASTER_PERSISTENCE_EXISTING_CLAIM##" "${ARG_EXISTING_PERSISTENCE_CLAIM} " ${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
+    replaceStringInFile "##JENKINS_MASTER_PERSISTENCE_EXISTING_CLAIM##" "${ARG_EXISTING_PERSISTENCE_CLAIM} " "${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml"
 
     # if a persistence volume claim exists, replace values there
     if [[ -f "${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml" ]]; then
         # Name of the PVC
-        replaceStringInFile "##K8S_MGMT_PERSISTENCE_VOLUME_CLAIM_NAME##" "${ARG_EXISTING_PERSISTENCE_CLAIM} " ${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml
+        replaceStringInFile "##K8S_MGMT_PERSISTENCE_VOLUME_CLAIM_NAME##" "${ARG_EXISTING_PERSISTENCE_CLAIM} " "${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml"
     fi
 }
 
@@ -117,77 +117,77 @@ function processTemplatesWithGlobalConfiguration() {
     local ARG_FULL_PROJECT_DIRECTORY=$1
 
     # Kubernetes server certificate
-    replaceStringInFile "##KUBERNETES_SERVER_CERTIFICATE##" "${KUBERNETES_SERVER_CERTIFICATE}" ${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml
+    replaceStringInFile "##KUBERNETES_SERVER_CERTIFICATE##" "${KUBERNETES_SERVER_CERTIFICATE}" "${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml"
     # Name of the Jenkins deployment
-    replaceStringInFile "##JENKINS_MASTER_DEPLOYMENT_NAME##" "${JENKINS_MASTER_DEPLOYMENT_NAME}" ${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml
-    replaceStringInFile "##JENKINS_MASTER_DEPLOYMENT_NAME##" "${JENKINS_MASTER_DEPLOYMENT_NAME}" ${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml
+    replaceStringInFile "##JENKINS_MASTER_DEPLOYMENT_NAME##" "${JENKINS_MASTER_DEPLOYMENT_NAME}" "${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml"
+    replaceStringInFile "##JENKINS_MASTER_DEPLOYMENT_NAME##" "${JENKINS_MASTER_DEPLOYMENT_NAME}" "${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml"
     # if a persistence volume claim exists, replace values there
     if [[ -f "${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml" ]]; then
         # Name of the Jenkins deployment
-        replaceStringInFile "##JENKINS_MASTER_DEPLOYMENT_NAME##" "${JENKINS_MASTER_DEPLOYMENT_NAME}" ${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml
+        replaceStringInFile "##JENKINS_MASTER_DEPLOYMENT_NAME##" "${JENKINS_MASTER_DEPLOYMENT_NAME}" "${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml"
     fi
 
     # Docker Registry Credentials ID for Kubernetes
-    replaceStringInFile "##KUBERNETES_DOCKER_REGISTRY_CREDENTIALS_ID##" "${KUBERNETES_DOCKER_REGISTRY_CREDENTIALS_ID}" ${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml
+    replaceStringInFile "##KUBERNETES_DOCKER_REGISTRY_CREDENTIALS_ID##" "${KUBERNETES_DOCKER_REGISTRY_CREDENTIALS_ID}" "${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml"
     # Maven Repository Credentials ID
-    replaceStringInFile "##MAVEN_REPOSITORY_SECRETS_CREDENTIALS_ID##" "${MAVEN_REPOSITORY_SECRETS_CREDENTIALS_ID}" ${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml
+    replaceStringInFile "##MAVEN_REPOSITORY_SECRETS_CREDENTIALS_ID##" "${MAVEN_REPOSITORY_SECRETS_CREDENTIALS_ID}" "${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml"
     # NPM Repository Credentials ID
-    replaceStringInFile "##NPM_REPOSITORY_SECRETS_CREDENTIALS_ID##" "${NPM_REPOSITORY_SECRETS_CREDENTIALS_ID}" ${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml
+    replaceStringInFile "##NPM_REPOSITORY_SECRETS_CREDENTIALS_ID##" "${NPM_REPOSITORY_SECRETS_CREDENTIALS_ID}" "${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml"
     # VCS Credentials ID
-    replaceStringInFile "##VCS_REPOSITORY_SECRETS_CREDENTIALS_ID##" "${VCS_REPOSITORY_SECRETS_CREDENTIALS_ID}" ${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml
+    replaceStringInFile "##VCS_REPOSITORY_SECRETS_CREDENTIALS_ID##" "${VCS_REPOSITORY_SECRETS_CREDENTIALS_ID}" "${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml"
     # Jenkins master default URI prefix
-    replaceStringInFile "##JENKINS_MASTER_DEFAULT_URI_PREFIX##" "${JENKINS_MASTER_DEFAULT_URI_PREFIX}" ${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml
-    replaceStringInFile "##JENKINS_MASTER_DEFAULT_URI_PREFIX##" "${JENKINS_MASTER_DEFAULT_URI_PREFIX}" ${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
-    replaceStringInFile "##JENKINS_MASTER_DEFAULT_URI_PREFIX##" "${JENKINS_MASTER_DEFAULT_URI_PREFIX}" ${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml
+    replaceStringInFile "##JENKINS_MASTER_DEFAULT_URI_PREFIX##" "${JENKINS_MASTER_DEFAULT_URI_PREFIX}" "${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml"
+    replaceStringInFile "##JENKINS_MASTER_DEFAULT_URI_PREFIX##" "${JENKINS_MASTER_DEFAULT_URI_PREFIX}" "${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml"
+    replaceStringInFile "##JENKINS_MASTER_DEFAULT_URI_PREFIX##" "${JENKINS_MASTER_DEFAULT_URI_PREFIX}" "${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml"
     # Jenkins master label for seed job binding
-    replaceStringInFile "##JENKINS_MASTER_DEFAULT_LABEL##" "${JENKINS_MASTER_DEFAULT_LABEL}" ${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml
-    replaceStringInFile "##JENKINS_MASTER_DEFAULT_LABEL##" "${JENKINS_MASTER_DEFAULT_LABEL}" ${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
+    replaceStringInFile "##JENKINS_MASTER_DEFAULT_LABEL##" "${JENKINS_MASTER_DEFAULT_LABEL}" "${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml"
+    replaceStringInFile "##JENKINS_MASTER_DEFAULT_LABEL##" "${JENKINS_MASTER_DEFAULT_LABEL}" "${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml"
     # URL to the seed job script repository
-    replaceStringInFile "##JENKINS_JOBDSL_SEED_JOB_SCRIPT_URL##" "${JENKINS_JOBDSL_SEED_JOB_SCRIPT_URL}" ${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml
+    replaceStringInFile "##JENKINS_JOBDSL_SEED_JOB_SCRIPT_URL##" "${JENKINS_JOBDSL_SEED_JOB_SCRIPT_URL}" "${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml"
     # Jenkins master access (anonymous read-only or only logged-in)
-    replaceStringInFile "##JENKINS_MASTER_DENY_ANONYMOUS_READ_ACCESS##" "${JENKINS_MASTER_DENY_ANONYMOUS_READ_ACCESS}" ${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
+    replaceStringInFile "##JENKINS_MASTER_DENY_ANONYMOUS_READ_ACCESS##" "${JENKINS_MASTER_DENY_ANONYMOUS_READ_ACCESS}" "${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml"
     # The default JcasC Configuration file URL
-    replaceStringInFile "##JENKINS_JCASC_CONFIGURATION_URL##" "${JENKINS_JCASC_CONFIGURATION_URL}" ${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
+    replaceStringInFile "##JENKINS_JCASC_CONFIGURATION_URL##" "${JENKINS_JCASC_CONFIGURATION_URL}" "${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml"
     # Replace Jenkins persistence storage class
-    replaceStringInFile "##JENKINS_MASTER_PERSISTENCE_STORAGE_CLASS##" "${JENKINS_MASTER_PERSISTENCE_STORAGE_CLASS}" ${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
+    replaceStringInFile "##JENKINS_MASTER_PERSISTENCE_STORAGE_CLASS##" "${JENKINS_MASTER_PERSISTENCE_STORAGE_CLASS}" "${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml"
     # if a persistence volume claim exists, replace values there
     if [[ -f "${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml" ]]; then
         # Name of the Jenkins deployment
-        replaceStringInFile "##JENKINS_MASTER_PERSISTENCE_STORAGE_CLASS##" "${JENKINS_MASTER_PERSISTENCE_STORAGE_CLASS}" ${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml
+        replaceStringInFile "##JENKINS_MASTER_PERSISTENCE_STORAGE_CLASS##" "${JENKINS_MASTER_PERSISTENCE_STORAGE_CLASS}" "${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml"
     fi
     # Replace Jenkins persistence access mode
-    replaceStringInFile "##JENKINS_MASTER_PERSISTENCE_ACCESS_MODE##" "${JENKINS_MASTER_PERSISTENCE_ACCESS_MODE}" ${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
+    replaceStringInFile "##JENKINS_MASTER_PERSISTENCE_ACCESS_MODE##" "${JENKINS_MASTER_PERSISTENCE_ACCESS_MODE}" "${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml"
     # if a persistence volume claim exists, replace values there
     if [[ -f "${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml" ]]; then
         # Name of the Jenkins deployment
-        replaceStringInFile "##JENKINS_MASTER_PERSISTENCE_ACCESS_MODE##" "${JENKINS_MASTER_PERSISTENCE_ACCESS_MODE}" ${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml
+        replaceStringInFile "##JENKINS_MASTER_PERSISTENCE_ACCESS_MODE##" "${JENKINS_MASTER_PERSISTENCE_ACCESS_MODE}" "${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml"
     fi
     # Replace Jenkins persistence storage size
-    replaceStringInFile "##JENKINS_MASTER_PERSISTENCE_STORAGE_SIZE##" "${JENKINS_MASTER_PERSISTENCE_STORAGE_SIZE}" ${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
+    replaceStringInFile "##JENKINS_MASTER_PERSISTENCE_STORAGE_SIZE##" "${JENKINS_MASTER_PERSISTENCE_STORAGE_SIZE}" "${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml"
     # if a persistence volume claim exists, replace values there
     if [[ -f "${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml" ]]; then
         # Name of the Jenkins deployment
-        replaceStringInFile "##JENKINS_MASTER_PERSISTENCE_STORAGE_SIZE##" "${JENKINS_MASTER_PERSISTENCE_STORAGE_SIZE}" ${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml
+        replaceStringInFile "##JENKINS_MASTER_PERSISTENCE_STORAGE_SIZE##" "${JENKINS_MASTER_PERSISTENCE_STORAGE_SIZE}" "${ARG_FULL_PROJECT_DIRECTORY}/pvc_claim.yaml"
     fi
     # replace the container image
-    replaceStringInFile "##JENKINS_MASTER_CONTAINER_IMAGE##" "${JENKINS_MASTER_CONTAINER_IMAGE}" ${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
-    replaceStringInFile "##JENKINS_MASTER_CONTAINER_IMAGE_TAG##" "${JENKINS_MASTER_CONTAINER_IMAGE_TAG}" ${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
-    replaceStringInFile "##JENKINS_MASTER_CONTAINER_PULL_POLICY##" "${JENKINS_MASTER_CONTAINER_PULL_POLICY}" ${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
-    replaceStringInFile "##JENKINS_MASTER_CONTAINER_IMAGE_PULL_SECRET_NAME##" "${JENKINS_MASTER_CONTAINER_IMAGE_PULL_SECRET_NAME} " ${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
+    replaceStringInFile "##JENKINS_MASTER_CONTAINER_IMAGE##" "${JENKINS_MASTER_CONTAINER_IMAGE}" "${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml"
+    replaceStringInFile "##JENKINS_MASTER_CONTAINER_IMAGE_TAG##" "${JENKINS_MASTER_CONTAINER_IMAGE_TAG}" "${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml"
+    replaceStringInFile "##JENKINS_MASTER_CONTAINER_PULL_POLICY##" "${JENKINS_MASTER_CONTAINER_PULL_POLICY}" "${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml"
+    replaceStringInFile "##JENKINS_MASTER_CONTAINER_IMAGE_PULL_SECRET_NAME##" "${JENKINS_MASTER_CONTAINER_IMAGE_PULL_SECRET_NAME} " "${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml"
     # replace Jenkins admin password
-    replaceStringInFile "##JENKINS_MASTER_ADMIN_PASSWORD##" "${JENKINS_MASTER_ADMIN_PASSWORD}" ${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml
+    replaceStringInFile "##JENKINS_MASTER_ADMIN_PASSWORD##" "${JENKINS_MASTER_ADMIN_PASSWORD}" "${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml"
     # nginx-ingress-controller deployment name
-    replaceStringInFile "##NGINX_INGRESS_DEPLOYMENT_NAME##" "${NGINX_INGRESS_DEPLOYMENT_NAME} " ${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml
-    replaceStringInFile "##NGINX_INGRESS_CONTROLLER_CONTAINER_IMAGE##" "${NGINX_INGRESS_CONTROLLER_CONTAINER_IMAGE}" ${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml
-    replaceStringInFile "##NGINX_INGRESS_CONTROLLER_CONTAINER_PULL_SECRETS##" "${NGINX_INGRESS_CONTROLLER_CONTAINER_PULL_SECRETS} " ${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml
-    replaceStringInFile "##NGINX_INGRESS_CONTROLLER_FOR_NAMESPACE##" "${NGINX_INGRESS_CONTROLLER_FOR_NAMESPACE}" ${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml
-    replaceStringInFile "##NGINX_INGRESS_ANNOTATION_CLASS##" "${NGINX_INGRESS_ANNOTATION_CLASS} " ${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml
+    replaceStringInFile "##NGINX_INGRESS_DEPLOYMENT_NAME##" "${NGINX_INGRESS_DEPLOYMENT_NAME} " "${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml"
+    replaceStringInFile "##NGINX_INGRESS_CONTROLLER_CONTAINER_IMAGE##" "${NGINX_INGRESS_CONTROLLER_CONTAINER_IMAGE}" "${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml"
+    replaceStringInFile "##NGINX_INGRESS_CONTROLLER_CONTAINER_PULL_SECRETS##" "${NGINX_INGRESS_CONTROLLER_CONTAINER_PULL_SECRETS} " "${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml"
+    replaceStringInFile "##NGINX_INGRESS_CONTROLLER_FOR_NAMESPACE##" "${NGINX_INGRESS_CONTROLLER_FOR_NAMESPACE}" "${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml"
+    replaceStringInFile "##NGINX_INGRESS_ANNOTATION_CLASS##" "${NGINX_INGRESS_ANNOTATION_CLASS} " "${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml"
     # configure loadbalancer
-    replaceStringInFile "##NGINX_LOADBALANCER_ENABLED##" "${NGINX_LOADBALANCER_ENABLED} " ${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml
-    replaceStringInFile "##NGINX_LOADBALANCER_HTTP_PORT##" "${NGINX_LOADBALANCER_HTTP_PORT} " ${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml
-    replaceStringInFile "##NGINX_LOADBALANCER_HTTP_TARGETPORT##" "${NGINX_LOADBALANCER_HTTP_TARGETPORT} " ${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml
-    replaceStringInFile "##NGINX_LOADBALANCER_HTTPS_PORT##" "${NGINX_LOADBALANCER_HTTPS_PORT} " ${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml
-    replaceStringInFile "##NGINX_LOADBALANCER_HTTPS_TARGETPORT##" "${NGINX_LOADBALANCER_HTTPS_TARGETPORT} " ${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml
+    replaceStringInFile "##NGINX_LOADBALANCER_ENABLED##" "${NGINX_LOADBALANCER_ENABLED} " "${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml"
+    replaceStringInFile "##NGINX_LOADBALANCER_HTTP_PORT##" "${NGINX_LOADBALANCER_HTTP_PORT} " "${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml"
+    replaceStringInFile "##NGINX_LOADBALANCER_HTTP_TARGETPORT##" "${NGINX_LOADBALANCER_HTTP_TARGETPORT} " "${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml"
+    replaceStringInFile "##NGINX_LOADBALANCER_HTTPS_PORT##" "${NGINX_LOADBALANCER_HTTPS_PORT} " "${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml"
+    replaceStringInFile "##NGINX_LOADBALANCER_HTTPS_TARGETPORT##" "${NGINX_LOADBALANCER_HTTPS_TARGETPORT} " "${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml"
 }
 
 ##########
@@ -202,21 +202,21 @@ function createProjectFromTemplate() {
     local ARG_PVC_CLAIM=$2
 
     # create new project directory
-    mkdir -p ${ARG_PROJECT_DIRECTORY}
+    mkdir -p "${ARG_PROJECT_DIRECTORY}"
     # copy files
     ## if project does not use a global secrets file copy it to project directory
     if [[ -z "${GLOBAL_SECRETS_FILE}" ]]; then
-        cp ${TEMPLATES_BASE_DIRECTORY}secrets.sh ${ARG_PROJECT_DIRECTORY}/
+        cp "${TEMPLATES_BASE_DIRECTORY}secrets.sh" "${ARG_PROJECT_DIRECTORY}/"
     fi
     # copy Jenkins Helm Chart values.yaml for project configuration
-    cp ${TEMPLATES_BASE_DIRECTORY}jenkins_helm_values.yaml ${ARG_PROJECT_DIRECTORY}/
+    cp "${TEMPLATES_BASE_DIRECTORY}jenkins_helm_values.yaml" "${ARG_PROJECT_DIRECTORY}/"
     # copy JcasC file to project
-    cp ${TEMPLATES_BASE_DIRECTORY}jcasc_config.yaml ${ARG_PROJECT_DIRECTORY}/
+    cp "${TEMPLATES_BASE_DIRECTORY}jcasc_config.yaml" "${ARG_PROJECT_DIRECTORY}/"
     # copy ingress values template
-    cp ${TEMPLATES_BASE_DIRECTORY}nginx_ingress_helm_values.yaml ${ARG_PROJECT_DIRECTORY}/
+    cp "${TEMPLATES_BASE_DIRECTORY}nginx_ingress_helm_values.yaml" "${ARG_PROJECT_DIRECTORY}/"
 
     if [[ ! -z "${ARG_PVC_CLAIM}" ]]; then
-        cp ${TEMPLATES_BASE_DIRECTORY}pvc_claim.yaml ${ARG_PROJECT_DIRECTORY}/
+        cp "${TEMPLATES_BASE_DIRECTORY}pvc_claim.yaml" "${ARG_PROJECT_DIRECTORY}/"
     fi
 }
 

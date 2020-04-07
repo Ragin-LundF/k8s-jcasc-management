@@ -35,9 +35,9 @@ function readIpForNamespaceFromFile() {
                     echo ""
                     echo "  INFO ipconfig_utils: IP ${VALUE} found for namespace ${ARG_USED_NAMESPACE}."
                     echo ""
-                    eval ${ARG_RETVAL_FOUND_IP_ADDRESS}="${VALUE}"
+                    eval ${ARG_RETVAL_FOUND_IP_ADDRESS}="\${VALUE}"
                 fi
-            done < ${IP_CONFIG_FILE}
+            done < "${IP_CONFIG_FILE}"
         else
             if [[ "${LOG_LEVEL}" != "NONE" ]]; then
                 echo ""
@@ -47,7 +47,7 @@ function readIpForNamespaceFromFile() {
             # no file found. create new file
             touch "${IP_CONFIG_FILE}"
             # add last line, because while read needs a LF character on each line
-            echo "" > ${IP_CONFIG_FILE}
+            echo "" > "${IP_CONFIG_FILE}"
         fi
     fi
 }
@@ -67,8 +67,13 @@ function readNamespacesFromFile() {
     if [[ -f "${IP_CONFIG_FILE}" ]]; then
         while read VAR VALUE
         do
-            __NAMESPACE_LIST="${__NAMESPACE_LIST},${VAR}"
-        done < ${IP_CONFIG_FILE}
+            if [[ -n "${VAR}" ]]; then
+                if [[ -n "${__NAMESPACE_LIST}" ]]; then
+                    __NAMESPACE_LIST="${__NAMESPACE_LIST},"
+                fi
+                __NAMESPACE_LIST="${__NAMESPACE_LIST}${VAR}"
+            fi
+        done < "${IP_CONFIG_FILE}"
     else
         echo ""
         echo "  ERROR: Cannot read IP config file from (${IP_CONFIG_FILE}) to resolve namespaces."
@@ -102,10 +107,10 @@ function validateIfIpAlreadyExists() {
                     echo "  INFO ipconfig_utils.sh: IP address ${VALUE} already exists for namespace ${VAR}"
                     echo ""
                 fi
-                eval ${ARG_RETVAL_NAMESPACE}="${VAR}"
+                eval ${ARG_RETVAL_NAMESPACE}="\${VAR}"
                 break
             fi
-        done < ${IP_CONFIG_FILE}
+        done < "${IP_CONFIG_FILE}"
     else
         if [[ "${LOG_LEVEL}" != "NONE" ]]; then
             echo ""

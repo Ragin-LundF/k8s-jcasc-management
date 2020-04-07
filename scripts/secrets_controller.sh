@@ -24,11 +24,11 @@ function encryptSecrets() {
     fi
 
     if [[ "${K8S_MGMT_ENCRYPTION_TOOL}" == "openssl" ]]; then
-        openssl enc -e -a -aes-256-cbc -salt -in ${VAR_SECRETS_FILE} -out ${VAR_SECRETS_FILE}.enc
+        openssl enc -e -a -aes-256-cbc -salt -in "${VAR_SECRETS_FILE}" -out "${VAR_SECRETS_FILE}.enc"
     elif [[ "${K8S_MGMT_ENCRYPTION_TOOL}" == "gpg" ]]; then
-        gpg -c ${VAR_SECRETS_FILE}
+        gpg -c "${VAR_SECRETS_FILE}"
     fi
-    rm ${VAR_SECRETS_FILE}
+    rm "${VAR_SECRETS_FILE}"
 
 
     if [[ "${LOG_LEVEL}" != "NONE" ]]; then
@@ -46,9 +46,9 @@ function decryptSecrets() {
     resolveSecretsFile VAR_SECRETS_FILE
 
     if [[ "${K8S_MGMT_ENCRYPTION_TOOL}" == "openssl" ]]; then
-        openssl enc -d -a -aes-256-cbc -salt -in ${VAR_SECRETS_FILE}.enc -out ${VAR_SECRETS_FILE}
+        openssl enc -d -a -aes-256-cbc -salt -in "${VAR_SECRETS_FILE}.enc" -out "${VAR_SECRETS_FILE}"
     elif [[ "${K8S_MGMT_ENCRYPTION_TOOL}" == "gpg" ]]; then
-        gpg ${VAR_SECRETS_FILE}.gpg
+        gpg "${VAR_SECRETS_FILE}.gpg"
     fi
 
 }
@@ -63,7 +63,7 @@ function __applySecretsToNamespace() {
     local ARG_NAMESPACE=$1
     local ARG_SECRETS_FILE=$2
 
-    env NAMESPACE=${ARG_NAMESPACE} sh ${ARG_SECRETS_FILE}
+    env NAMESPACE="${ARG_NAMESPACE}" sh "${ARG_SECRETS_FILE}"
 }
 
 ##########
@@ -87,7 +87,7 @@ function applySecrets() {
     # set namespace variable and execute the secrets file to apply the secrets
     __applySecretsToNamespace "${ARG_NAMESPACE}" "${VAR_SECRETS_FILE}"
     # we are done...remove the decrypted secrets.sh file
-    rm ${VAR_SECRETS_FILE}
+    rm "${VAR_SECRETS_FILE}"
 }
 
 ##########
@@ -119,7 +119,7 @@ function applyGlobalSecretsToAllNamespaces() {
         done
 
         # we are done...remove the decrypted secrets.sh file
-        rm ${VAR_SECRETS_FILE}
+        rm "${VAR_SECRETS_FILE}"
     else
         echo ""
         echo "  ERROR: This function is only available for globally configured secrets files!"

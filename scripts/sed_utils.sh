@@ -55,7 +55,7 @@ function replaceStringInFile() {
     fi
 
     # replace the string and write a new file via tee.
-    sed -e 's|'"${ARG_STR_TO_REPLACE}"'|'"${ARG_STR_REPLACEMENT}"'|' ${ARG_FILE_TO_PROCESS} | tee ${ARG_FILE_TO_PROCESS}.new > /dev/null
+    sed -e 's|'"${ARG_STR_TO_REPLACE}"'|'"${ARG_STR_REPLACEMENT}"'|' "${ARG_FILE_TO_PROCESS}" | tee "${ARG_FILE_TO_PROCESS}.new" > /dev/null
     # move the new file to the old file, which ensures that no data is cut off.
-    mv ${ARG_FILE_TO_PROCESS}.new ${ARG_FILE_TO_PROCESS}
+    mv "${ARG_FILE_TO_PROCESS}.new" "${ARG_FILE_TO_PROCESS}"
 }

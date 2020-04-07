@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # read configuration
 if [[ -f "./config/k8s_jcasc_custom.cnf" ]]; then
@@ -13,7 +13,8 @@ if [[ -f "./config/k8s_jcasc_custom.cnf" ]]; then
         fi
         echo "  INFO: loading overlay config..."
         echo ""
-        source ${K8S_MGMT_ALTERNATIVE_CONFIG_FILE}
+        # shellcheck source=/dev/null
+        source "${K8S_MGMT_ALTERNATIVE_CONFIG_FILE}"
     else
         echo ""
         echo "  ERROR: Configured alternative config not found! Please check your config/k8s_jcasc_custom.cnf file!"
@@ -25,22 +26,32 @@ else
 fi
 
 # import subscripts (take care with order!)
+# shellcheck source=scripts/arguments_utils.sh
 source ./scripts/arguments_utils.sh
+# shellcheck source=scripts/cleanup_k8s_utils.sh
 source ./scripts/cleanup_k8s_utils.sh
+# spellcheck source=scripts/dialogs.sh
 source ./scripts/dialogs.sh
+# spellcheck source=scripts/ipconfig_utils.sh
 source ./scripts/ipconfig_utils.sh
+# spellcheck source=scripts/install_controller.sh
 source ./scripts/install_controller.sh
+# spellcheck source=scripts/project_wizard_controller.sh
 source ./scripts/project_wizard_controller.sh
+# spellcheck source=scripts/secrets_controller.sh
 source ./scripts/secrets_controller.sh
+# spellcheck source=scripts/sed_utils.sh
 source ./scripts/sed_utils.sh
+# spellcheck source=scripts/validator_utils.sh
 source ./scripts/validator_utils.sh
+# spellcheck source=scripts/version_utils.sh
 source ./scripts/version_utils.sh
 
 # first check version
 checkVersion
 
 # start the script
-processArguments $@
+processArguments "$@"
 
 # validate, that command exists and nothing went wrong
 if [[ -z "${K8S_MGMT_COMMAND}" ]]; then
