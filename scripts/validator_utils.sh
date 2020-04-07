@@ -59,7 +59,7 @@ function validateNamespace() {
     # check if namespace fits to RFC 952 and RFC 1123 (DNS LABEL)
     if [[ ! "${ARG_NAMESPACE}" =~ ${__INTERNAL_NAMESPACE_PATTERN} ]]; then
         echo ""
-        echo "  ERROR validator_utils.sh: Namespace has syntactical error!"
+        echo "  ERROR validator_utils.sh: Namespace (${ARG_NAMESPACE}) has syntactical error!"
         echo ""
         __INTERNAL_RETVALUE="false"
     fi

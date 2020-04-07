@@ -14,8 +14,8 @@ function version {
 function remoteVersionWithWget() {
     local ARG_RETVAL_VERSION=$1
     wget -q -O _tmp_version ${K8S_MGMT_VERSION_URL}
-    local __INTERNAL_REMOTE_VERSION_WGET=$(cat ${K8S_MGMT_VERSION_TMP_FILE})
-    rm ${K8S_MGMT_VERSION_TMP_FILE}
+    local __INTERNAL_REMOTE_VERSION_WGET=$(cat "${K8S_MGMT_VERSION_TMP_FILE}")
+    rm "${K8S_MGMT_VERSION_TMP_FILE}"
     eval ${ARG_RETVAL_VERSION}="\${__INTERNAL_REMOTE_VERSION_WGET}"
 }
 
@@ -26,7 +26,7 @@ function remoteVersionWithWget() {
 ##########
 function remoteVersionWithCurl() {
     local ARG_RETVAL_VERSION=$1
-    local __INTERNAL_REMOTE_VERSION_CURL=$(curl -s ${K8S_MGMT_VERSION_URL} | cat)
+    local __INTERNAL_REMOTE_VERSION_CURL=$(curl -s "${K8S_MGMT_VERSION_URL}" | cat)
     eval ${ARG_RETVAL_VERSION}="\${__INTERNAL_REMOTE_VERSION_CURL}"
 }
 
@@ -43,7 +43,7 @@ function checkVersion() {
             remoteVersionWithCurl __INTERNAL_REMOTE_VERSION
         fi
         local __INTERNAL_CURRENT_VERSION=$(cat VERSION)
-        if [[ $(version ${__INTERNAL_REMOTE_VERSION}) -gt $(version ${__INTERNAL_CURRENT_VERSION}) ]]; then
+        if [[ $(version "${__INTERNAL_REMOTE_VERSION}") -gt $(version "${__INTERNAL_CURRENT_VERSION}") ]]; then
             echo ""
             echo "  INFO: A new version of k8s-jcasc-management is available. Please upgrade your version."
             echo "  INFO: For more information, please check: https://github.com/Ragin-LundF/k8s-jcasc-management"
