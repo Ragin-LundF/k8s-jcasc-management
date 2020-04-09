@@ -240,6 +240,20 @@ If you create a new project via the wizard, the system also checks, if a IP addr
 You can use this tool to export the complete Kubernetes configuration to a local `k8s-manifests` directory.
 This can help to figure out differences between clusters.
 
+# Screenshots #
+
+## Standard k8s-jcasc-manaagement ##
+![alt text](docs/images/screenshot.png "K8S JCASC Management standard flow")
+
+## Dialog based k8s-jcasc-manaagement ##
+![alt text](docs/images/dialog_main_menu.png "K8S JCASC Management main menu with dialog")
+*Screenhot: main menu with dialog support*
+
+![alt text](docs/images/dialog_directory_select.png "K8S JCASC Management directory selection with dialog")
+*Screenhot: enter a directory with dialog support*
+
+
+
 # Helpful links #
 
 - Kubernetes DNS-Based Service Discovery: https://github.com/kubernetes/dns/blob/master/docs/specification.md
