@@ -96,6 +96,7 @@ function dialogAskForNamespace() {
         validateNamespace "${__INTERNAL_NAMESPACE}" __INTERNAL_NAMESPACE_VALID
         # if namespace was invalid ask again, else return namespace
         if [[ "${__INTERNAL_NAMESPACE_VALID}" == "false" ]]; then
+            dialog --msgbox "The namespace was not correct." 0 0
             local __INTERNAL_NAMESPACE_RECURSIVE_DUMMY
             dialogAskForNamespace __INTERNAL_NAMESPACE_RECURSIVE_DUMMY
         fi
@@ -137,6 +138,7 @@ function dialogAskForIpAddress() {
         validateIpAddress "${__INTERNAL_IP_ADDRESS}" __INTERNAL_IP_ADDRESS_VALID
         # if IP address was invalid ask again, else return IP
         if [[ "${__INTERNAL_IP_ADDRESS_VALID}" == "false" ]]; then
+            dialog --msgbox "The IP address was not correct." 0 0
             local __INTERNAL_IP_ADDRESS_DUMMY
             dialogAskForIpAddress __INTERNAL_IP_ADDRESS_DUMMY
         fi
@@ -198,9 +200,7 @@ function dialogAskForJenkinsJobConfigurationRepository() {
     # validate entry if pattern was there
     if [[ ! -z "${JENKINS_JOBDSL_REPO_VALIDATE_PATTERN}" ]]; then
         if [[ ! "${__INTERNAL_JENKINS_JOB_REPO}" =~ ${JENKINS_JOBDSL_REPO_VALIDATE_PATTERN} ]]; then
-            echo "ERROR dialogs.sh: The Jenkins job configuration repository has a wrong syntax."
-            echo "ERROR dialogs.sh: It must match the pattern: '${JENKINS_JOBDSL_REPO_VALIDATE_PATTERN}'"
-            echo ""
+            dialog --msgbox "The Jenkins job configuration repository has a wrong syntax. It must match the pattern: '${JENKINS_JOBDSL_REPO_VALIDATE_PATTERN}'" 0 0
             local __INTERNAL_RECURSIVE_JOB_REPO_DUMMY
             dialogAskForJenkinsJobConfigurationRepository __INTERNAL_RECURSIVE_JOB_REPO_DUMMY
         fi

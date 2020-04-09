@@ -26,13 +26,6 @@ else
 fi
 
 # import subscripts (take care with order!)
-if [[ -x "$(command -v dialog)" ]]; then
-    # spellcheck source=scripts/dialogs_dialog.sh
-    source ./scripts/dialogs_dialog.sh
-else
-    # spellcheck source=scripts/dialogs.sh
-    source ./scripts/dialogs.sh
-fi
 # shellcheck source=scripts/arguments_utils.sh
 source ./scripts/arguments_utils.sh
 # shellcheck source=scripts/cleanup_k8s_utils.sh
@@ -57,6 +50,18 @@ checkVersion
 
 # start the script
 processArguments "$@"
+
+# import the dialog depending on installed tool "dialog" or on argument --nodialog
+if [[ -x "$(command -v dialog)" && "${K8S_MGMT_NO_DIALOG}" == "false" ]]; then
+    # spellcheck source=scripts/dialogs_dialog.sh
+    source ./scripts/dialogs_dialog.sh
+else
+    # spellcheck source=scripts/dialogs.sh
+    source ./scripts/dialogs.sh
+fi
+
+# if no valid argument was given let the user select one
+selectInstallationTypeDialog
 
 # validate, that command exists and nothing went wrong
 if [[ -z "${K8S_MGMT_COMMAND}" ]]; then

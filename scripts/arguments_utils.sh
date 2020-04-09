@@ -13,6 +13,7 @@ _K8S_MGMT_COMMAND_SECRETS_DECRYPT="SECRETS_DECRYPT"
 _K8S_MGMT_COMMAND_SECRETS_APPLY="SECRETS_APPLY"
 _K8S_MGMT_COMMAND_SECRETS_APPLY_TO_ALL_NAMESPACES="SECRETS_APPLY_ALL_NAMESPACES"
 _K8S_MGMT_COMMAND_CREATE_PROJECT="CREATE_PROJECT"
+K8S_MGMT_NO_DIALOG="false"
 
 ##########
 # Functions to set the K8S_MGMT_COMMAND.
@@ -49,6 +50,10 @@ function processArguments() {
     for i in "$@"
     do
         case ${i} in
+            --nodialog)
+                K8S_MGMT_NO_DIALOG="true"
+                shift
+            ;;
             ## options
             # directory, where the project configuration is located
             -p=*|--projectdir=*)
@@ -112,6 +117,4 @@ function processArguments() {
             ;;
         esac
     done
-
-    selectInstallationTypeDialog
 }
