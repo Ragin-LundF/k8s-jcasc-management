@@ -13,6 +13,7 @@ _K8S_MGMT_COMMAND_SECRETS_DECRYPT="SECRETS_DECRYPT"
 _K8S_MGMT_COMMAND_SECRETS_APPLY="SECRETS_APPLY"
 _K8S_MGMT_COMMAND_SECRETS_APPLY_TO_ALL_NAMESPACES="SECRETS_APPLY_ALL_NAMESPACES"
 _K8S_MGMT_COMMAND_CREATE_PROJECT="CREATE_PROJECT"
+K8S_MGMT_NO_DIALOG="false"
 
 ##########
 # Functions to set the K8S_MGMT_COMMAND.
@@ -42,28 +43,6 @@ function setCommandToCreateProject() {
 }
 
 ##########
-# If a command was not already set, this function asks for the command
-#
-function selectInstallationType() {
-    if [[ -z "${K8S_MGMT_COMMAND}" ]]; then
-        echo "Please select the command you want to execute:"
-            select WIZARD in "install" "uninstall" "upgrade" "encryptSecrets" "decryptSecrets" "applySecrets" "applySecretsToAll" "createProject" "quit"; do
-                case $WIZARD in
-                    install) setCommandToInstall; break;;
-                    uninstall) setCommandToUnInstall; break;;
-                    upgrade) setCommandToUpgrade; break;;
-                    encryptSecrets) setCommandToSecretsEncrypt; break;;
-                    decryptSecrets) setCommandToSecretDecrypt; break;;
-                    applySecrets) setCommandToSecretsApply; break;;
-                    applySecretsToAll) setCommandToSecretsApplyToAllNamespaces; break;;
-                    createProject) setCommandToCreateProject; break;;
-                    quit) exit 0; break;;
-                esac
-            done
-    fi
-}
-
-##########
 # Process arguments and set defaults
 #
 function processArguments() {
@@ -71,6 +50,10 @@ function processArguments() {
     for i in "$@"
     do
         case ${i} in
+            --nodialog)
+                K8S_MGMT_NO_DIALOG="true"
+                shift
+            ;;
             ## options
             # directory, where the project configuration is located
             -p=*|--projectdir=*)
@@ -134,6 +117,4 @@ function processArguments() {
             ;;
         esac
     done
-
-    selectInstallationType
 }
