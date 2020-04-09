@@ -23,7 +23,7 @@ function selectInstallationTypeDialog() {
                 "applySecretsToAll" "Apply secrets to all projects in Kubernetes" \
                 "createProject" "Create a new project" \
                 "quit" "Quit")
-        #local WIZARD=$(<"{SELECT_COMMAND}")
+
         case "${WIZARD}" in
             install) setCommandToInstall;;
             uninstall) setCommandToUnInstall;;
