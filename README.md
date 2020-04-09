@@ -39,6 +39,8 @@ To use this tool, you need to have the following tools installed:
 * [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 * [helm 3](https://helm.sh/)
 
+Optional the tool can use `dialog` for a better workflow.
+
 ## Basic concept ##
 
 ![alt text](docs/images/k8s-mgmt-workflow.png "K8S Workflow")
