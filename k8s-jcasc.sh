@@ -26,12 +26,17 @@ else
 fi
 
 # import subscripts (take care with order!)
+if [[ -x "$(command -v dialog)" ]]; then
+    # spellcheck source=scripts/dialogs_dialog.sh
+    source ./scripts/dialogs_dialog.sh
+else
+    # spellcheck source=scripts/dialogs.sh
+    source ./scripts/dialogs.sh
+fi
 # shellcheck source=scripts/arguments_utils.sh
 source ./scripts/arguments_utils.sh
 # shellcheck source=scripts/cleanup_k8s_utils.sh
 source ./scripts/cleanup_k8s_utils.sh
-# spellcheck source=scripts/dialogs.sh
-source ./scripts/dialogs.sh
 # spellcheck source=scripts/ipconfig_utils.sh
 source ./scripts/ipconfig_utils.sh
 # spellcheck source=scripts/install_controller.sh
