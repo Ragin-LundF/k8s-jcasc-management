@@ -8,18 +8,32 @@
 #
 function selectInstallationTypeDialog() {
     if [[ -z "${K8S_MGMT_COMMAND}" ]]; then
-        echo "Dialog"
-        local WIZARD=`dialog --backtitle "Main menu" --title "Main menu" --nocancel --clear --menu "Please select the command you want to execute" 0 0 0 "install" "" "uninstall" "" "upgrade" "" "encryptSecrets" "" "decryptSecrets" "" "applySecrets" "" "applySecretsToAll" "" "createProject" "" "quit" "" 3>&1 1>&2 2>&3`
+        local WIZARD=$(dialog --nocancel \
+                --clear \
+                --stdout \
+                --backtitle "Main menu" \
+                --title "Main menu" \
+                --menu "Please select the command you want to execute" 0 0 0 \
+                "install" "Install Jenkins of a project" \
+                "uninstall" "Uninstall Jenkins of a project" \
+                "upgrade" "Upgrade Jenkins in a project" \
+                "encryptSecrets" "Encrypt the secrets file" \
+                "decryptSecrets" "Decrypt the secrets file" \
+                "applySecrets" "Apply secrets of a project to Kubernetes" \
+                "applySecretsToAll" "Apply secrets to all projects in Kubernetes" \
+                "createProject" "Create a new project" \
+                "quit" "Quit")
+        #local WIZARD=$(<"{SELECT_COMMAND}")
         case "${WIZARD}" in
-            install) setCommandToInstall; break;;
-            uninstall) setCommandToUnInstall; break;;
-            upgrade) setCommandToUpgrade; break;;
-            encryptSecrets) setCommandToSecretsEncrypt; break;;
-            decryptSecrets) setCommandToSecretDecrypt; break;;
-            applySecrets) setCommandToSecretsApply; break;;
-            applySecretsToAll) setCommandToSecretsApplyToAllNamespaces; break;;
-            createProject) setCommandToCreateProject; break;;
-            quit) exit 0; break;;
+            install) setCommandToInstall;;
+            uninstall) setCommandToUnInstall;;
+            upgrade) setCommandToUpgrade;;
+            encryptSecrets) setCommandToSecretsEncrypt;;
+            decryptSecrets) setCommandToSecretDecrypt;;
+            applySecrets) setCommandToSecretsApply;;
+            applySecretsToAll) setCommandToSecretsApplyToAllNamespaces;;
+            createProject) setCommandToCreateProject;;
+            quit) exit 0;;
         esac
     fi
 }
@@ -61,6 +75,7 @@ function dialogAskForProjectDirectory() {
     if [[ -z "${K8S_MGMT_PROJECT_DIRECTORY}" ]]; then
         # get data from user
         __INTERNAL_PROJECT_DIRECTORY=`dialog --backtitle "Project directory selection" --title "Project directory selection"  --clear --nocancel --inputbox "Please enter the target project directory." 0 0 3>&1 1>&2 2>&3`
+
         # set the directory as default directory
         K8S_MGMT_PROJECT_DIRECTORY="${__INTERNAL_PROJECT_DIRECTORY}"
     else
