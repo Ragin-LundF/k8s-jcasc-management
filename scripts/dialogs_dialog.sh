@@ -22,6 +22,7 @@ function selectInstallationTypeDialog() {
                 "applySecrets" "Apply secrets of a project to Kubernetes" \
                 "applySecretsToAll" "Apply secrets to all projects in Kubernetes" \
                 "createProject" "Create a new project" \
+                "createJenkinsUserPassword" "Create a password for Jenkins user" \
                 "quit" "Quit")
 
         case "${WIZARD}" in
@@ -33,6 +34,7 @@ function selectInstallationTypeDialog() {
             applySecrets) setCommandToSecretsApply;;
             applySecretsToAll) setCommandToSecretsApplyToAllNamespaces;;
             createProject) setCommandToCreateProject;;
+            createJenkinsUserPassword) setCommandToCreateJenkinsUserPassword;;
             quit) exit 0;;
         esac
     fi
@@ -234,4 +236,23 @@ function dialogAskForJenkinsJobConfigurationRepository() {
         fi
     fi
     eval ${ARG_RETVALUE}="\${__INTERNAL_JENKINS_JOB_REPO}"
+}
+
+##########
+# Ask for user password and encrypt it for Jenkins.
+#
+##########
+function dialogAskForPassword() {
+    if [[ -x "$(command -v htpasswd)" ]]; then
+        # get data from user
+        local __INTERNAL_USER_PASSWORD=`dialog --backtitle "Jenkins user password creator" --title "Jenkins user password creator" --clear --nocancel --inputbox "Please enter the password" 0 0 3>&1 1>&2 2>&3`
+
+
+        local _INTERNAL_ENCRYPTED_PASS
+        encryptUserPasswordForJenkins "${__INTERNAL_USER_PASSWORD}" _INTERNAL_ENCRYPTED_PASS
+        echo "Encrypted password: ${_INTERNAL_ENCRYPTED_PASS}"
+    else
+        echo "ERROR: you need to have 'htpasswd' installed to create a password."
+        echo "ERROR: you can also use this site for password creation: https://www.devglan.com/online-tools/bcrypt-hash-generator"
+    fi
 }

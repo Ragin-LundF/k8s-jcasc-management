@@ -121,6 +121,8 @@ function run() {
         uninstallIngressControllerFromNamespace
         ## remove nginx-ingress-controller sa,roles,clusterroes....
         cleanupK8sNginxIngressControllerComplete
+    elif [[ "${_K8S_MGMT_COMMAND_CREATE_JENKINS_USER_PASSWORD}" == "${K8S_MGMT_COMMAND}" ]]; then
+        dialogAskForPassword
     fi
 }
 

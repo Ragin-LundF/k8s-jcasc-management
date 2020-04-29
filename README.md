@@ -224,6 +224,7 @@ The following commands are supported:
 | `applysecrets` | Apply the secrets to the Kubernetes namespace (global secrets or project secrets, depending on configuration). |
 | `applySecretsToAll` | Apply the secrets to all known namespaces in Kubernetes (global secrets only). |
 | `createproject` | Create a new Jenkins project for the configuration and deployment values from the templates. It uses a wizard to ask for relevant data. |
+| `createJenkinsUserPassword` | Create a new bcryted Jenkins user password with `htpasswd`. You can also use this online site to create a password: https://www.devglan.com/online-tools/bcrypt-hash-generator  |
 
 ## IP Management ##
 

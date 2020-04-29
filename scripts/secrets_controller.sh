@@ -153,3 +153,17 @@ function resolveSecretsFile() {
         eval ${ARG_RETVAL_SECRET_DIR}="\${GLOBAL_SECRETS_FILE}"
     fi
 }
+
+##########
+# Function to create secrets for a user bcrypted
+#
+# argument 1: the plain password which should be encrypted
+# argument 2: variable in which the result should be written (return value)
+##########
+function encryptUserPasswordForJenkins() {
+    local ARG_PLAIN_PASSWORD=$1
+    local ARG_RETVAL_ENCRYPTED_PASS=$2
+
+    local _INTERNAL_ENCRYPTED_JENKINS_USER_PASSWORD=$(htpasswd -nbBC 10 MYPASS "${ARG_PLAIN_PASSWORD}" | sed -e 's/MYPASS\://')
+    eval ${ARG_RETVAL_ENCRYPTED_PASS}="\${_INTERNAL_ENCRYPTED_JENKINS_USER_PASSWORD}"
+}
