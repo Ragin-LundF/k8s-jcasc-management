@@ -24,8 +24,11 @@ JENKINS_JOBDSL_BASE_URL=http://github.com
 # Validation pattern for Jenkins JobDSL URI/URL
 JENKINS_JOBDSL_REPO_VALIDATE_PATTERN=".*\.git"
 
-# Default admin password for Jenkins
+# Default admin password for Jenkins if security configuration in the jcasc_config should not be used
 JENKINS_MASTER_ADMIN_PASSWORD=admin
+# Default password with bcrypt for security configuration as code (jcasc_config)
+JENKINS_MASTER_ADMIN_PASSWORD_ENCRYPTED='$2a$04$UNxiNvJN6R3me9vybVQr/OzpMhgobih8qbxDpGy3lZmmmwc6t48ty'
+JENKINS_MASTER_PROJECT_USER_PASSWORD_ENCRYPTED='$2a$04$BFPq6fSa9KGKrlIktz/C8eSFrrG/gglnW1eXWMSjgtCSx36mMOSNm'
 
 # Default label for the jenkins master to execute the seed job, which will be bind to this label.
 JENKINS_MASTER_DEFAULT_LABEL=jenkins-master-for-seed

@@ -23,6 +23,7 @@ master:
   # because we want to "proxy" jenkins via ingress routing, we have to set the Uri Prefix here
   jenkinsUriPrefix: "##JENKINS_MASTER_DEFAULT_URI_PREFIX##"
   installPlugins:
+    - authorize-project:latest
     - blueocean:latest
     - blueocean-bitbucket-pipeline:latest
     - configuration-as-code:latest
@@ -38,6 +39,7 @@ master:
     - metrics:latest
     - multiple-scms:latest
     - pipeline-config-history:latest
+    - role-strategy:latest
     - sonar:latest
     - ssh-agent:latest
     - stashNotifier:latest

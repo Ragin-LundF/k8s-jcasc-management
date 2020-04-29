@@ -28,6 +28,20 @@ To simplify the installation and the project settings, it has a small helper too
 
 *The password for the preconfigured secrets file is `admin`. There is no valid data inside this file! Please change it for your own project!*
 
+As default the system uses encrypted passwords instead of using the password from the `jenkins_helm_values.yaml`.
+The default users and passwords are:
+
+- administrator
+  - User: admin
+  - Pass: admin
+  - permissions: all
+- project user
+  - User: project-user
+  - Pass: project
+  - permissions: read all and execute build
+
+This can be changed on the `jcasc_config.yaml` file under the `jenkins.securityRealm` section.
+
 ## Prerequisites ##
 
 To use this tool, you need to have the following tools installed:

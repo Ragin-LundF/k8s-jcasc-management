@@ -176,6 +176,9 @@ function processTemplatesWithGlobalConfiguration() {
     replaceStringInFile "##JENKINS_MASTER_CONTAINER_IMAGE_PULL_SECRET_NAME##" "${JENKINS_MASTER_CONTAINER_IMAGE_PULL_SECRET_NAME} " "${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml"
     # replace Jenkins admin password
     replaceStringInFile "##JENKINS_MASTER_ADMIN_PASSWORD##" "${JENKINS_MASTER_ADMIN_PASSWORD}" "${ARG_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml"
+    replaceStringInFile "##JENKINS_MASTER_ADMIN_PASSWORD_ENCRYPTED##" "${JENKINS_MASTER_ADMIN_PASSWORD_ENCRYPTED}" "${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml"
+    replaceStringInFile "##JENKINS_MASTER_PROJECT_USER_PASSWORD_ENCRYPTED##" "${JENKINS_MASTER_PROJECT_USER_PASSWORD_ENCRYPTED}" "${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml"
+
     # nginx-ingress-controller deployment name
     replaceStringInFile "##NGINX_INGRESS_DEPLOYMENT_NAME##" "${NGINX_INGRESS_DEPLOYMENT_NAME} " "${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml"
     replaceStringInFile "##NGINX_INGRESS_CONTROLLER_CONTAINER_IMAGE##" "${NGINX_INGRESS_CONTROLLER_CONTAINER_IMAGE}" "${ARG_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml"

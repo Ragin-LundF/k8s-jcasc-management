@@ -1,6 +1,40 @@
 jenkins:
   systemMessage: "##PROJECT_DIRECTORY## Jenkins in namespace ##NAMESPACE##"
 
+  authorizationStrategy:
+    roleBased:
+      roles:
+        global:
+          - name: "admin"
+            description: "Jenkins administrators"
+            permissions:
+              - "Overall/Administer"
+            assignments:
+              - "admin"
+          - name: "readonly"
+            description: "Read-only users"
+            permissions:
+              - "Overall/Read"
+              - "Job/Read"
+            assignments:
+              - "authenticated"
+        items:
+          - name: "Project User"
+            description: "User for the project"
+            pattern: ".*"
+            permissions:
+              - "Job/Build"
+            assignments:
+              - "project-user"
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: "admin"
+          password: "#jbcrypt:##JENKINS_MASTER_ADMIN_PASSWORD_ENCRYPTED##"
+        - id: "project-user"
+          password: "#jbcrypt:##JENKINS_MASTER_PROJECT_USER_PASSWORD_ENCRYPTED##"
+
   clouds:
     - kubernetes:
         name: "jenkins-build-slaves"
@@ -209,6 +243,10 @@ jobs:
   - script: >
       job('seed_job') {
           label('##JENKINS_MASTER_DEFAULT_LABEL##')
+          logRotator {
+              numToKeep(5)
+              artifactNumToKeep(1)
+          }
           multiscm {
               git {
                   remote {
