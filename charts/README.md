@@ -9,7 +9,6 @@ This is an edited copy of https://github.com/helm/charts/tree/master/stable/jenk
 To have more flexibility and to add the possibility to deploy directly from Jenkins, it was necessary to change some things in the default Helm Charts.
 
 These changes are listed here:
- - changed: `jenkins-master/templates/config.yaml`
  - added: `jenkins-master/templates/k8s-mgmt-jenkins-agent-deploy-rbac.yaml`
 
 ### k8s-mgmt-jenkins-agent-deploy-rbac.yaml ##
