@@ -7,11 +7,15 @@
 # If a command was not already set, this function asks for the command
 #
 function selectInstallationTypeDialog() {
+    local __INTERNAL_BACKTITLE_NEW_VERSION=""
+    if [[ "${K8S_MGMT_VERSION_CHECK_RESULT}" == "true" ]]; then
+        __INTERNAL_BACKTITLE_NEW_VERSION=" // There is a new version available! Please upgrade this project!"
+    fi
     if [[ -z "${K8S_MGMT_COMMAND}" ]]; then
         local WIZARD=$(dialog --nocancel \
                 --clear \
                 --stdout \
-                --backtitle "Main menu" \
+                --backtitle "Main menu ${__INTERNAL_BACKTITLE_NEW_VERSION}" \
                 --title "Main menu" \
                 --menu "Please select the command you want to execute" 0 0 0 \
                 "install" "Install Jenkins of a project" \

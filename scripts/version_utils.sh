@@ -35,6 +35,8 @@ function remoteVersionWithCurl() {
 # that an update is available
 ##########
 function checkVersion() {
+    K8S_MGMT_VERSION_CHECK_RESULT="false"
+
     if [[ "${K8S_MGMT_VERSION_CHECK}" == "true" ]]; then
         local __INTERNAL_REMOTE_VERSION
         if [[ "${K8S_MGMT_VERSION_CHECK_TOOL}" == "wget" ]]; then
@@ -48,6 +50,7 @@ function checkVersion() {
             echo "  INFO: A new version of k8s-jcasc-management is available. Please upgrade your version."
             echo "  INFO: For more information, please check: https://github.com/Ragin-LundF/k8s-jcasc-management"
             echo ""
+            K8S_MGMT_VERSION_CHECK_RESULT="true"
         fi
     fi
 }
