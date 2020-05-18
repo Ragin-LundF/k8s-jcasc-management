@@ -101,7 +101,7 @@ function run() {
         dialogAskForNamespace __INTERNAL_NAMESPACE
 
         # check if something was found
-        if [[ ! -z "${__INTERNAL_NAMESPACE}" ]]; then
+        if [[ -n "${__INTERNAL_NAMESPACE}" ]]; then
             K8S_MGMT_NAMESPACE="${__INTERNAL_NAMESPACE}"
             applySecrets "${K8S_MGMT_NAMESPACE}"
         else

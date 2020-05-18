@@ -9,20 +9,20 @@
 function selectInstallationTypeDialog() {
     if [[ -z "${K8S_MGMT_COMMAND}" ]]; then
         echo "Please select the command you want to execute:"
-            select WIZARD in "install" "uninstall" "upgrade" "encryptSecrets" "decryptSecrets" "applySecrets" "applySecretsToAll" "createProject" "createJenkinsUserPassword" "quit"; do
-                case $WIZARD in
-                    install) setCommandToInstall; break;;
-                    uninstall) setCommandToUnInstall; break;;
-                    upgrade) setCommandToUpgrade; break;;
-                    encryptSecrets) setCommandToSecretsEncrypt; break;;
-                    decryptSecrets) setCommandToSecretDecrypt; break;;
-                    applySecrets) setCommandToSecretsApply; break;;
-                    applySecretsToAll) setCommandToSecretsApplyToAllNamespaces; break;;
-                    createProject) setCommandToCreateProject; break;;
-                    createJenkinsUserPassword) setCommandToCreateJenkinsUserPassword; break;;
-                    quit) exit 0; break;;
-                esac
-            done
+        select WIZARD in "install" "uninstall" "upgrade" "encryptSecrets" "decryptSecrets" "applySecrets" "applySecretsToAll" "createProject" "createJenkinsUserPassword" "quit"; do
+            case $WIZARD in
+                install) setCommandToInstall; break;;
+                uninstall) setCommandToUnInstall; break;;
+                upgrade) setCommandToUpgrade; break;;
+                encryptSecrets) setCommandToSecretsEncrypt; break;;
+                decryptSecrets) setCommandToSecretDecrypt; break;;
+                applySecrets) setCommandToSecretsApply; break;;
+                applySecretsToAll) setCommandToSecretsApplyToAllNamespaces; break;;
+                createProject) setCommandToCreateProject; break;;
+                createJenkinsUserPassword) setCommandToCreateJenkinsUserPassword; break;;
+                quit) exit 0; break;;
+            esac
+        done
     fi
 }
 
@@ -131,7 +131,7 @@ function dialogAskForIpAddress() {
     # if a namespace was give, try to resolve IP by namespace name
     local __INTERNAL_IP_ADDRESS_BY_NAMESPACE
     readIpForNamespaceFromFile "${ARG_NAMESPACE}" __INTERNAL_IP_ADDRESS_BY_NAMESPACE
-    if [[ ! -z "${__INTERNAL_IP_ADDRESS_BY_NAMESPACE}" ]]; then
+    if [[ -n "${__INTERNAL_IP_ADDRESS_BY_NAMESPACE}" ]]; then
         K8S_MGMT_IP_ADDRESS="${__INTERNAL_IP_ADDRESS_BY_NAMESPACE}"
     fi
 
@@ -208,7 +208,7 @@ function dialogAskForJenkinsJobConfigurationRepository() {
     read -p "JobDSL file URL: " __INTERNAL_JENKINS_JOB_REPO
 
     # validate entry if pattern was there
-    if [[ ! -z "${JENKINS_JOBDSL_REPO_VALIDATE_PATTERN}" ]]; then
+    if [[ -n "${JENKINS_JOBDSL_REPO_VALIDATE_PATTERN}" ]]; then
         if [[ ! "${__INTERNAL_JENKINS_JOB_REPO}" =~ ${JENKINS_JOBDSL_REPO_VALIDATE_PATTERN} ]]; then
             echo "ERROR dialogs.sh: The Jenkins job configuration repository has a wrong syntax."
             echo "ERROR dialogs.sh: It must match the pattern: '${JENKINS_JOBDSL_REPO_VALIDATE_PATTERN}'"
@@ -219,7 +219,7 @@ function dialogAskForJenkinsJobConfigurationRepository() {
     fi
 
     ## generate the final result
-    if [[ ! -z "${JENKINS_JOBDSL_BASE_URL}" ]]; then
+    if [[ -n "${JENKINS_JOBDSL_BASE_URL}" ]]; then
         # if JENKINS_JOBDSL_BASE_URL was defined, check if there is something with "://" (ssh/http/https...)
         if [[ "${__INTERNAL_JENKINS_JOB_REPO}" != *"://"* ]]; then
             # add a slash if base url does not end with slash and new repo does not start with slash

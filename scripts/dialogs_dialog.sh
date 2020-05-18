@@ -12,7 +12,8 @@ function selectInstallationTypeDialog() {
         __INTERNAL_BACKTITLE_NEW_VERSION=" // There is a new version available! Please upgrade this project!"
     fi
     if [[ -z "${K8S_MGMT_COMMAND}" ]]; then
-        local WIZARD=$(dialog --nocancel \
+        local WIZARD
+        WIZARD=$(dialog --nocancel \
                 --clear \
                 --stdout \
                 --backtitle "Main menu ${__INTERNAL_BACKTITLE_NEW_VERSION}" \
@@ -203,7 +204,8 @@ function dialogAskForJenkinsSystemMessage() {
     local ARG_RETVALUE=$1
 
     # get data from user
-    local __INTERNAL_JENKINS_SYSMSG=$(dialog \
+    local __INTERNAL_JENKINS_SYSMSG
+    __INTERNAL_JENKINS_SYSMSG=$(dialog \
         --backtitle "Jenkins system message" \
         --title "Jenkins system message" \
         --clear \
@@ -224,7 +226,8 @@ function dialogAskForExistingPersistenceClaim() {
     local ARG_RETVALUE=$1
 
     # get data from user
-    local __INTERNAL_EXISTING_PERSISTENCE_CLAIM=$(dialog \
+    local __INTERNAL_EXISTING_PERSISTENCE_CLAIM
+    __INTERNAL_EXISTING_PERSISTENCE_CLAIM=$(dialog \
         --backtitle "Existing persistent volume claim" \
         --title "Existing persistent volume claim" \
         --clear \
@@ -291,7 +294,8 @@ function dialogAskForJenkinsJobConfigurationRepository() {
 function dialogAskForPassword() {
     if [[ -x "$(command -v htpasswd)" ]]; then
         # get data from user
-        local __INTERNAL_USER_PASSWORD=$(dialog \
+        local __INTERNAL_USER_PASSWORD
+        __INTERNAL_USER_PASSWORD=$(dialog \
             --backtitle "Jenkins user password creator" \
             --title "Jenkins user password creator" \
             --clear \

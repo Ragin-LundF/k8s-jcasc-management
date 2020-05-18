@@ -200,7 +200,8 @@ function dialogAskForJenkinsSystemMessage() {
     local ARG_RETVALUE=$1
 
     # get data from user
-    local __INTERNAL_JENKINS_SYSMSG=$(whiptail \
+    local __INTERNAL_JENKINS_SYSMSG
+    __INTERNAL_JENKINS_SYSMSG=$(whiptail \
         --title "Jenkins system message" \
         --clear \
         --nocancel \
@@ -220,7 +221,8 @@ function dialogAskForExistingPersistenceClaim() {
     local ARG_RETVALUE=$1
 
     # get data from user
-    local __INTERNAL_EXISTING_PERSISTENCE_CLAIM=$(whiptail \
+    local __INTERNAL_EXISTING_PERSISTENCE_CLAIM
+    __INTERNAL_EXISTING_PERSISTENCE_CLAIM=$(whiptail \
         --title "Existing persistent volume claim" \
         --clear \
         --nocancel \
@@ -285,7 +287,8 @@ function dialogAskForJenkinsJobConfigurationRepository() {
 function dialogAskForPassword() {
     if [[ -x "$(command -v htpasswd)" ]]; then
         # get data from user
-        local __INTERNAL_USER_PASSWORD=$(whiptail \
+        local __INTERNAL_USER_PASSWORD
+        __INTERNAL_USER_PASSWORD=$(whiptail \
             --title "Jenkins user password creator" \
             --clear \
             --nocancel \
