@@ -2,6 +2,8 @@
 LOG_LEVEL=INFO
 # defines the file, in which the ip addresses for each namespace should be stored
 IP_CONFIG_FILE=./config/ip_config.cnf
+# Dummy prefix for reserved IPs. If a namespace was prefixed with this, it will not be used for actions that are working with the IP_CONFIG_FILE (like global update of credentials)
+IP_CONFIG_FILE_DUMMY_PREFIX=dummy
 
 # directory, where the projects are located. Must contain a trailing slash!
 PROJECTS_BASE_DIRECTORY=./projects/

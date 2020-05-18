@@ -60,18 +60,19 @@ function readIpForNamespaceFromFile() {
 function readNamespacesFromFile() {
     # arguments
     local ARG_RETVALUE=$1
-
-    # variables
-    local __NAMESPACE_LIST
+    local __NAMESPACE_LIST=""
 
     if [[ -f "${IP_CONFIG_FILE}" ]]; then
         while read VAR VALUE
         do
             if [[ -n "${VAR}" ]]; then
-                if [[ -n "${__NAMESPACE_LIST}" ]]; then
-                    __NAMESPACE_LIST="${__NAMESPACE_LIST},"
+                local __INTERNAL_DUMMY_NAMESPACE_PATTERN="^${IP_CONFIG_FILE_DUMMY_PREFIX}.*"
+                if [[ -z "${IP_CONFIG_FILE_DUMMY_PREFIX}" || ! "${VAR}" =~ ${__INTERNAL_DUMMY_NAMESPACE_PATTERN} ]]; then
+                    if [[ -n "${__NAMESPACE_LIST}" ]]; then
+                        __NAMESPACE_LIST="${__NAMESPACE_LIST},"
+                    fi
+                    __NAMESPACE_LIST="${__NAMESPACE_LIST}${VAR}"
                 fi
-                __NAMESPACE_LIST="${__NAMESPACE_LIST}${VAR}"
             fi
         done < "${IP_CONFIG_FILE}"
     else

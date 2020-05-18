@@ -3,6 +3,7 @@
 setUp() {
     echo "Start setup.."
     IP_CONFIG_FILE="ip_config.cnf.tst"
+    IP_CONFIG_FILE_DUMMY_PREFIX="dummy"
     _K8S_MGMT_TEST_IP="1.1.1.1"
     _K8S_MGMT_TEST_NS="my-namespace"
     echo "${_K8S_MGMT_TEST_NS} ${_K8S_MGMT_TEST_IP}" > "${IP_CONFIG_FILE}"
@@ -18,6 +19,14 @@ testReadNamespacesFromFile() {
     local _RETVAL
     echo "additional-namespace 2.2.2.2" >> "${IP_CONFIG_FILE}"
     . ../scripts/ipconfig_utils.sh && readNamespacesFromFile _RETVAL > /dev/null
+    assertEquals "Namespaces are wrong." "${_K8S_MGMT_TEST_NS},additional-namespace" "${_RETVAL}"
+}
+
+testReadNamespacesFromFileWithDummyPrefix() {
+    local _RETVAL
+    echo "additional-namespace 2.2.2.2" >> "${IP_CONFIG_FILE}"
+    echo "dummy_mydummynamespace 1.1.1.1" >> "${IP_CONFIG_FILE}"
+    . ../scripts/ipconfig_utils.sh && readNamespacesFromFile _RETVAL
     assertEquals "Namespaces are wrong." "${_K8S_MGMT_TEST_NS},additional-namespace" "${_RETVAL}"
 }
 
