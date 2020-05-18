@@ -78,7 +78,7 @@ function applySecrets() {
 
     # check if namespace is known, that we can apply the secrets.
     if [[ -z "${ARG_NAMESPACE}" ]]; then
-        read -p "Which is the target namespace name? " ARG_NAMESPACE
+        dialogAskForNamespace ARG_NAMESPACE
         applySecrets "${ARG_NAMESPACE}"
     fi
 
