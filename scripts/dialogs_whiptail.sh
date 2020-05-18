@@ -12,11 +12,11 @@ function selectInstallationTypeDialog() {
         __INTERNAL_BACKTITLE_NEW_VERSION=" // There is a new version available! Please upgrade this project!"
     fi
     if [[ -z "${K8S_MGMT_COMMAND}" ]]; then
-        local WIZARD=$(dialog --nocancel \
+        local WIZARD
+        WIZARD=$(whiptail \
                 --clear \
-                --stdout \
-                --backtitle "Main menu ${__INTERNAL_BACKTITLE_NEW_VERSION}" \
-                --title "Main menu" \
+                --nocancel \
+                --title "Main menu ${__INTERNAL_BACKTITLE_NEW_VERSION}" \
                 --menu "Please select the command you want to execute" 0 0 0 \
                 "install" "Install Jenkins of a project" \
                 "uninstall" "Uninstall Jenkins of a project" \
@@ -27,7 +27,8 @@ function selectInstallationTypeDialog() {
                 "applySecretsToAll" "Apply secrets to all projects in Kubernetes" \
                 "createProject" "Create a new project" \
                 "createJenkinsUserPassword" "Create a password for Jenkins user" \
-                "quit" "Quit")
+                "quit" "Quit" 3>&2 2>&1 1>&3
+        )
 
         case "${WIZARD}" in
             install) setCommandToInstall;;
@@ -57,8 +58,7 @@ function dialogAskForDeploymentName() {
     local __INTERNAL_DEPLOYMENT_NAME
     if [[ -z "${JENKINS_MASTER_DEPLOYMENT_NAME}" ]]; then
         # get data from user
-        __INTERNAL_DEPLOYMENT_NAME=$(dialog \
-            --backtitle "Deployment name" \
+        __INTERNAL_DEPLOYMENT_NAME=$(whiptail \
             --title "Deployment name" \
             --clear \
             --nocancel \
@@ -86,9 +86,8 @@ function dialogAskForProjectDirectory() {
     local __INTERNAL_PROJECT_DIRECTORY
     if [[ -z "${K8S_MGMT_PROJECT_DIRECTORY}" ]]; then
         # get data from user
-        __INTERNAL_PROJECT_DIRECTORY=$(dialog \
-            --backtitle "Project directory selection" \
-            --title "Project directory selection" \
+        __INTERNAL_PROJECT_DIRECTORY=$(whiptail \
+            --title "Project directory selection"  \
             --clear \
             --nocancel \
             --inputbox "Please enter the target project directory." 0 0 3>&1 1>&2 2>&3
@@ -118,8 +117,7 @@ function dialogAskForNamespace() {
     local __INTERNAL_NAMESPACE_VALID
     if [[ -z "${K8S_MGMT_NAMESPACE}" ]]; then
         # get data from user
-        __INTERNAL_NAMESPACE=$(dialog \
-            --backtitle "Enter namespace" \
+        __INTERNAL_NAMESPACE=$(whiptail \
             --title "Enter namespace" \
             --clear \
             --nocancel \
@@ -135,7 +133,7 @@ function dialogAskForNamespace() {
         validateNamespace "${__INTERNAL_NAMESPACE}" __INTERNAL_NAMESPACE_VALID
         # if namespace was invalid ask again, else return namespace
         if [[ "${__INTERNAL_NAMESPACE_VALID}" == "false" ]]; then
-            dialog --msgbox "The namespace was not correct." 0 0
+            whiptail --msgbox "The namespace was not correct." 0 0
             local __INTERNAL_NAMESPACE_RECURSIVE_DUMMY
             dialogAskForNamespace __INTERNAL_NAMESPACE_RECURSIVE_DUMMY
         fi
@@ -171,8 +169,7 @@ function dialogAskForIpAddress() {
     local __INTERNAL_IP_ADDRESS_VALID
     if [[ -z "${K8S_MGMT_IP_ADDRESS}" ]]; then
         # get data from user
-        __INTERNAL_IP_ADDRESS=$(dialog \
-            --backtitle "Enter IP address" \
+        __INTERNAL_IP_ADDRESS=$(whiptail \
             --title "Enter IP address" \
             --clear \
             --nocancel \
@@ -183,7 +180,7 @@ function dialogAskForIpAddress() {
         validateIpAddress "${__INTERNAL_IP_ADDRESS}" __INTERNAL_IP_ADDRESS_VALID
         # if IP address was invalid ask again, else return IP
         if [[ "${__INTERNAL_IP_ADDRESS_VALID}" == "false" ]]; then
-            dialog --msgbox "The IP address was not correct." 0 0
+            whiptail --msgbox "The IP address was not correct." 0 0
             local __INTERNAL_IP_ADDRESS_DUMMY
             dialogAskForIpAddress __INTERNAL_IP_ADDRESS_DUMMY
         fi
@@ -203,8 +200,7 @@ function dialogAskForJenkinsSystemMessage() {
     local ARG_RETVALUE=$1
 
     # get data from user
-    local __INTERNAL_JENKINS_SYSMSG=$(dialog \
-        --backtitle "Jenkins system message" \
+    local __INTERNAL_JENKINS_SYSMSG=$(whiptail \
         --title "Jenkins system message" \
         --clear \
         --nocancel \
@@ -224,8 +220,7 @@ function dialogAskForExistingPersistenceClaim() {
     local ARG_RETVALUE=$1
 
     # get data from user
-    local __INTERNAL_EXISTING_PERSISTENCE_CLAIM=$(dialog \
-        --backtitle "Existing persistent volume claim" \
+    local __INTERNAL_EXISTING_PERSISTENCE_CLAIM=$(whiptail \
         --title "Existing persistent volume claim" \
         --clear \
         --nocancel \
@@ -252,8 +247,7 @@ function dialogAskForJenkinsJobConfigurationRepository() {
         __INTERNAL_MSG_JOBDSL_BASE_TXT="Please enter the URL or URI to the job configuration repository (URI must be the part after '${JENKINS_JOBDSL_BASE_URL}')"
     fi
     # get data from user
-    __INTERNAL_JENKINS_JOB_REPO=$(dialog \
-        --backtitle "JobDSL configuration repository" \
+    __INTERNAL_JENKINS_JOB_REPO=$(whiptail \
         --title "JobDSL configuration repository" \
         --clear \
         --nocancel \
@@ -263,7 +257,7 @@ function dialogAskForJenkinsJobConfigurationRepository() {
     # validate entry if pattern was there
     if [[ -n "${JENKINS_JOBDSL_REPO_VALIDATE_PATTERN}" ]]; then
         if [[ ! "${__INTERNAL_JENKINS_JOB_REPO}" =~ ${JENKINS_JOBDSL_REPO_VALIDATE_PATTERN} ]]; then
-            dialog --msgbox "The Jenkins job configuration repository has a wrong syntax. It must match the pattern: '${JENKINS_JOBDSL_REPO_VALIDATE_PATTERN}'" 0 0
+            whiptail --msgbox "The Jenkins job configuration repository has a wrong syntax. It must match the pattern: '${JENKINS_JOBDSL_REPO_VALIDATE_PATTERN}'" 0 0
             local __INTERNAL_RECURSIVE_JOB_REPO_DUMMY
             dialogAskForJenkinsJobConfigurationRepository __INTERNAL_RECURSIVE_JOB_REPO_DUMMY
         fi
@@ -291,8 +285,7 @@ function dialogAskForJenkinsJobConfigurationRepository() {
 function dialogAskForPassword() {
     if [[ -x "$(command -v htpasswd)" ]]; then
         # get data from user
-        local __INTERNAL_USER_PASSWORD=$(dialog \
-            --backtitle "Jenkins user password creator" \
+        local __INTERNAL_USER_PASSWORD=$(whiptail \
             --title "Jenkins user password creator" \
             --clear \
             --nocancel \

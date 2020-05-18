@@ -52,7 +52,10 @@ checkVersion
 processArguments "$@"
 
 # import the dialog depending on installed tool "dialog" or on argument --nodialog
-if [[ -x "$(command -v dialog)" && "${K8S_MGMT_NO_DIALOG}" == "false" ]]; then
+if [[ -x "$(command -v whiptail)" && "${K8S_MGMT_NO_DIALOG}" == "false" ]]; then
+    # spellcheck source=scripts/dialogs_whiptail.sh
+    source ./scripts/dialogs_whiptail.sh
+elif [[ -x "$(command -v dialog)" && "${K8S_MGMT_NO_DIALOG}" == "false" ]]; then
     # spellcheck source=scripts/dialogs_dialog.sh
     source ./scripts/dialogs_dialog.sh
 else

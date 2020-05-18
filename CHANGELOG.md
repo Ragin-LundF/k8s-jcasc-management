@@ -1,3 +1,15 @@
+# 1.8.0 #
+- Improved scripts
+  - Missing dialog for apply secrets to a namespace added
+- Support for dummy entries in `ip_config.cnf` file
+  - can be used for IP reservation
+  - configuration of the prefix for dummy entries can be done with the `IP_CONFIG_FILE_DUMMY_PREFIX` variable
+- `whiptail` support
+  - If `dialog` and `whiptail` are installed, the order is:
+    - `whiptail`
+    - `dialog`
+    - `nodialog`
+
 # 1.7.0 #
 - Upgrade of Jenkins Helm charts to version 1.11.3
   - Includes accepted PR for advanced changes in `charts/jenkins-master/templates/config.yaml`
@@ -14,7 +26,7 @@
 - Adding support for `dialog` for better experience
 
 # 1.3.0 #
-- Bugfixes and test improvment with `shunit2`
+- Bugfixes and test improvement with `shunit2`
 
 # 1.2.0 #
 - Adding support for GPG in addition of openssl.
