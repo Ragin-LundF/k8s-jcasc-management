@@ -260,6 +260,13 @@ This can help to figure out differences between clusters.
 ## Standard k8s-jcasc-manaagement ##
 ![alt text](docs/images/screenshot.png "K8S JCASC Management standard flow")
 
+## Whiptail based k8s-jcasc-manaagement ##
+![alt text](docs/images/whiptail_main_menu.png "K8S JCASC Management main menu with whiptail")
+*Screenhot: main menu with whiptail support*
+
+![alt text](docs/images/whiptail_directory_select.png "K8S JCASC Management directory selection with whiptail")
+*Screenhot: enter a directory with whiptail support*
+
 ## Dialog based k8s-jcasc-manaagement ##
 ![alt text](docs/images/dialog_main_menu.png "K8S JCASC Management main menu with dialog")
 *Screenhot: main menu with dialog support*
