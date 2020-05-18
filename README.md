@@ -262,17 +262,17 @@ This can help to figure out differences between clusters.
 
 ## Whiptail based k8s-jcasc-manaagement ##
 ![alt text](docs/images/whiptail_main_menu.png "K8S JCASC Management main menu with whiptail")
-*Screenhot: main menu with whiptail support*
+*Screenshot: main menu with whiptail support*
 
 ![alt text](docs/images/whiptail_directory_select.png "K8S JCASC Management directory selection with whiptail")
-*Screenhot: enter a directory with whiptail support*
+*Screenshot: enter a directory with whiptail support*
 
 ## Dialog based k8s-jcasc-manaagement ##
 ![alt text](docs/images/dialog_main_menu.png "K8S JCASC Management main menu with dialog")
-*Screenhot: main menu with dialog support*
+*Screenshot: main menu with dialog support*
 
 ![alt text](docs/images/dialog_directory_select.png "K8S JCASC Management directory selection with dialog")
-*Screenhot: enter a directory with dialog support*
+*Screenshot: enter a directory with dialog support*
 
 
 
