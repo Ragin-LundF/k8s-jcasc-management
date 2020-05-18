@@ -126,13 +126,13 @@ function installOrUpgradeJenkins() {
     local __INTERNAL_FULL_PROJECT_DIRECTORY="${PROJECTS_BASE_DIRECTORY}${__INTERNAL_PROJECT_DIRECTORY_NAME}"
 
     # set global variables
-    if [[ ! -z "${__INTERNAL_NAMESPACE}" ]]; then
+    if [[ -n "${__INTERNAL_NAMESPACE}" ]]; then
         K8S_MGMT_NAMESPACE="${__INTERNAL_NAMESPACE}"
     fi
-    if [[ ! -z "${__INTERNAL_PROJECT_DIRECTORY_NAME}" ]]; then
+    if [[ -n "${__INTERNAL_PROJECT_DIRECTORY_NAME}" ]]; then
         K8S_MGMT_PROJECT_DIRECTORY="${__INTERNAL_PROJECT_DIRECTORY_NAME}"
     fi
-    if [[ ! -z "${__INTERNAL_DEPLOYMENT_NAME}" ]]; then
+    if [[ -n "${__INTERNAL_DEPLOYMENT_NAME}" ]]; then
         JENKINS_MASTER_DEPLOYMENT_NAME="${__INTERNAL_DEPLOYMENT_NAME}"
     fi
 

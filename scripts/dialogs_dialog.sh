@@ -57,7 +57,7 @@ function dialogAskForDeploymentName() {
     local __INTERNAL_DEPLOYMENT_NAME
     if [[ -z "${JENKINS_MASTER_DEPLOYMENT_NAME}" ]]; then
         # get data from user
-        __INTERNAL_DEPLOYMENT_NAME=`dialog --backtitle "Deployment name" --title "Deployment name" --clear --nocancel --inputbox "Please enter the deployment name" 0 0 3>&1 1>&2 2>&3`
+        __INTERNAL_DEPLOYMENT_NAME=$(dialog --backtitle "Deployment name" --title "Deployment name" --clear --nocancel --inputbox "Please enter the deployment name" 0 0 3>&1 1>&2 2>&3)
         # set the deployment name as default
         JENKINS_MASTER_DEPLOYMENT_NAME="${__INTERNAL_DEPLOYMENT_NAME}"
     else
@@ -80,7 +80,7 @@ function dialogAskForProjectDirectory() {
     local __INTERNAL_PROJECT_DIRECTORY
     if [[ -z "${K8S_MGMT_PROJECT_DIRECTORY}" ]]; then
         # get data from user
-        __INTERNAL_PROJECT_DIRECTORY=`dialog --backtitle "Project directory selection" --title "Project directory selection"  --clear --nocancel --inputbox "Please enter the target project directory." 0 0 3>&1 1>&2 2>&3`
+        __INTERNAL_PROJECT_DIRECTORY=$(dialog --backtitle "Project directory selection" --title "Project directory selection"  --clear --nocancel --inputbox "Please enter the target project directory." 0 0 3>&1 1>&2 2>&3)
 
         # set the directory as default directory
         K8S_MGMT_PROJECT_DIRECTORY="${__INTERNAL_PROJECT_DIRECTORY}"
@@ -106,7 +106,7 @@ function dialogAskForNamespace() {
     local __INTERNAL_NAMESPACE_VALID
     if [[ -z "${K8S_MGMT_NAMESPACE}" ]]; then
         # get data from user
-        __INTERNAL_NAMESPACE=`dialog --backtitle "Enter namespace" --title "Enter namespace"  --clear --nocancel --inputbox "Please enter the target namespace." 0 0 "${K8S_MGMT_PROJECT_DIRECTORY}" 3>&1 1>&2 2>&3`
+        __INTERNAL_NAMESPACE=$(dialog --backtitle "Enter namespace" --title "Enter namespace"  --clear --nocancel --inputbox "Please enter the target namespace." 0 0 "${K8S_MGMT_PROJECT_DIRECTORY}" 3>&1 1>&2 2>&3)
 
         # check namespace and if it was empty and the directory set, then set namespace=directory
         if [[ -z "${__INTERNAL_NAMESPACE}" && -n "${K8S_MGMT_PROJECT_DIRECTORY}" ]]; then
@@ -145,7 +145,7 @@ function dialogAskForIpAddress() {
     # if a namespace was give, try to resolve IP by namespace name
     local __INTERNAL_IP_ADDRESS_BY_NAMESPACE
     readIpForNamespaceFromFile "${ARG_NAMESPACE}" __INTERNAL_IP_ADDRESS_BY_NAMESPACE
-    if [[ ! -z "${__INTERNAL_IP_ADDRESS_BY_NAMESPACE}" ]]; then
+    if [[ -n "${__INTERNAL_IP_ADDRESS_BY_NAMESPACE}" ]]; then
         K8S_MGMT_IP_ADDRESS="${__INTERNAL_IP_ADDRESS_BY_NAMESPACE}"
     fi
 
@@ -153,7 +153,7 @@ function dialogAskForIpAddress() {
     local __INTERNAL_IP_ADDRESS_VALID
     if [[ -z "${K8S_MGMT_IP_ADDRESS}" ]]; then
         # get data from user
-        __INTERNAL_IP_ADDRESS=`dialog --backtitle "Enter IP address" --title "Enter IP address" --clear --nocancel --inputbox "Please enter the loadbalancer IP for your installation." 0 0 3>&1 1>&2 2>&3`
+        __INTERNAL_IP_ADDRESS=$(dialog --backtitle "Enter IP address" --title "Enter IP address" --clear --nocancel --inputbox "Please enter the loadbalancer IP for your installation." 0 0 3>&1 1>&2 2>&3)
 
         # validate
         validateIpAddress "${__INTERNAL_IP_ADDRESS}" __INTERNAL_IP_ADDRESS_VALID
@@ -179,7 +179,7 @@ function dialogAskForJenkinsSystemMessage() {
     local ARG_RETVALUE=$1
 
     # get data from user
-    local __INTERNAL_JENKINS_SYSMSG=`dialog --backtitle "Jenkins system message" --title "Jenkins system message" --clear --nocancel --inputbox "Please enter the Jenkins system message or leave empty for default (can be changed later in the JCasC file)." 0 0 3>&1 1>&2 2>&3`
+    local __INTERNAL_JENKINS_SYSMSG=$(dialog --backtitle "Jenkins system message" --title "Jenkins system message" --clear --nocancel --inputbox "Please enter the Jenkins system message or leave empty for default (can be changed later in the JCasC file)." 0 0 3>&1 1>&2 2>&3)
 
     eval ${ARG_RETVALUE}="\${__INTERNAL_JENKINS_SYSMSG}"
 }
@@ -194,7 +194,7 @@ function dialogAskForExistingPersistenceClaim() {
     local ARG_RETVALUE=$1
 
     # get data from user
-    local __INTERNAL_EXISTING_PERSISTENCE_CLAIM=`dialog --backtitle "Existing persistent volume claim" --title "Existing persistent volume claim" --clear --nocancel --inputbox "Enter an existing claim, that should be reused or leave empty for no persistence claim. You can change it later in the jenkins_helm_values.yaml file." 0 0 3>&1 1>&2 2>&3`
+    local __INTERNAL_EXISTING_PERSISTENCE_CLAIM=$(dialog --backtitle "Existing persistent volume claim" --title "Existing persistent volume claim" --clear --nocancel --inputbox "Enter an existing claim, that should be reused or leave empty for no persistence claim. You can change it later in the jenkins_helm_values.yaml file." 0 0 3>&1 1>&2 2>&3)
 
     eval ${ARG_RETVALUE}="\${__INTERNAL_EXISTING_PERSISTENCE_CLAIM}"
 }
@@ -216,10 +216,10 @@ function dialogAskForJenkinsJobConfigurationRepository() {
         __INTERNAL_MSG_JOBDSL_BASE_TXT="Please enter the URL or URI to the job configuration repository (URI must be the part after '${JENKINS_JOBDSL_BASE_URL}')"
     fi
     # get data from user
-    __INTERNAL_JENKINS_JOB_REPO=`dialog --backtitle "JobDSL configuration repository" --title "JobDSL configuration repository" --clear --nocancel --inputbox "${__INTERNAL_MSG_JOBDSL_BASE_TXT}" 0 0 3>&1 1>&2 2>&3`
+    __INTERNAL_JENKINS_JOB_REPO=$(dialog --backtitle "JobDSL configuration repository" --title "JobDSL configuration repository" --clear --nocancel --inputbox "${__INTERNAL_MSG_JOBDSL_BASE_TXT}" 0 0 3>&1 1>&2 2>&3)
 
     # validate entry if pattern was there
-    if [[ ! -z "${JENKINS_JOBDSL_REPO_VALIDATE_PATTERN}" ]]; then
+    if [[ -n "${JENKINS_JOBDSL_REPO_VALIDATE_PATTERN}" ]]; then
         if [[ ! "${__INTERNAL_JENKINS_JOB_REPO}" =~ ${JENKINS_JOBDSL_REPO_VALIDATE_PATTERN} ]]; then
             dialog --msgbox "The Jenkins job configuration repository has a wrong syntax. It must match the pattern: '${JENKINS_JOBDSL_REPO_VALIDATE_PATTERN}'" 0 0
             local __INTERNAL_RECURSIVE_JOB_REPO_DUMMY
@@ -228,7 +228,7 @@ function dialogAskForJenkinsJobConfigurationRepository() {
     fi
 
     ## generate the final result
-    if [[ ! -z "${JENKINS_JOBDSL_BASE_URL}" ]]; then
+    if [[ -n "${JENKINS_JOBDSL_BASE_URL}" ]]; then
         # if JENKINS_JOBDSL_BASE_URL was defined, check if there is something with "://" (ssh/http/https...)
         if [[ "${__INTERNAL_JENKINS_JOB_REPO}" != *"://"* ]]; then
             # add a slash if base url does not end with slash and new repo does not start with slash
@@ -249,8 +249,7 @@ function dialogAskForJenkinsJobConfigurationRepository() {
 function dialogAskForPassword() {
     if [[ -x "$(command -v htpasswd)" ]]; then
         # get data from user
-        local __INTERNAL_USER_PASSWORD=`dialog --backtitle "Jenkins user password creator" --title "Jenkins user password creator" --clear --nocancel --inputbox "Please enter the password" 0 0 3>&1 1>&2 2>&3`
-
+        local __INTERNAL_USER_PASSWORD=$(dialog --backtitle "Jenkins user password creator" --title "Jenkins user password creator" --clear --nocancel --inputbox "Please enter the password" 0 0 3>&1 1>&2 2>&3)
 
         local _INTERNAL_ENCRYPTED_PASS
         encryptUserPasswordForJenkins "${__INTERNAL_USER_PASSWORD}" _INTERNAL_ENCRYPTED_PASS

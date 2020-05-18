@@ -17,7 +17,7 @@ function processTemplatesWithJenkinsSystemMessage() {
     local ARG_JENKINS_SYSTEM_MESSAGE=$2
 
     # If a custom message should be set, overwrite the message
-    if [[ ! -z "${ARG_JENKINS_SYSTEM_MESSAGE}" ]]; then
+    if [[ -n "${ARG_JENKINS_SYSTEM_MESSAGE}" ]]; then
         replaceStringInFile "##PROJECT_DIRECTORY## Jenkins in namespace ##NAMESPACE##" "${ARG_JENKINS_SYSTEM_MESSAGE}" "${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml"
     fi
 }
@@ -218,7 +218,7 @@ function createProjectFromTemplate() {
     # copy ingress values template
     cp "${TEMPLATES_BASE_DIRECTORY}nginx_ingress_helm_values.yaml" "${ARG_PROJECT_DIRECTORY}/"
 
-    if [[ ! -z "${ARG_PVC_CLAIM}" ]]; then
+    if [[ -n "${ARG_PVC_CLAIM}" ]]; then
         cp "${TEMPLATES_BASE_DIRECTORY}pvc_claim.yaml" "${ARG_PROJECT_DIRECTORY}/"
     fi
 }
@@ -242,7 +242,7 @@ function projectWizard() {
 
     # try to pre-load some configuration
     ## read the IP address, if global variable 'K8S_MGMT_NAMESPACE' was already set
-     if [[ ! -z "${K8S_MGMT_NAMESPACE}" ]]; then
+     if [[ -n "${K8S_MGMT_NAMESPACE}" ]]; then
         readIpForNamespaceFromFile "${K8S_MGMT_NAMESPACE}" VAR_IP_ADDRESS
      fi
 

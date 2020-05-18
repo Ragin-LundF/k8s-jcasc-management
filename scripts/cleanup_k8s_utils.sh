@@ -14,9 +14,9 @@ function cleanupK8sNginxIngressRoles() {
     echo ""
     echo "  INFO: Delete nginx-ingress-controller role from Kubernetes..."
     echo ""
-    local __INTERNAL_ROLES=$(kubectl -n ${ARG_NAMESPACE} get role | grep ${NGINX_INGRESS_DEPLOYMENT_NAME} | awk '{print $1}')
-    if [[ ! -z "${__INTERNAL_ROLES}" ]]; then
-        kubectl -n ${ARG_NAMESPACE} delete role ${__INTERNAL_ROLES}
+    local __INTERNAL_ROLES=$(kubectl -n "${ARG_NAMESPACE}" get role | grep "${NGINX_INGRESS_DEPLOYMENT_NAME}" | awk '{print $1}')
+    if [[ -n "${__INTERNAL_ROLES}" ]]; then
+        kubectl -n "${ARG_NAMESPACE}" delete role "${__INTERNAL_ROLES}"
     fi
 }
 
@@ -31,9 +31,9 @@ function cleanupK8sNginxIngressRoleBindings() {
     echo ""
     echo "  INFO: Delete nginx-ingress-controller rolebindings from Kubernetes..."
     echo ""
-    local __INTERNAL_ROLE_BINDINGS=$(kubectl -n ${ARG_NAMESPACE} get rolebindings | grep ${NGINX_INGRESS_DEPLOYMENT_NAME} | awk '{print $1}')
-    if [[ ! -z "${__INTERNAL_ROLE_BINDINGS}" ]]; then
-        kubectl -n ${ARG_NAMESPACE} delete rolebindings ${__INTERNAL_ROLE_BINDINGS}
+    local __INTERNAL_ROLE_BINDINGS=$(kubectl -n "${ARG_NAMESPACE}" get rolebindings | grep "${NGINX_INGRESS_DEPLOYMENT_NAME}" | awk '{print $1}')
+    if [[ -n "${__INTERNAL_ROLE_BINDINGS}" ]]; then
+        kubectl -n "${ARG_NAMESPACE}" delete rolebindings "${__INTERNAL_ROLE_BINDINGS}"
     fi
 }
 
@@ -47,9 +47,9 @@ function cleanupK8sNginxIngressServiceAccounts() {
     echo ""
     echo "  INFO: Delete nginx-ingress-controller service accounts from Kubernetes..."
     echo ""
-    local __INTERNAL_SERVICE_ACCOUNTS=$(kubectl -n ${ARG_NAMESPACE} get sa | grep ${NGINX_INGRESS_DEPLOYMENT_NAME} | awk '{print $1}')
-    if [[ ! -z "${__INTERNAL_SERVICE_ACCOUNTS}" ]]; then
-        kubectl -n ${ARG_NAMESPACE} delete sa ${__INTERNAL_SERVICE_ACCOUNTS}
+    local __INTERNAL_SERVICE_ACCOUNTS=$(kubectl -n "${ARG_NAMESPACE}" get sa | grep "${NGINX_INGRESS_DEPLOYMENT_NAME}" | awk '{print $1}')
+    if [[ -n "${__INTERNAL_SERVICE_ACCOUNTS}" ]]; then
+        kubectl -n "${ARG_NAMESPACE}" delete sa "${__INTERNAL_SERVICE_ACCOUNTS}"
     fi
 }
 
@@ -63,9 +63,9 @@ function cleanupK8sNginxIngressClusterRoles() {
     echo ""
     echo "  INFO: Delete nginx-ingress-controller clusterrole from Kubernetes..."
     echo ""
-    local __INTERNAL_CLUSTER_ROLES=$(kubectl -n ${ARG_NAMESPACE} get clusterrole | grep ${NGINX_INGRESS_DEPLOYMENT_NAME}-clusterrole-${ARG_NAMESPACE} | awk '{print $1}')
-    if [[ ! -z "${__INTERNAL_CLUSTER_ROLES}" ]]; then
-        kubectl -n ${ARG_NAMESPACE} delete clusterrole ${__INTERNAL_CLUSTER_ROLES}
+    local __INTERNAL_CLUSTER_ROLES=$(kubectl -n "${ARG_NAMESPACE}" get clusterrole | grep "${NGINX_INGRESS_DEPLOYMENT_NAME}"-clusterrole-"${ARG_NAMESPACE}" | awk '{print $1}')
+    if [[ -n "${__INTERNAL_CLUSTER_ROLES}" ]]; then
+        kubectl -n "${ARG_NAMESPACE}" delete clusterrole "${__INTERNAL_CLUSTER_ROLES}"
     fi
 }
 
@@ -79,9 +79,9 @@ function cleanupK8sNginxIngressClusterRoleBinding() {
     echo ""
     echo "  INFO: Delete nginx-ingress-controller clusterrolebinding from Kubernetes..."
     echo ""
-    local __INTERNAL_CLUSTER_ROLE_BINDING=$(kubectl -n ${ARG_NAMESPACE} get clusterrolebinding | grep ${NGINX_INGRESS_DEPLOYMENT_NAME}-clusterrole-nisa-binding-${ARG_NAMESPACE} | awk '{print $1}')
-    if [[ ! -z "${__INTERNAL_CLUSTER_ROLE_BINDING}" ]]; then
-        kubectl -n ${ARG_NAMESPACE} delete clusterrolebinding ${__INTERNAL_CLUSTER_ROLE_BINDING}
+    local __INTERNAL_CLUSTER_ROLE_BINDING=$(kubectl -n "${ARG_NAMESPACE}" get clusterrolebinding | grep "${NGINX_INGRESS_DEPLOYMENT_NAME}"-clusterrole-nisa-binding-"${ARG_NAMESPACE}" | awk '{print $1}')
+    if [[ -n "${__INTERNAL_CLUSTER_ROLE_BINDING}" ]]; then
+        kubectl -n "${ARG_NAMESPACE}" delete clusterrolebinding "${__INTERNAL_CLUSTER_ROLE_BINDING}"
     fi
 }
 
@@ -95,9 +95,9 @@ function cleanupK8sNginxIngress() {
     echo ""
     echo "  INFO: Delete nginx-ingress-controller ingress (Jenkins) from Kubernetes..."
     echo ""
-    local __INTERNAL_INGRESS=$(kubectl -n ${ARG_NAMESPACE} get ingress | grep ${NGINX_INGRESS_DEPLOYMENT_NAME} | awk '{print $1}')
-    if [[ ! -z "${__INTERNAL_INGRESS}" ]]; then
-        kubectl -n ${ARG_NAMESPACE} delete ingress ${__INTERNAL_INGRESS}
+    local __INTERNAL_INGRESS=$(kubectl -n "${ARG_NAMESPACE}" get ingress | grep "${NGINX_INGRESS_DEPLOYMENT_NAME}" | awk '{print $1}')
+    if [[ -n "${__INTERNAL_INGRESS}" ]]; then
+        kubectl -n "${ARG_NAMESPACE}" delete ingress "${__INTERNAL_INGRESS}"
     fi
 }
 
