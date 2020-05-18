@@ -53,7 +53,7 @@ To use this tool, you need to have the following tools installed:
 * [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 * [helm 3](https://helm.sh/)
 
-Optional the tool can use `dialog` for a better workflow.
+Optional the tool can use `whiptail` or `dialog` for a better workflow.
 
 ## Basic concept ##
 
