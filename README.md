@@ -53,7 +53,31 @@ To use this tool, you need to have the following tools installed:
 * [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 * [helm 3](https://helm.sh/)
 
-Optional the tool can use `whiptail` or `dialog` for a better workflow.
+Optional the tool can use `whiptail` (`newt`) or `dialog` for a better workflow.
+
+### Installation whiptail/newt ###
+
+- Debian: `apt-get install whiptail`
+- Ubuntu: `apt-get install whiptail`
+- Alpine: `apk add newt`
+- Arch Linux: `pacman -S whiptail`
+- Kali Linux: `apt-get install whiptail`
+- CentOS: `yum install newt`
+- Fedora: `dnf install newt`
+- OS X: `brew install newt`
+- Raspbian: `apt-get install whiptail`
+
+### Installation dialog ###
+
+- Debian: `apt-get install dialog`
+- Ubuntu: `apt-get install dialog`
+- Alpine: `apk add dialog`
+- Arch Linux: `pacman -S dialog`
+- Kali Linux: `apt-get install dialog`
+- CentOS: `yum install dialog`
+- Fedora: `dnf install dialog`
+- OS X: `brew install dialog`
+- Raspbian: `apt-get install dialog`
 
 ## Basic concept ##
 
