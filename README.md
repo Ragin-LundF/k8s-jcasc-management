@@ -1,3 +1,26 @@
+# Table of content #
+
+* [Kubernetes Jenkins as Code management](#kubernetes-jenkins-as-code-management)
+  * [Prerequisites](#prerequisites)
+  * [Installation whiptail/newt](#installation-whiptailnewt)
+  * [Installation dialog](#installation-dialog)
+* [Basic concept](#basic-concept)
+  * [Advantages](#advantages)
+* [Build slaves](#build-slaves)
+* [Configuration](#configuration)
+  * [Configure alternative configuration with overlays](#configure-alternative-configuration-with-overlays)
+* [How to use](#how-to-use)
+  * [k8s-jcasc.sh arguments](#k8s-jcascsh-arguments)
+  * [k8s-jcasc.sh commands](#k8s-jcascsh-commands)
+* [IP Management](#ip-management)
+* [Additional tools](#additional-tools)
+  * [k8sfullconfigexport](#k8sfullconfigexport)
+* [Screenshots](#screenshots)
+  * [Standard k8s-jcasc-management](#standard-k8s-jcasc-management)
+  * [Whiptail based k8s-jcasc-management](#whiptail-based-k8s-jcasc-management)
+  * [Dialog based k8s-jcasc-management](#dialog-based-k8s-jcasc-management)
+* [Helpful links](#helpful-links)
+
 # Kubernetes Jenkins as Code management #
 
 This project offers a template for managing Jenkins instances on Kubernetes with a JobDSL and Jenkins Configuration as Code (JcasC).
@@ -79,7 +102,7 @@ Optional the tool can use `whiptail` (`newt`) or `dialog` for a better workflow.
 - OS X: `brew install dialog`
 - Raspbian: `apt-get install dialog`
 
-## Basic concept ##
+# Basic concept #
 
 ![alt text](docs/images/k8s-mgmt-workflow.png "K8S Workflow")
 
@@ -94,7 +117,7 @@ Optional the tool can use `whiptail` (`newt`) or `dialog` for a better workflow.
 * This main configuration also contains a very simple `seed-job`, which does a scm checkout of a Groovy script to manage jobs and a repository, which contains the job definition.
     * you can use the [jenkins-jobdsl-remote](https://github.com/Ragin-LundF/jenkins-jobdsl-remote) script as such an seed-job manager.
 
-### Advantages ##
+## Advantages ##
 By having all things stored in VCS repositories, which are normally backed up, it is possible to recreate every instance in no-time.
 It is impossible to misconfigure a Jenkins instance, because the configuration can be reloaded from this remote repository and all configurations are completely versioned.
 
@@ -102,7 +125,7 @@ Also every develops maybe can have admin access to play around with the Jenkins,
 
 If the K8S cluster or server crashes, it is possible to redeploy everything as it was in minutes, because also the job definition is stored in a VCS repository.
 
-## Build slaves ##
+# Build slaves #
 The pre-defined slave-containers will not work directly.
 Every build slave container needs to setup the jenkins home work directory and jenkins user/group with `uid`/`gid` `1000`.
 
@@ -182,7 +205,7 @@ RUN apk update && apk -U upgrade -a && \
 RUN addgroup -S ${user} docker
 ```
 
-## Configuration ##
+# Configuration #
 
 The system has a basic configuration file to pre-configure some global settings.
 This file is located under [config/k8s_jcasc_mgmt.cnf](config/k8s_jcasc_mgmt.cnf).
@@ -193,7 +216,7 @@ All files and directories under the `PROJECTS_BASE_DIRECTORY' should be passed t
 
 Then your existing Jenkins projects can be fully recovered from this repository.
 
-### Configure alternative configuration with overlays ###
+## Configure alternative configuration with overlays ##
 
 To use this repository "as-it-is", it is possible to create a `config/k8s_jcasc_custom.cnf` file.
 
@@ -217,7 +240,7 @@ In the `.gitignore` file, this file is set to ignore, to prevent a commit.
 With the `K8S_MGMT_WORK_AS_OVERLAY` key it is possible to tell the system to first load the original configuration (`k8s_jcasc_mgmt.cnf`) and then the alternative config, which was defined with the `K8S_MGMT_ALTERNATIVE_CONFIG_FILE` key.
 In the new configuration, it is only required to overwrite the options, that has to be changed instead of writing a new file with the complete configuration, which can result in update problems.
 
-## How to use ##
+# How to use #
 
 The simplest way is to call the script without arguments. Everything else will be asked by the script.
 
@@ -235,7 +258,7 @@ For less selection and more control you can also give some arguments and the com
 
 The order of the arguments and commands are irrelevant.
 
-### k8s-jcasc.sh arguments ###
+## k8s-jcasc.sh arguments ##
 
 It is possible to use multiple arguments.
 The following arguments are supported:
@@ -247,7 +270,7 @@ The following arguments are supported:
 | `-d=` or `--deploymentname=` | Defines the deployment name, which is relevant only for `install` and `uninstall`. This can also be configured globally for all projects as `JENKINS_MASTER_DEPLOYMENT_NAME` in the config file. | `-d=jenkins-master` or `--deploymentname=jenkins-master` |
 | `--nodialog` | If `dialog` is installed, but you dont want to use it | n/a | 
 
-### k8s-jcasc.sh commands ###
+## k8s-jcasc.sh commands ##
 
 Only one command can be used. Multiple commands are *NOT* supported.
 The following commands are supported:
@@ -264,7 +287,7 @@ The following commands are supported:
 | `createproject` | Create a new Jenkins project for the configuration and deployment values from the templates. It uses a wizard to ask for relevant data. |
 | `createJenkinsUserPassword` | Create a new bcryted Jenkins user password with `htpasswd`. You can also use this online site to create a password: https://www.devglan.com/online-tools/bcrypt-hash-generator  |
 
-## IP Management ##
+# IP Management #
 
 For greater installations and also after a recovery case, it is helpful to know which Jenkins instance is running behind which loadbalancer IP on which namespace.
 
@@ -281,17 +304,17 @@ This can help to figure out differences between clusters.
 
 # Screenshots #
 
-## Standard k8s-jcasc-manaagement ##
+## Standard k8s-jcasc-management ##
 ![alt text](docs/images/screenshot.png "K8S JCASC Management standard flow")
 
-## Whiptail based k8s-jcasc-manaagement ##
+## Whiptail based k8s-jcasc-management ##
 ![alt text](docs/images/whiptail_main_menu.png "K8S JCASC Management main menu with whiptail")
 *Screenshot: main menu with whiptail support*
 
 ![alt text](docs/images/whiptail_directory_select.png "K8S JCASC Management directory selection with whiptail")
 *Screenshot: enter a directory with whiptail support*
 
-## Dialog based k8s-jcasc-manaagement ##
+## Dialog based k8s-jcasc-management ##
 ![alt text](docs/images/dialog_main_menu.png "K8S JCASC Management main menu with dialog")
 *Screenshot: main menu with dialog support*
 
