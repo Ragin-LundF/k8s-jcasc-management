@@ -186,7 +186,7 @@ function dialogAskForIpAddress() {
         if [[ "${__INTERNAL_IP_ADDRESS_VALID}" == "false" ]]; then
             dialog --msgbox "The IP address was not correct." 0 0
             local __INTERNAL_IP_ADDRESS_DUMMY
-            dialogAskForIpAddress __INTERNAL_IP_ADDRESS_DUMMY
+            dialogAskForIpAddress __INTERNAL_IP_ADDRESS_DUMMY ARG_NAMESPACE
         fi
     else
         __INTERNAL_IP_ADDRESS="${K8S_MGMT_IP_ADDRESS}"
