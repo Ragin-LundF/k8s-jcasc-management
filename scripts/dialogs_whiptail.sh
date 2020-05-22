@@ -85,13 +85,20 @@ function dialogAskForProjectDirectory() {
     # first check, if global project directory variable was not set
     local __INTERNAL_PROJECT_DIRECTORY
     if [[ -z "${K8S_MGMT_PROJECT_DIRECTORY}" ]]; then
-        # get data from user
-        __INTERNAL_PROJECT_DIRECTORY=$(whiptail \
-            --title "Project directory selection"  \
-            --clear \
-            --nocancel \
-            --inputbox "Please enter the target project directory." 0 0 3>&1 1>&2 2>&3
-        )
+        local __DIRECTORIES_ARRAY
+        __DIRECTORIES_ARRAY=($(ls "${PROJECTS_BASE_DIRECTORY}"))
+
+        local __DIRECTORY_NAME
+        local __DIRECTORIES_STRING_LIST
+        local __DIRECTORY_ARRAY_SELECTION="ON"
+
+        for _folder in "${__DIRECTORIES_ARRAY[@]}"
+        do
+            __DIRECTORY_NAME=$(echo "${_folder}" | sed -e 's|'"${PROJECTS_BASE_DIRECTORY}"'||')
+            __DIRECTORIES_STRING_LIST="${__DIRECTORIES_STRING_LIST} \"${__DIRECTORY_NAME}\" \"_\" ${__DIRECTORY_ARRAY_SELECTION}"
+            # set selection to OFF after first run
+            __DIRECTORY_ARRAY_SELECTION="OFF"
+        done
 
         # set the directory as default directory
         K8S_MGMT_PROJECT_DIRECTORY="${__INTERNAL_PROJECT_DIRECTORY}"
