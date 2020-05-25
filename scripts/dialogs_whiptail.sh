@@ -77,22 +77,36 @@ function dialogAskForDeploymentName() {
 # Ask for Project directory if it was not already set.
 #
 # argument 1: variable in which the result should be written (return value)
+# argument 2: true=show directory selection | false/na=input
 ##########
 function dialogAskForProjectDirectory() {
     # arguments
     local ARG_RETVALUE=$1
+    local ARG_USE_DIALOG=$2
 
     # first check, if global project directory variable was not set
     local __INTERNAL_PROJECT_DIRECTORY
     if [[ -z "${K8S_MGMT_PROJECT_DIRECTORY}" ]]; then
-        # get data from user
-        __INTERNAL_PROJECT_DIRECTORY=$(whiptail \
-            --title "Project directory selection"  \
-            --clear \
-            --nocancel \
-            --inputbox "Please enter the target project directory." 0 0 3>&1 1>&2 2>&3
-        )
+        if [[ "${ARG_USE_DIALOG}" == "true" ]]; then
+            local __DIRECTORIES
+            readProjectDirectories __DIRECTORIES
 
+            __INTERNAL_PROJECT_DIRECTORY=$(whiptail \
+                --title "Project directory selection" \
+                --clear \
+                --nocancel \
+                --menu "Please enter the target project directory." 0 0 10 \
+                ${__DIRECTORIES} 3>&1 1>&2 2>&3
+            )
+        else
+            # get data from user
+            __INTERNAL_PROJECT_DIRECTORY=$(whiptail \
+                --title "Project directory selection"  \
+                --clear \
+                --nocancel \
+                --inputbox "Please enter the target project directory." 0 0 3>&1 1>&2 2>&3
+            )
+        fi
         # set the directory as default directory
         K8S_MGMT_PROJECT_DIRECTORY="${__INTERNAL_PROJECT_DIRECTORY}"
     else

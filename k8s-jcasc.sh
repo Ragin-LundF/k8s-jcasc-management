@@ -30,6 +30,8 @@ fi
 source ./scripts/arguments_utils.sh
 # shellcheck source=scripts/cleanup_k8s_utils.sh
 source ./scripts/cleanup_k8s_utils.sh
+# spellcheck source=scripts/filedir_utils.sh
+source ./scripts/filedir_utils.sh
 # spellcheck source=scripts/ipconfig_utils.sh
 source ./scripts/ipconfig_utils.sh
 # spellcheck source=scripts/install_controller.sh
