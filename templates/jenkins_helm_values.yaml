@@ -78,3 +78,7 @@ serviceAccountAgent:
   # Specifies whether a ServiceAccount should be created
   create: true
 
+k8smanagement:
+  rbac:
+    # list of additional namespaces that should be deployable (adds RBAC roles to those namespaces)
+    additionalNamespaces: []

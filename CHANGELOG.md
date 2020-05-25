@@ -1,3 +1,18 @@
+# 1.9.0
+Adding support for deployments in other namespaces.
+
+With the following section in the `jenkins_helm_values.yaml` it is possible to add other namespaces to the RBAC binding.
+This allows Jenkins to deploy applications into those namespaces later on a CI/CD pipeline.
+
+
+```yaml
+k8smanagement:
+  rbac:
+    # list of additional namespaces that should be deployable (adds RBAC roles to those namespaces)
+    additionalNamespaces: []
+```
+
+
 # 1.8.0 #
 - Improved scripts
   - Missing dialog for apply secrets to a namespace added
