@@ -150,7 +150,18 @@ function installOrUpgradeJenkins() {
     installPersistenceVolumeClaim
 
     # install or upgrade the Jenkins Helm Chart
-    helm "${__INTERNAL_HELM_COMMAND}" "${JENKINS_MASTER_DEPLOYMENT_NAME}" "${__INTERNAL_HELM_JENKINS_PATH}" -n "${K8S_MGMT_NAMESPACE}" -f "${__INTERNAL_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml"
+    if [[ -f "${__INTERNAL_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml" ]]; then
+        helm "${__INTERNAL_HELM_COMMAND}" "${JENKINS_MASTER_DEPLOYMENT_NAME}" "${__INTERNAL_HELM_JENKINS_PATH}" -n "${K8S_MGMT_NAMESPACE}" -f "${__INTERNAL_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml"
+    else
+        echo ""
+        echo "  INFO: No Jenkins Helm values found..."
+        echo ""
+    fi
+
+    # lookup for scripts to execute
+    if [[ -d "${__INTERNAL_FULL_PROJECT_DIRECTORY}/scripts/" ]]; then
+        find "${__INTERNAL_FULL_PROJECT_DIRECTORY}/scripts/" -name "i_*.sh" -type f -exec chmod +x {} \; -exec {} \;
+    fi
 }
 
 ##########
@@ -170,8 +181,13 @@ function installIngressControllerToNamespace() {
     # create new variable with full project directory
     local __INTERNAL_FULL_PROJECT_DIRECTORY="${PROJECTS_BASE_DIRECTORY}${__INTERNAL_PROJECT_DIRECTORY_NAME}"
 
-    # install the nginx-ingress controller with loadbalancer and default route
-    helm install "${NGINX_INGRESS_DEPLOYMENT_NAME}" "${__INTERNAL_HELM_NGINX_INGRESS_PATH}" -n "${__INTERNAL_NAMESPACE}" -f "${__INTERNAL_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml"
+    if [[ -f "${__INTERNAL_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml" ]]; then
+        # install the nginx-ingress controller with loadbalancer and default route
+        helm install "${NGINX_INGRESS_DEPLOYMENT_NAME}" "${__INTERNAL_HELM_NGINX_INGRESS_PATH}" -n "${__INTERNAL_NAMESPACE}" -f "${__INTERNAL_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml"
+    echo ""
+        echo "  INFO: No Nginx Helm values found..."
+        echo ""
+    fi
 }
 
 ##########
@@ -198,4 +214,9 @@ function uninstallJenkins() {
     dialogAskForDeploymentName __INTERNAL_HELM_DEPLOYMENT_NAME
 
     helm uninstall "${__INTERNAL_HELM_DEPLOYMENT_NAME}" -n "${__INTERNAL_NAMESPACE}"
+
+    # lookup for scripts to execute if namespace name = directory name
+    if [[ -d "${PROJECTS_BASE_DIRECTORY}${__INTERNAL_NAMESPACE}/scripts/" ]]; then
+        find "${PROJECTS_BASE_DIRECTORY}${__INTERNAL_NAMESPACE}/scripts/" -name "d_*.sh" -type f -exec chmod +x {} \; -exec {} \;
+    fi
 }

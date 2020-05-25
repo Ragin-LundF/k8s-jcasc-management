@@ -113,7 +113,6 @@ function dialogAskForProjectDirectory() {
         __INTERNAL_PROJECT_DIRECTORY="${K8S_MGMT_PROJECT_DIRECTORY}"
     fi
 
-exit 1
     eval ${ARG_RETVALUE}="\${__INTERNAL_PROJECT_DIRECTORY}"
 }
 

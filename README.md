@@ -287,6 +287,12 @@ The following commands are supported:
 | `createproject` | Create a new Jenkins project for the configuration and deployment values from the templates. It uses a wizard to ask for relevant data. |
 | `createJenkinsUserPassword` | Create a new bcryted Jenkins user password with `htpasswd`. You can also use this online site to create a password: https://www.devglan.com/online-tools/bcrypt-hash-generator  |
 
+# Execution of scripts #
+
+It is also possible to create shell scripts for namespaces/directories. This can be helpful, if you want to install other tools besides Jenkins.
+The `k8s-jcasc.sh` tool first tries to install the secrets, PVC and Jenkins. After this was done it checks, if a directory called `scripts` is inside of the project directory and if it contains `*.sh` files.
+Those files will be executed.
+
 # IP Management #
 
 For greater installations and also after a recovery case, it is helpful to know which Jenkins instance is running behind which loadbalancer IP on which namespace.

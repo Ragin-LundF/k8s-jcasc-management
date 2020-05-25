@@ -1,3 +1,18 @@
+# 1.10.0
+Shell script support and directory selection.
+
+With `dialog` and `whiptail` it is now possible to select the directory in a selection dialog instead of an input dialog.
+
+For better support for additional tools and installations, `k8s-jcasc.sh` now checks after (de-)installing Jenkins, if the selected project directory contains shell scripts in a directory called `scripts`.
+
+To use this feature it is required to have the following naming conventions:
+
+- `i_*.sh` -> Scripts for installation
+- `d_*.sh` -> Scripts for deinstallation
+
+The deinstallation scripts can only be executed if the project directory matches the namespace name. This is necessary because normally only the namespace and no directory selection is required for deinstallation.
+
+
 # 1.9.0
 Adding support for deployments in other namespaces.
 
