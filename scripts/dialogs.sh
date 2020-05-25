@@ -54,10 +54,13 @@ function dialogAskForDeploymentName() {
 # Ask for Project directory if it was not already set.
 #
 # argument 1: variable in which the result should be written (return value)
+# argument 2: true=show directory selection | false/na=input (unsupported without dialog/whiptail)
 ##########
 function dialogAskForProjectDirectory() {
     # arguments
     local ARG_RETVALUE=$1
+    # unsupported for default dialog
+    local ARG_USE_DIALOG=$2
 
     # first check, if global project directory variable was not set
     local __INTERNAL_PROJECT_DIRECTORY

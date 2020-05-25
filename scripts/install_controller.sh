@@ -15,7 +15,7 @@ _K8S_MGMT_HELM_UPGRADE_COMMAND="upgrade"
 function installPersistenceVolumeClaim() {
     # variables
     local __INTERNAL_PROJECT_DIRECTORY
-    dialogAskForProjectDirectory __INTERNAL_PROJECT_DIRECTORY
+    dialogAskForProjectDirectory __INTERNAL_PROJECT_DIRECTORY "true"
     local __INTERNAL_NAMESPACE
     dialogAskForNamespace __INTERNAL_NAMESPACE
 
@@ -76,7 +76,8 @@ function checkAndInstallNamespace() {
 
     if [[ -n "${__INTERNAL_NAMESPACE_TO_CHECK}" ]]; then
         # lookup if namespace already exists
-        local __INTERNAL_NS_EXISTS=$(kubectl get namespaces | awk '{print $1}' | grep "${__INTERNAL_NAMESPACE_TO_CHECK}")
+        local __INTERNAL_NS_EXISTS
+        __INTERNAL_NS_EXISTS=$(kubectl get namespaces | awk '{print $1}' | grep "${__INTERNAL_NAMESPACE_TO_CHECK}")
 
         if [[ -z "${__INTERNAL_NS_EXISTS}" ]]; then
             kubectl create namespace "${__INTERNAL_NAMESPACE_TO_CHECK}"
@@ -111,7 +112,7 @@ function installOrUpgradeJenkins() {
     local __INTERNAL_HELM_JENKINS_PATH="./charts/jenkins-master"
     # get project directory
     local __INTERNAL_PROJECT_DIRECTORY_NAME
-    dialogAskForProjectDirectory __INTERNAL_PROJECT_DIRECTORY_NAME
+    dialogAskForProjectDirectory __INTERNAL_PROJECT_DIRECTORY_NAME "true"
     # get namespace from global variables or ask for the name
     local __INTERNAL_NAMESPACE
     dialogAskForNamespace __INTERNAL_NAMESPACE
@@ -161,7 +162,7 @@ function installIngressControllerToNamespace() {
     local __INTERNAL_HELM_NGINX_INGRESS_PATH="./charts/nginx-ingress-controller"
     # get project directory
     local __INTERNAL_PROJECT_DIRECTORY_NAME
-    dialogAskForProjectDirectory __INTERNAL_PROJECT_DIRECTORY_NAME
+    dialogAskForProjectDirectory __INTERNAL_PROJECT_DIRECTORY_NAME "true"
     # get namespace from global variables or ask for the name
     local __INTERNAL_NAMESPACE
     dialogAskForNamespace __INTERNAL_NAMESPACE
