@@ -291,7 +291,12 @@ The following commands are supported:
 
 It is also possible to create shell scripts for namespaces/directories. This can be helpful, if you want to install other tools besides Jenkins.
 The `k8s-jcasc.sh` tool first tries to install the secrets, PVC and Jenkins. After this was done it checks, if a directory called `scripts` is inside of the project directory and if it contains `*.sh` files.
-Those files will be executed.
+
+These files have to follow these rules and naming conventions:
+- `i_*.sh` -> Files that should be executed for installation
+- `d_*.sh` -> Files that should be executed for deinstallation
+
+The deinstallation scripts can only be executed if the project directory matches the namespace name. This is necessary because normally only the namespace and no directory selection is required for deinstallation.
 
 # IP Management #
 
