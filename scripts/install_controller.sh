@@ -184,7 +184,7 @@ function installIngressControllerToNamespace() {
     if [[ -f "${__INTERNAL_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml" ]]; then
         # install the nginx-ingress controller with loadbalancer and default route
         helm install "${NGINX_INGRESS_DEPLOYMENT_NAME}" "${__INTERNAL_HELM_NGINX_INGRESS_PATH}" -n "${__INTERNAL_NAMESPACE}" -f "${__INTERNAL_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml"
-    echo ""
+        echo ""
         echo "  INFO: No Nginx Helm values found..."
         echo ""
     fi
