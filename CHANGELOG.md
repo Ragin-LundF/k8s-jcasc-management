@@ -1,3 +1,8 @@
+# 1.10.1
+Hotfix for MacOS/BSD
+
+MacOS/BSD does not support `find -printf`. Now it uses the default `ls` command for directory listening.
+
 # 1.10.0
 Shell script support and directory selection.
 

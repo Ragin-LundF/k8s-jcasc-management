@@ -90,7 +90,7 @@ function dialogAskForProjectDirectory() {
     if [[ -z "${K8S_MGMT_PROJECT_DIRECTORY}" ]]; then
         if [[ "${ARG_USE_DIALOG}" == "true" ]]; then
             local __DIRECTORIES
-            readProjectDirectories __DIRECTORIES
+            readProjectDirectoriesForDialog __DIRECTORIES
 
             __INTERNAL_PROJECT_DIRECTORY=$(dialog \
                 --title "Project directory selection" \
