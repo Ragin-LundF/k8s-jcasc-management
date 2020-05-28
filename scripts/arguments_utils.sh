@@ -13,6 +13,7 @@ _K8S_MGMT_COMMAND_SECRETS_DECRYPT="SECRETS_DECRYPT"
 _K8S_MGMT_COMMAND_SECRETS_APPLY="SECRETS_APPLY"
 _K8S_MGMT_COMMAND_SECRETS_APPLY_TO_ALL_NAMESPACES="SECRETS_APPLY_ALL_NAMESPACES"
 _K8S_MGMT_COMMAND_CREATE_PROJECT="CREATE_PROJECT"
+_K8S_MGMT_COMMAND_CREATE_DEPLOYMENT_ONLY_PROJECT="CREATE_DEPLOYMENT_ONLY_PROJECT"
 _K8S_MGMT_COMMAND_CREATE_JENKINS_USER_PASSWORD="CREATE_JENKINS_USER_PASSWORD"
 K8S_MGMT_NO_DIALOG="false"
 
@@ -41,6 +42,9 @@ function setCommandToSecretsApplyToAllNamespaces() {
 }
 function setCommandToCreateProject() {
     K8S_MGMT_COMMAND="${_K8S_MGMT_COMMAND_CREATE_PROJECT}"
+}
+function setCommandToCreateDeploymentOnlyProject() {
+    K8S_MGMT_COMMAND="${_K8S_MGMT_COMMAND_CREATE_DEPLOYMENT_ONLY_PROJECT}"
 }
 function setCommandToCreateJenkinsUserPassword() {
     K8S_MGMT_COMMAND="${_K8S_MGMT_COMMAND_CREATE_JENKINS_USER_PASSWORD}"
@@ -114,6 +118,11 @@ function processArguments() {
             # create new project
             createproject)
                 setCommandToCreateProject
+                shift # past argument=value
+            ;;
+            # create new application project
+            createdeploymentonlyproject)
+                setCommandToCreateDeploymentOnlyProject
                 shift # past argument=value
             ;;
             # create a password

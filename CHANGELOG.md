@@ -1,3 +1,14 @@
+# 1.11.0
+Adding support to disable Jenkins ingress as default while installing ingress controller.
+
+If Jenkins should deploy applications to other namespaces, it will deploy the ingress controller (if active) also to the other namespaces, but without the ingress of Jenkins.
+
+To create the needed project, there is a new menu point called `createDeploymentOnlyProject`. This function will only ask for directory, namespace and IP and creates only the ingress and loadbalancer relevant files.
+
+The installation for such projects is looking for Jenkins Helm Chart values and if they are not available it skips the installation of Jenkins and sets an internal flag to prevent the installation of a Jenkins ingress routing.
+
+
+
 # 1.10.1
 Hotfix for MacOS/BSD
 

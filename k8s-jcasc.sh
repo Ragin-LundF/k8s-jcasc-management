@@ -84,6 +84,8 @@ function run() {
     if [[ "${_K8S_MGMT_COMMAND_CREATE_PROJECT}" == "${K8S_MGMT_COMMAND}" ]]; then
         ## Create new project
         projectWizard
+    elif [[ "${_K8S_MGMT_COMMAND_CREATE_DEPLOYMENT_ONLY_PROJECT}" == "${K8S_MGMT_COMMAND}" ]]; then
+        createDeploymentOnlyWizard
     elif [[ "${_K8S_MGMT_COMMAND_SECRETS_ENCRYPT}" == "${K8S_MGMT_COMMAND}" ]]; then
         ## encrypt secrets
         encryptSecrets
@@ -114,11 +116,13 @@ function run() {
         fi
     elif [[ "${_K8S_MGMT_COMMAND_INSTALL}" == "${K8S_MGMT_COMMAND}" ]]; then
         ## install Jenkins
-        installOrUpgradeJenkins "${_K8S_MGMT_COMMAND_INSTALL}"
-        installIngressControllerToNamespace
+        local __K8S_MGMT_INSTALL_JENKINS_HELM_EXISTING
+        installOrUpgradeJenkins "${_K8S_MGMT_COMMAND_INSTALL}" __K8S_MGMT_INSTALL_JENKINS_HELM_EXISTING
+        installIngressControllerToNamespace "${__K8S_MGMT_INSTALL_JENKINS_HELM_EXISTING}"
     elif [[ "${_K8S_MGMT_COMMAND_UPGRADE}" == "${K8S_MGMT_COMMAND}" ]]; then
         ## upgrade Jenkins
-        installOrUpgradeJenkins "${_K8S_MGMT_COMMAND_UPGRADE}"
+        local __K8S_MGMT_INSTALL_JENKINS_HELM_EXISTING
+        installOrUpgradeJenkins "${_K8S_MGMT_COMMAND_UPGRADE}" __K8S_MGMT_INSTALL_JENKINS_HELM_EXISTING
     elif [[ "${_K8S_MGMT_COMMAND_UNINSTALL}" == "${K8S_MGMT_COMMAND}" ]]; then
         ## uninstall Jenkins
         uninstallJenkins

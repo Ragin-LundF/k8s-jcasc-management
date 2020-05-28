@@ -1,3 +1,4 @@
+{{- if .Values.k8sJenkinsMgmt.ingress.enabled }}
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
@@ -15,3 +16,4 @@ spec:
             backend:
               serviceName: {{ .Values.k8sJenkinsMgmt.ingress.jenkinsDeploymentName }}
               servicePort: 8080
+{{- end }}

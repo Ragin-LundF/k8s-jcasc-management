@@ -27,6 +27,7 @@ function selectInstallationTypeDialog() {
                 "applySecrets" "Apply secrets of a project to Kubernetes" \
                 "applySecretsToAll" "Apply secrets to all projects in Kubernetes" \
                 "createProject" "Create a new project" \
+                "createDeploymentOnlyProject" "Create a new deployment only project" \
                 "createJenkinsUserPassword" "Create a password for Jenkins user" \
                 "quit" "Quit")
 
@@ -39,6 +40,7 @@ function selectInstallationTypeDialog() {
             applySecrets) setCommandToSecretsApply;;
             applySecretsToAll) setCommandToSecretsApplyToAllNamespaces;;
             createProject) setCommandToCreateProject;;
+            createDeploymentOnlyProject) setCommandToCreateDeploymentOnlyProject;;
             createJenkinsUserPassword) setCommandToCreateJenkinsUserPassword;;
             quit) exit 0;;
         esac

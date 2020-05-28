@@ -89,11 +89,14 @@ function checkAndInstallNamespace() {
 # This function installs the Jenkins instance
 #
 # argument 1: INSTALL or UPGRADE (see _K8S_MGMT_COMMAND_INSTALL or _K8S_MGMT_COMMAND_UPGRADE at the arguments_utils.sh file)
+# argument 2: return value if jenkins installation was existing or not to decide, if a ingress should be created or not
 ##########
 function installOrUpgradeJenkins() {
     ## install Jenkins to Kubernetes
     # arguments
     local ARG_INSTALL_UPGRADE_COMMAND=$1
+    local ARG_RETVAL_K8S_MGMT_INSTALL_JENKINS_HELM_EXISTING=$2
+    local __JENKINS_HELM_CHARTS_EXISTING
 
     # validate helm command
     local __INTERNAL_HELM_COMMAND
@@ -140,21 +143,27 @@ function installOrUpgradeJenkins() {
     # check namespace and install it if it does not exist
     checkAndInstallNamespace "${K8S_MGMT_NAMESPACE}"
 
-    # start with apply secrets to kubernetes
-    echo ""
-    echo "  INFO: Apply secrets..."
-    echo ""
-    applySecrets "${K8S_MGMT_NAMESPACE}"
-
     # Now lets install the PVC if it does not exist
     installPersistenceVolumeClaim
 
     # install or upgrade the Jenkins Helm Chart
     if [[ -f "${__INTERNAL_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml" ]]; then
+        __JENKINS_HELM_CHARTS_EXISTING="true"
+        # start with apply secrets to kubernetes
+        echo ""
+        echo "  INFO: Apply secrets..."
+        echo ""
+        applySecrets "${K8S_MGMT_NAMESPACE}"
+
+        # start with installing Jenkins to kubernetes
+        echo ""
+        echo "  INFO: Installing Jenkins..."
+        echo ""
         helm "${__INTERNAL_HELM_COMMAND}" "${JENKINS_MASTER_DEPLOYMENT_NAME}" "${__INTERNAL_HELM_JENKINS_PATH}" -n "${K8S_MGMT_NAMESPACE}" -f "${__INTERNAL_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml"
     else
+        __JENKINS_HELM_CHARTS_EXISTING="false"
         echo ""
-        echo "  INFO: No Jenkins Helm values found..."
+        echo "  INFO: No Jenkins Helm values found...skipping..."
         echo ""
     fi
 
@@ -162,13 +171,17 @@ function installOrUpgradeJenkins() {
     if [[ -d "${__INTERNAL_FULL_PROJECT_DIRECTORY}/scripts/" ]]; then
         find "${__INTERNAL_FULL_PROJECT_DIRECTORY}/scripts/" -name "i_*.sh" -type f -exec chmod +x {} \; -exec {} \;
     fi
+    eval ${ARG_RETVAL_K8S_MGMT_INSTALL_JENKINS_HELM_EXISTING}="\${__JENKINS_HELM_CHARTS_EXISTING}"
 }
 
 ##########
 # This function installs the Nginx-Ingress controller instance and loadbalancer
 #
+# # argument 1: Is Jenkins available? true = Jenkins ingress will be installed, if configured | false = Jenkins ingress will be disabled
 ##########
 function installIngressControllerToNamespace() {
+    local ARG_JENKINS_IS_EXISTING=$1
+
     # path to helm charts
     local __INTERNAL_HELM_NGINX_INGRESS_PATH="./charts/nginx-ingress-controller"
     # get project directory
@@ -182,8 +195,19 @@ function installIngressControllerToNamespace() {
     local __INTERNAL_FULL_PROJECT_DIRECTORY="${PROJECTS_BASE_DIRECTORY}${__INTERNAL_PROJECT_DIRECTORY_NAME}"
 
     if [[ -f "${__INTERNAL_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml" ]]; then
+        echo ""
+        echo "  INFO: Try to install nginx ingress controller..."
+        echo ""
+        local __SET_JENKINS_INGRESS_DISABLED=""
+
+        if [[ "false" == "${ARG_JENKINS_IS_EXISTING}" ]]; then
+            __SET_JENKINS_INGRESS_DISABLED="--set k8sJenkinsMgmt.ingress.enabled=false"
+            echo ""
+            echo "  INFO: No Jenkins Deployment found. Deactivating Jenkins ingress..."
+            echo ""
+        fi
         # install the nginx-ingress controller with loadbalancer and default route
-        helm install "${NGINX_INGRESS_DEPLOYMENT_NAME}" "${__INTERNAL_HELM_NGINX_INGRESS_PATH}" -n "${__INTERNAL_NAMESPACE}" -f "${__INTERNAL_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml"
+        helm install "${NGINX_INGRESS_DEPLOYMENT_NAME}" "${__INTERNAL_HELM_NGINX_INGRESS_PATH}" -n "${__INTERNAL_NAMESPACE}" -f "${__INTERNAL_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml" ${__SET_JENKINS_INGRESS_DISABLED}
     else
         echo ""
         echo "  INFO: No Nginx Helm values found..."

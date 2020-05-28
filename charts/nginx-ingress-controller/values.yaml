@@ -1,5 +1,6 @@
 k8sJenkinsMgmt:
   ingress:
+    enabled: true
     annotationIngressClass: nginx
     namespace: ""
     loadbalancerip: ""

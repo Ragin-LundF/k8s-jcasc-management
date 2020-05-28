@@ -9,7 +9,7 @@
 function selectInstallationTypeDialog() {
     if [[ -z "${K8S_MGMT_COMMAND}" ]]; then
         echo "Please select the command you want to execute:"
-        select WIZARD in "install" "uninstall" "upgrade" "encryptSecrets" "decryptSecrets" "applySecrets" "applySecretsToAll" "createProject" "createJenkinsUserPassword" "quit"; do
+        select WIZARD in "install" "uninstall" "upgrade" "encryptSecrets" "decryptSecrets" "applySecrets" "applySecretsToAll" "createProject" "createDeploymentOnlyProject" "createJenkinsUserPassword" "quit"; do
             case $WIZARD in
                 install) setCommandToInstall; break;;
                 uninstall) setCommandToUnInstall; break;;
@@ -19,6 +19,7 @@ function selectInstallationTypeDialog() {
                 applySecrets) setCommandToSecretsApply; break;;
                 applySecretsToAll) setCommandToSecretsApplyToAllNamespaces; break;;
                 createProject) setCommandToCreateProject; break;;
+                createDeploymentOnlyProject) setCommandToCreateDeploymentOnlyProject; break;;
                 createJenkinsUserPassword) setCommandToCreateJenkinsUserPassword; break;;
                 quit) exit 0; break;;
             esac
