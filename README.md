@@ -12,6 +12,8 @@
 * [How to use](#how-to-use)
   * [k8s-jcasc.sh arguments](#k8s-jcascsh-arguments)
   * [k8s-jcasc.sh commands](#k8s-jcascsh-commands)
+  * [Templates](#templates)
+    * [Sub-Templates (cloud-templates)](#sub-templates-cloud-templates)
 * [Execution of Scripts](#execution-of-scripts)
 * [IP Management](#ip-management)
 * [Additional tools](#additional-tools)
