@@ -176,16 +176,6 @@ function dialogAskForJenkinsSystemMessage() {
     eval ${ARG_RETVALUE}="\${__INTERNAL_JENKINS_SYSMSG}"
 }
 
-function cloudTemplatesChoiceToogle () {
-    local __INTERNAL_SELECTED_TEMPLATE=$1
-    if [[ ${opts[__INTERNAL_SELECTED_TEMPLATE]} ]] # toggle
-    then
-        opts[__INTERNAL_SELECTED_TEMPLATE]=
-    else
-        opts[__INTERNAL_SELECTED_TEMPLATE]=+
-    fi
-}
-
 ##########
 # Ask for Jenkins cloud templates if they exist.
 # If user is selecting file(s), the method returns the content.
@@ -225,7 +215,6 @@ function dialogAskForCloudTemplates() {
 
     eval ${ARG_RETVALUE}="\${__INTERNAL_JENKINS_CLOUD_CONTENT}"
 }
-
 
 ##########
 # Ask for existing persistence claim.
