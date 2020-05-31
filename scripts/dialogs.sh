@@ -176,6 +176,57 @@ function dialogAskForJenkinsSystemMessage() {
     eval ${ARG_RETVALUE}="\${__INTERNAL_JENKINS_SYSMSG}"
 }
 
+function cloudTemplatesChoiceToogle () {
+    local __INTERNAL_SELECTED_TEMPLATE=$1
+    if [[ ${opts[__INTERNAL_SELECTED_TEMPLATE]} ]] # toggle
+    then
+        opts[__INTERNAL_SELECTED_TEMPLATE]=
+    else
+        opts[__INTERNAL_SELECTED_TEMPLATE]=+
+    fi
+}
+
+##########
+# Ask for Jenkins cloud templates if they exist.
+# If user is selecting file(s), the method returns the content.
+#
+# argument 1: variable in which the result should be written (return value)
+##########
+function dialogAskForCloudTemplates() {
+    # arguments
+    local ARG_RETVALUE=$1
+    local __INTERNAL_CLOUD_TEMPLATES_SELECTION
+    local __INTERNAL_CLOUD_TEMPLATES_FOUND
+    findJenkinsCloudTemplates __INTERNAL_CLOUD_TEMPLATES_FOUND
+
+    # check if cloud templates were found
+    if [[ -n "${__INTERNAL_CLOUD_TEMPLATES_FOUND}" ]]; then
+        # prepare them for dialogs
+        for __CLOUD_TMPLP_IDX in "${!__INTERNAL_CLOUD_TEMPLATES_FOUND[@]}"
+        do
+            echo "$((__CLOUD_TMPLP_IDX+1)) - ${__INTERNAL_CLOUD_TEMPLATES_FOUND[__CLOUD_TMPLP_IDX]}"
+        done
+
+        # ask user for templates
+        echo "Enter the number(s) of the cloud templates you want to use. To select multiple templates, separate them with comma (,). Leave empty if you do not want to add a template."
+        read -p "Templates: " __INTERNAL_CLOUD_TEMPLATES_USER_ENTRIES
+        if [[ -n "${__INTERNAL_CLOUD_TEMPLATES_USER_ENTRIES}" ]]; then
+            __INTERNAL_CLOUD_TEMPLATES_USER_ENTRIES_ARR=(${__INTERNAL_CLOUD_TEMPLATES_USER_ENTRIES//,/ })
+            __INTERNAL_CLOUD_TEMPLATES_SELECTION=()
+            for __INTERNAL_CLOUD_TEMPLATES_USER_SELECT_IDX in "${__INTERNAL_CLOUD_TEMPLATES_USER_ENTRIES_ARR[@]}"
+            do
+                __INTERNAL_CLOUD_TEMPLATES_SELECTION=("${__INTERNAL_CLOUD_TEMPLATES_SELECTION[@]}" "${__INTERNAL_CLOUD_TEMPLATES_FOUND[$((__INTERNAL_CLOUD_TEMPLATES_USER_ENTRIES_ARR-1))]}" )
+            done
+        fi
+
+        # read content of selected templates
+        __INTERNAL_JENKINS_CLOUD_CONTENT=$(readSelectedCloudTemplates "${__INTERNAL_CLOUD_TEMPLATES_SELECTION[@]}")
+    fi
+
+    eval ${ARG_RETVALUE}="\${__INTERNAL_JENKINS_CLOUD_CONTENT}"
+}
+
+
 ##########
 # Ask for existing persistence claim.
 #

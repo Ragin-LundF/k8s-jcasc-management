@@ -249,10 +249,10 @@ function dialogAskForCloudTemplates() {
     # check if cloud templates were found
     if [[ -n "${__INTERNAL_CLOUD_TEMPLATES_FOUND}" ]]; then
         # prepare them for dialogs
-        local __INTERNAL_CLOUD_TEMPLATE_WHIPTAIL
+        local __INTERNAL_CLOUD_TEMPLATE_DIALOG
         for __INTERNAL_CLOUD_TEMPLATE in "${__INTERNAL_CLOUD_TEMPLATES_FOUND[@]}"
         do
-            __INTERNAL_CLOUD_TEMPLATE_WHIPTAIL="${__INTERNAL_CLOUD_TEMPLATE_WHIPTAIL} ${__INTERNAL_CLOUD_TEMPLATE} ___ OFF "
+            __INTERNAL_CLOUD_TEMPLATE_DIALOG="${__INTERNAL_CLOUD_TEMPLATE_DIALOG} ${__INTERNAL_CLOUD_TEMPLATE} ___ OFF "
         done
 
         # ask user for templates
@@ -262,7 +262,7 @@ function dialogAskForCloudTemplates() {
             --clear \
             --checklist \
             "Choose the templates you want to use for this Jenkins installation" 0 0 10 \
-            ${__INTERNAL_CLOUD_TEMPLATE_WHIPTAIL} \
+            ${__INTERNAL_CLOUD_TEMPLATE_DIALOG} \
             3>&1 1>&2 2>&3
         ))
 
