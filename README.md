@@ -305,6 +305,7 @@ At the `templates` directory contains the following:
 
 `k8s-jcasc-management` supports additional sub-templates to create projects with dynamic container configuration.
 These templates are located in the `./templates/cloud-templates/` directory.
+If this directory does not exist, the `create project` wizard will not ask for other sub-templates.
 
 All files stored there can be selected with the process/menu `create project` and will added to the `jcasc_config.yaml`. 
 
@@ -330,8 +331,7 @@ The file `jcasc_config.yaml` should now have a `##K8S_MGMT_JENKINS_CLOUD_TEMPLAT
 
 **It is important, that the placeholder is at the beginning of the line.**
 
-If a folder called `cloud-templates` is existing in the `templates` folder, then all files in this directory will be shown as possible cloud-templates.
-The user can then select which (none or multiple) sub-templates should be added to the main template.
+If files are inside of this directory, the user can then select which (none or multiple) sub-templates should be added to the main template.
 
 These sub-templates must also start on the beginning of the line.
 For an example have a look here: [templates/cloud-templates/node.yaml](./templates/cloud-templates/node.yaml)
