@@ -305,11 +305,11 @@ function projectWizard() {
     # target directory
     local __INTERNAL_FULL_PROJECT_DIRECTORY="${PROJECTS_BASE_DIRECTORY}${VAR_PROJECT_DIRECTORY}"
 
-    # all data collected -> start create new project
-    createProjectFromTemplate "${__INTERNAL_FULL_PROJECT_DIRECTORY}" "${VAR_EXISTING_PERSISTENCE_CLAIM}"
-
     # everything looks fine, lets add the IP address and namespace name to the configuration
     addIpToIpConfiguration "${VAR_IP_ADDRESS}" "${VAR_NAMESPACE}"
+
+    # all data collected -> start create new project
+    createProjectFromTemplate "${__INTERNAL_FULL_PROJECT_DIRECTORY}" "${VAR_EXISTING_PERSISTENCE_CLAIM}"
 
     # start processing the templates
     ## First process the cloud templates, because they contain things, that will be replaced later!

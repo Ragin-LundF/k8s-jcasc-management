@@ -192,9 +192,9 @@ function dialogAskForCloudTemplates() {
     # check if cloud templates were found
     if [[ -n "${__INTERNAL_CLOUD_TEMPLATES_FOUND}" ]]; then
         # prepare them for dialogs
-        for __CLOUD_TMPLP_IDX in "${!__INTERNAL_CLOUD_TEMPLATES_FOUND[@]}"
+        for __INTERNAL_CLOUD_TMPLP_IDX in "${!__INTERNAL_CLOUD_TEMPLATES_FOUND[@]}"
         do
-            echo "$((__CLOUD_TMPLP_IDX+1)) - ${__INTERNAL_CLOUD_TEMPLATES_FOUND[__CLOUD_TMPLP_IDX]}"
+            echo "$((__INTERNAL_CLOUD_TMPLP_IDX+1)) - ${__INTERNAL_CLOUD_TEMPLATES_FOUND[__INTERNAL_CLOUD_TMPLP_IDX]}"
         done
 
         # ask user for templates
@@ -203,9 +203,15 @@ function dialogAskForCloudTemplates() {
         if [[ -n "${__INTERNAL_CLOUD_TEMPLATES_USER_ENTRIES}" ]]; then
             __INTERNAL_CLOUD_TEMPLATES_USER_ENTRIES_ARR=(${__INTERNAL_CLOUD_TEMPLATES_USER_ENTRIES//,/ })
             __INTERNAL_CLOUD_TEMPLATES_SELECTION=()
+            # iterate over selection
             for __INTERNAL_CLOUD_TEMPLATES_USER_SELECT_IDX in "${__INTERNAL_CLOUD_TEMPLATES_USER_ENTRIES_ARR[@]}"
             do
-                __INTERNAL_CLOUD_TEMPLATES_SELECTION=("${__INTERNAL_CLOUD_TEMPLATES_SELECTION[@]}" "${__INTERNAL_CLOUD_TEMPLATES_FOUND[$((__INTERNAL_CLOUD_TEMPLATES_USER_ENTRIES_ARR-1))]}" )
+                # first, calc user entry -1 to be in sync with index and remove existing spaces
+                local __INTERNAL_CLOUD_TMPL_IDX_TRIM
+                __INTERNAL_CLOUD_TMPL_IDX_TRIM=$((__INTERNAL_CLOUD_TEMPLATES_USER_SELECT_IDX-1))
+                __INTERNAL_CLOUD_TMPL_IDX_TRIM=$(echo -e "${__INTERNAL_CLOUD_TMPL_IDX_TRIM}" | sed -e 's/[[:space:]]//')
+                # add filenames from original array to selection array
+                __INTERNAL_CLOUD_TEMPLATES_SELECTION=("${__INTERNAL_CLOUD_TEMPLATES_SELECTION[@]}" "${__INTERNAL_CLOUD_TEMPLATES_FOUND[${__INTERNAL_CLOUD_TMPL_IDX_TRIM}]}" )
             done
         fi
 
