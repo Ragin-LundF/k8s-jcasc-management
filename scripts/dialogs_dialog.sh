@@ -234,6 +234,46 @@ function dialogAskForJenkinsSystemMessage() {
 }
 
 ##########
+# Ask for Jenkins cloud templates if they exist.
+# If user is selecting file(s), the method returns the content.
+#
+# argument 1: variable in which the result should be written (return value)
+##########
+function dialogAskForCloudTemplates() {
+    # arguments
+    local ARG_RETVALUE=$1
+    local __INTERNAL_CLOUD_TEMPLATES_SELECTION
+    local __INTERNAL_CLOUD_TEMPLATES_FOUND
+    findJenkinsCloudTemplates __INTERNAL_CLOUD_TEMPLATES_FOUND
+
+    # check if cloud templates were found
+    if [[ -n "${__INTERNAL_CLOUD_TEMPLATES_FOUND}" ]]; then
+        # prepare them for dialogs
+        local __INTERNAL_CLOUD_TEMPLATE_WHIPTAIL
+        for __INTERNAL_CLOUD_TEMPLATE in "${__INTERNAL_CLOUD_TEMPLATES_FOUND[@]}"
+        do
+            __INTERNAL_CLOUD_TEMPLATE_WHIPTAIL="${__INTERNAL_CLOUD_TEMPLATE_WHIPTAIL} ${__INTERNAL_CLOUD_TEMPLATE} ___ OFF "
+        done
+
+        # ask user for templates
+        __INTERNAL_CLOUD_TEMPLATES_SELECTION=($(dialog \
+            --title "Select cloud templates" \
+            --backtitle "Select cloud templates" \
+            --clear \
+            --checklist \
+            "Choose the templates you want to use for this Jenkins installation" 0 0 10 \
+            ${__INTERNAL_CLOUD_TEMPLATE_WHIPTAIL} \
+            3>&1 1>&2 2>&3
+        ))
+
+        # read content of selected templates
+        __INTERNAL_JENKINS_CLOUD_CONTENT=$(readSelectedCloudTemplates "${__INTERNAL_CLOUD_TEMPLATES_SELECTION[@]}")
+    fi
+
+    eval ${ARG_RETVALUE}="\${__INTERNAL_JENKINS_CLOUD_CONTENT}"
+}
+
+##########
 # Ask for existing persistence claim.
 #
 # argument 1: variable in which the result should be written (return value)
