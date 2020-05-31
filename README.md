@@ -286,7 +286,54 @@ The following commands are supported:
 | `applysecrets` | Apply the secrets to the Kubernetes namespace (global secrets or project secrets, depending on configuration). |
 | `applySecretsToAll` | Apply the secrets to all known namespaces in Kubernetes (global secrets only). |
 | `createproject` | Create a new Jenkins project for the configuration and deployment values from the templates. It uses a wizard to ask for relevant data. |
+| `createdeploymentonlyproject` | Create a new project without Jenkins for deployments. This can be used to reserve/manage the IP inside the tool and to install a loadbalancer and ingress controller to this namespace. |
 | `createJenkinsUserPassword` | Create a new bcryted Jenkins user password with `htpasswd`. You can also use this online site to create a password: https://www.devglan.com/online-tools/bcrypt-hash-generator  |
+
+## Templates ##
+
+At the `templates` directory contains the following:
+- `cloud-templates` -> support for subsets for Jenkins Cloud templates
+- `jcasc_config.yaml` -> Jenkins Configuration as Code template
+- `jenkins_helm_values.yaml` -> Basic Jenkins configuration of the Helm Charts template
+- `nginx_ingress_helm_values.yaml` -> Nginx Ingress Controller Helm Chart values template
+- `pvc_claim.yaml` -> Template for Persistent Volume Claim
+- `secrets.sh` -> Example of secrets.sh script
+
+### Sub-Templates (cloud-templates) ###
+
+`k8s-jcasc-management` supports additional sub-templates to create projects with dynamic container configuration.
+These templates are located in the `./templates/cloud-templates/` directory.
+
+All files stored there can be selected with the process/menu `create project` and will added to the `jcasc_config.yaml`. 
+
+The file `jcasc_config.yaml` should now have a `##K8S_MGMT_JENKINS_CLOUD_TEMPLATES##` placeholder:
+
+```yaml
+  clouds:
+    - kubernetes:
+        name: "jenkins-build-slaves"
+        serverUrl: ""
+        serverCertificate: ##KUBERNETES_SERVER_CERTIFICATE##
+        directConnection: false
+        skipTlsVerify: true
+        namespace: "##NAMESPACE##"
+        jenkinsUrl: "http://##JENKINS_MASTER_DEPLOYMENT_NAME##:8080"
+        maxRequestsPerHostStr: 64
+        retentionTimeout: 5
+        connectTimeout: 10
+        readTimeout: 20
+        templates:
+##K8S_MGMT_JENKINS_CLOUD_TEMPLATES##
+```
+
+**It is important, that the placeholder is at the beginning of the line.**
+
+If a folder called `cloud-templates` is existing in the `templates` folder, then all files in this directory will be shown as possible cloud-templates.
+The user can then select which (none or multiple) sub-templates should be added to the main template.
+
+These sub-templates must also start on the beginning of the line.
+For an example have a look here: [templates/cloud-templates/node.yaml](./templates/cloud-templates/node.yaml)
+
 
 # Execution of Scripts #
 
