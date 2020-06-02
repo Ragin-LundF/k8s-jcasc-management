@@ -251,6 +251,26 @@ function createProjectFromTemplate() {
 }
 
 ##########
+# Process the cloud template configuration placeholder
+#
+# argument 1: directory of the project
+# argument 2: content of the selected templates
+##########
+function processTemplatesWithCloudTemplates() {
+    # arguments
+    local ARG_FULL_PROJECT_DIRECTORY=$1
+    local ARG_SELECTED_CLOUD_TEMPLATES=$2
+
+    if [[ -n "${ARG_SELECTED_CLOUD_TEMPLATES}" ]]; then
+        echo "${ARG_SELECTED_CLOUD_TEMPLATES}" | while IFS=$'\n' read __INTERNAL_CONTENT_AS_ARRAY; do
+            replaceStringInFile "##K8S_MGMT_JENKINS_CLOUD_TEMPLATES##" "          ${__INTERNAL_CONTENT_AS_ARRAY}\n##K8S_MGMT_JENKINS_CLOUD_TEMPLATES##" "${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml"
+        done
+    fi
+    # replace left template variable with empty comment
+    replaceStringInFile "##K8S_MGMT_JENKINS_CLOUD_TEMPLATES##" "          #" "${ARG_FULL_PROJECT_DIRECTORY}/jcasc_config.yaml"
+}
+
+##########
 # Project wizard delegation method to trigger dialogs and
 # execute the resulting actions
 #
@@ -260,6 +280,7 @@ function projectWizard() {
     local VAR_PROJECT_DIRECTORY
     local VAR_NAMESPACE
     local VAR_IP_ADDRESS
+    local VAR_CLOUD_TEMPLATES
     local VAR_JENKINS_SYSTEM_MESSAGE
     local VAR_JENKINS_JOB_CONFIGURATION_REPOSITORY
     local VAR_EXISTING_PERSISTENCE_CLAIM
@@ -276,6 +297,7 @@ function projectWizard() {
     # collect all information from dialogs
     dialogAskForNamespace VAR_NAMESPACE
     dialogAskForIpAddress VAR_IP_ADDRESS "${VAR_NAMESPACE}"
+    dialogAskForCloudTemplates VAR_CLOUD_TEMPLATES
     dialogAskForJenkinsSystemMessage VAR_JENKINS_SYSTEM_MESSAGE
     dialogAskForJenkinsJobConfigurationRepository VAR_JENKINS_JOB_CONFIGURATION_REPOSITORY
     dialogAskForExistingPersistenceClaim VAR_EXISTING_PERSISTENCE_CLAIM
@@ -283,13 +305,16 @@ function projectWizard() {
     # target directory
     local __INTERNAL_FULL_PROJECT_DIRECTORY="${PROJECTS_BASE_DIRECTORY}${VAR_PROJECT_DIRECTORY}"
 
-    # all data collected -> start create new project
-    createProjectFromTemplate "${__INTERNAL_FULL_PROJECT_DIRECTORY}" "${VAR_EXISTING_PERSISTENCE_CLAIM}"
-
     # everything looks fine, lets add the IP address and namespace name to the configuration
     addIpToIpConfiguration "${VAR_IP_ADDRESS}" "${VAR_NAMESPACE}"
 
+    # all data collected -> start create new project
+    createProjectFromTemplate "${__INTERNAL_FULL_PROJECT_DIRECTORY}" "${VAR_EXISTING_PERSISTENCE_CLAIM}"
+
     # start processing the templates
+    ## First process the cloud templates, because they contain things, that will be replaced later!
+    processTemplatesWithCloudTemplates "${__INTERNAL_FULL_PROJECT_DIRECTORY}" "${VAR_CLOUD_TEMPLATES}"
+
     ## Jenkins system message should be the first, because it overwrites the message, if a custom message was defined
     processTemplatesWithJenkinsSystemMessage "${__INTERNAL_FULL_PROJECT_DIRECTORY}" "${VAR_JENKINS_SYSTEM_MESSAGE}"
     processTemplatesWithJenkinsJobRepository "${__INTERNAL_FULL_PROJECT_DIRECTORY}" "${VAR_JENKINS_JOB_CONFIGURATION_REPOSITORY}"

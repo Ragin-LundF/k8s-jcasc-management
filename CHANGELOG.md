@@ -1,3 +1,36 @@
+# 1.12.0
+Adding support for cloud template selection
+
+In this release it is possible to create the project configurations more dynamically by selecting different cloud templates.
+The file `jcasc_config.yaml` should now have a `##K8S_MGMT_JENKINS_CLOUD_TEMPLATES##` placeholder:
+
+```yaml
+  clouds:
+    - kubernetes:
+        name: "jenkins-build-slaves"
+        serverUrl: ""
+        serverCertificate: ##KUBERNETES_SERVER_CERTIFICATE##
+        directConnection: false
+        skipTlsVerify: true
+        namespace: "##NAMESPACE##"
+        jenkinsUrl: "http://##JENKINS_MASTER_DEPLOYMENT_NAME##:8080"
+        maxRequestsPerHostStr: 64
+        retentionTimeout: 5
+        connectTimeout: 10
+        readTimeout: 20
+        templates:
+##K8S_MGMT_JENKINS_CLOUD_TEMPLATES##
+```
+
+**It is important, that the placeholder is at the beginning of the line.**
+
+If a folder called `cloud-templates` is existing in the `templates` folder, then all files in this directory will be shown as possible cloud-templates.
+The user can then select which (none or multiple) sub-templates should be added to the main template.
+
+These sub-templates must also start on the beginning of the line.
+For an example have a look here: [templates/cloud-templates/node.yaml](./templates/cloud-templates/node.yaml)
+
+
 # 1.11.0
 Adding support to disable Jenkins ingress as default while installing ingress controller.
 
@@ -8,11 +41,11 @@ To create the needed project, there is a new menu point called `createDeployment
 The installation for such projects is looking for Jenkins Helm Chart values and if they are not available it skips the installation of Jenkins and sets an internal flag to prevent the installation of a Jenkins ingress routing.
 
 
-
 # 1.10.1
 Hotfix for MacOS/BSD
 
 MacOS/BSD does not support `find -printf`. Now it uses the default `ls` command for directory listening.
+
 
 # 1.10.0
 Shell script support and directory selection.
@@ -42,7 +75,6 @@ k8smanagement:
     # list of additional namespaces that should be deployable (adds RBAC roles to those namespaces)
     additionalNamespaces: []
 ```
-
 
 # 1.8.0 #
 - Improved scripts
