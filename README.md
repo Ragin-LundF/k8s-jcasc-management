@@ -13,7 +13,7 @@
   * [k8s-jcasc.sh arguments](#k8s-jcascsh-arguments)
   * [k8s-jcasc.sh commands](#k8s-jcascsh-commands)
   * [Templates](#templates)
-    * [Deployment only Namespaces](#deployment-only-namespaces)
+    * [Deployment-only Namespaces](#deployment-only-namespaces)
     * [Sub-Templates (cloud-templates)](#sub-templates-cloud-templates)
 * [Execution of Scripts](#execution-of-scripts)
 * [IP Management](#ip-management)
@@ -302,7 +302,7 @@ At the `templates` directory contains the following:
 - `pvc_claim.yaml` -> Template for Persistent Volume Claim
 - `secrets.sh` -> Example of secrets.sh script
 
-### Deployment only Namespaces ###
+### Deployment-only Namespaces ###
 
 `jenkins_helm_values.yaml` offers the possibility to add other namespaces for a Jenkins instance, that should deploy.
 The default for this section is empty:
