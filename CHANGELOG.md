@@ -1,7 +1,7 @@
 # 1.12.0
 Adding support for cloud template selection
 
-In this release it is possible to create the project configurations more dynamically by selecting different cloud templates.
+In this release, it is possible to create the project configurations more dynamically by selecting different cloud templates.
 The file `jcasc_config.yaml` should now have a `##K8S_MGMT_JENKINS_CLOUD_TEMPLATES##` placeholder:
 
 ```yaml
@@ -27,7 +27,7 @@ The file `jcasc_config.yaml` should now have a `##K8S_MGMT_JENKINS_CLOUD_TEMPLAT
 If a folder called `cloud-templates` is existing in the `templates` folder, then all files in this directory will be shown as possible cloud-templates.
 The user can then select which (none or multiple) sub-templates should be added to the main template.
 
-These sub-templates must also start on the beginning of the line.
+These sub-templates must also start at the beginning of the line.
 For an example have a look here: [templates/cloud-templates/node.yaml](./templates/cloud-templates/node.yaml)
 
 
