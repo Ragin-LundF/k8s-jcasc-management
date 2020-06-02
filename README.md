@@ -13,6 +13,7 @@
   * [k8s-jcasc.sh arguments](#k8s-jcascsh-arguments)
   * [k8s-jcasc.sh commands](#k8s-jcascsh-commands)
   * [Templates](#templates)
+    * [Deployment only Namespaces](#deployment-only-namespaces)
     * [Sub-Templates (cloud-templates)](#sub-templates-cloud-templates)
 * [Execution of Scripts](#execution-of-scripts)
 * [IP Management](#ip-management)
@@ -300,6 +301,40 @@ At the `templates` directory contains the following:
 - `nginx_ingress_helm_values.yaml` -> Nginx Ingress Controller Helm Chart values template
 - `pvc_claim.yaml` -> Template for Persistent Volume Claim
 - `secrets.sh` -> Example of secrets.sh script
+
+### Deployment only Namespaces ###
+
+`jenkins_helm_values.yaml` offers the possibility to add other namespaces for a Jenkins instance, that should deploy.
+The default for this section is empty:
+
+```yaml
+[...]
+k8smanagement:
+  rbac:
+    # list of additional namespaces that should be deployable (adds RBAC roles to those namespaces)
+    additionalNamespaces: {}
+```
+
+To let the Jenkins install applications into other namespaces, these namespaces can be added here.
+It is not required to add the namespace in which the Jenkins instance is running.
+The Helm Chart will then add additional `Roles` and `RoleBindings` to these namespaces for this instance. 
+
+*This is currently a manual process after creating a new project!*
+
+**Example:**
+In this example we add the namespaces `myapplication-qa`, `myapplication-preview` and `myapplication-production` to this Jenkins instance.
+After this was deployed, Jenkins can now deploy the application into them. 
+
+```yaml
+[...]
+k8smanagement:
+  rbac:
+    # list of additional namespaces that should be deployable (adds RBAC roles to those namespaces)
+    additionalNamespaces:
+      - myapplication-qa
+      - myapplication-preview
+      - myapplication-production
+```
 
 ### Sub-Templates (cloud-templates) ###
 
