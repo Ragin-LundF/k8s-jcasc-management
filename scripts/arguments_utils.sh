@@ -78,6 +78,10 @@ function processArguments() {
                 JENKINS_MASTER_DEPLOYMENT_NAME="${i#*=}"
                 shift # past argument=value
             ;;
+            -o=*|--output-dry-run-file=*)
+                K8S_MGMT_YAML_OUTPUT_FILE="${i#*=}"
+                shift # past argument=value
+            ;;
 
             ## arguments
             # install Jenkins

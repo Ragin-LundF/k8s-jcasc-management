@@ -159,7 +159,26 @@ function installOrUpgradeJenkins() {
         echo ""
         echo "  INFO: Installing Jenkins..."
         echo ""
-        helm "${__INTERNAL_HELM_COMMAND}" "${JENKINS_MASTER_DEPLOYMENT_NAME}" "${__INTERNAL_HELM_JENKINS_PATH}" -n "${K8S_MGMT_NAMESPACE}" -f "${__INTERNAL_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml"
+
+        # if output logging is active, prepare it
+        local __INTERNAL_COMMAND_EXTENSION=""
+        if [[ -n "${K8S_MGMT_YAML_OUTPUT_FILE}" ]]; then
+            {
+                date
+                echo "K8S_MGMT COMMAND:"
+                echo "================="
+                echo "helm ${__INTERNAL_HELM_COMMAND} ${JENKINS_MASTER_DEPLOYMENT_NAME} ${__INTERNAL_HELM_JENKINS_PATH} -n ${K8S_MGMT_NAMESPACE} -f ${__INTERNAL_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml"
+            } >> "${K8S_MGMT_YAML_OUTPUT_FILE}"
+            __INTERNAL_COMMAND_EXTENSION="--dry-run --debug"
+        fi
+
+        # Execute command and print output
+        local __INTERNAL_JENKINS_INSTALL_OUTPUT
+        __INTERNAL_JENKINS_INSTALL_OUTPUT=$(helm "${__INTERNAL_HELM_COMMAND}" "${JENKINS_MASTER_DEPLOYMENT_NAME}" "${__INTERNAL_HELM_JENKINS_PATH}" -n "${K8S_MGMT_NAMESPACE}" ${__INTERNAL_COMMAND_EXTENSION} -f "${__INTERNAL_FULL_PROJECT_DIRECTORY}/jenkins_helm_values.yaml")
+        echo "${__INTERNAL_JENKINS_INSTALL_OUTPUT}"
+        if [[ -n "${K8S_MGMT_YAML_OUTPUT_FILE}" ]]; then
+            echo "${__INTERNAL_JENKINS_INSTALL_OUTPUT}" >> ${K8S_MGMT_YAML_OUTPUT_FILE}
+        fi
     else
         __JENKINS_HELM_CHARTS_EXISTING="false"
         echo ""
@@ -207,7 +226,25 @@ function installIngressControllerToNamespace() {
             echo ""
         fi
         # install the nginx-ingress controller with loadbalancer and default route
-        helm install "${NGINX_INGRESS_DEPLOYMENT_NAME}" "${__INTERNAL_HELM_NGINX_INGRESS_PATH}" -n "${__INTERNAL_NAMESPACE}" -f "${__INTERNAL_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml" ${__SET_JENKINS_INGRESS_DISABLED}
+        # if output logging is active, prepare it
+        local __INTERNAL_COMMAND_EXTENSION=""
+        if [[ -n "${K8S_MGMT_YAML_OUTPUT_FILE}" ]]; then
+            {
+                date
+                echo "K8S_MGMT COMMAND:"
+                echo "================="
+                echo "helm install ${NGINX_INGRESS_DEPLOYMENT_NAME} ${__INTERNAL_HELM_NGINX_INGRESS_PATH} -n ${__INTERNAL_NAMESPACE} -f ${__INTERNAL_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml ${__SET_JENKINS_INGRESS_DISABLED}"
+            } >> "${K8S_MGMT_YAML_OUTPUT_FILE}"
+            __INTERNAL_COMMAND_EXTENSION="--dry-run --debug"
+        fi
+
+        # Execute command and write output
+        local __INTERNAL_INSTALL_NGINX_OUTPUT
+        __INTERNAL_INSTALL_NGINX_OUTPUT=$(helm install "${NGINX_INGRESS_DEPLOYMENT_NAME}" "${__INTERNAL_HELM_NGINX_INGRESS_PATH}" -n "${__INTERNAL_NAMESPACE}" ${__INTERNAL_COMMAND_EXTENSION} -f "${__INTERNAL_FULL_PROJECT_DIRECTORY}/nginx_ingress_helm_values.yaml" ${__SET_JENKINS_INGRESS_DISABLED})
+        echo "${__INTERNAL_INSTALL_NGINX_OUTPUT}"
+        if [[ -n "${K8S_MGMT_YAML_OUTPUT_FILE}" ]]; then
+             echo "${__INTERNAL_INSTALL_NGINX_OUTPUT}" >> ${K8S_MGMT_YAML_OUTPUT_FILE}
+        fi
     else
         echo ""
         echo "  INFO: No Nginx Helm values found..."
@@ -225,7 +262,22 @@ function uninstallIngressControllerFromNamespace() {
     dialogAskForNamespace __INTERNAL_NAMESPACE
 
     # uninstall the nginx-ingress controller
-    helm uninstall "${NGINX_INGRESS_DEPLOYMENT_NAME}" -n "${__INTERNAL_NAMESPACE}"
+    local __INTERNAL_COMMAND_EXTENSION=""
+    if [[ -n "${K8S_MGMT_YAML_OUTPUT_FILE}" ]]; then
+        {
+            date
+            echo "K8S_MGMT COMMAND:"
+            echo "================="
+            echo "helm uninstall ${NGINX_INGRESS_DEPLOYMENT_NAME} -n ${__INTERNAL_NAMESPACE}"
+        } >> "${K8S_MGMT_YAML_OUTPUT_FILE}"
+        __INTERNAL_COMMAND_EXTENSION=" --dry-run --debug"
+    fi
+    local __INTERNAL_NGINX_UNINSTALL_OUTPUT
+    __INTERNAL_NGINX_UNINSTALL_OUTPUT=$(helm uninstall "${NGINX_INGRESS_DEPLOYMENT_NAME}" -n "${__INTERNAL_NAMESPACE}" ${__INTERNAL_COMMAND_EXTENSION})
+    echo "${__INTERNAL_NGINX_UNINSTALL_OUTPUT}"
+    if [[ -n "${K8S_MGMT_YAML_OUTPUT_FILE}" ]]; then
+        echo "${__INTERNAL_NGINX_UNINSTALL_OUTPUT}" >> ${K8S_MGMT_YAML_OUTPUT_FILE}
+    fi
 }
 
 ##########
@@ -238,7 +290,25 @@ function uninstallJenkins() {
     local __INTERNAL_HELM_DEPLOYMENT_NAME
     dialogAskForDeploymentName __INTERNAL_HELM_DEPLOYMENT_NAME
 
-    helm uninstall "${__INTERNAL_HELM_DEPLOYMENT_NAME}" -n "${__INTERNAL_NAMESPACE}"
+    # prepare output or debugging
+    local __INTERNAL_COMMAND_EXTENSION=""
+    if [[ -n "${K8S_MGMT_YAML_OUTPUT_FILE}" ]]; then
+        {
+            date
+            echo "K8S_MGMT COMMAND:"
+            echo "================="
+            echo "helm uninstall ${__INTERNAL_HELM_DEPLOYMENT_NAME} -n ${__INTERNAL_NAMESPACE}"
+        } >> "${K8S_MGMT_YAML_OUTPUT_FILE}"
+        __INTERNAL_COMMAND_EXTENSION=" --dry-run --debug"
+    fi
+
+    # Execute command
+    local __INTERNAL_JENKINS_UNINSTALL_OUTPUT
+    __INTERNAL_JENKINS_UNINSTALL_OUTPUT=$(helm uninstall "${__INTERNAL_HELM_DEPLOYMENT_NAME}" -n "${__INTERNAL_NAMESPACE}" ${__INTERNAL_COMMAND_EXTENSION})
+    echo "${__INTERNAL_JENKINS_UNINSTALL_OUTPUT}"
+    if [[ -n "${K8S_MGMT_YAML_OUTPUT_FILE}" ]]; then
+        echo "${__INTERNAL_JENKINS_UNINSTALL_OUTPUT}" >> ${K8S_MGMT_YAML_OUTPUT_FILE}
+    fi
 
     # lookup for scripts to execute if namespace name = directory name
     if [[ -d "${PROJECTS_BASE_DIRECTORY}${__INTERNAL_NAMESPACE}/scripts/" ]]; then
