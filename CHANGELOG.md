@@ -1,3 +1,8 @@
+# 1.12.1
+Hotfix version for deployment RBAC.
+
+This release adds `extensions` to ingress roles to avoid deployment problems. 
+
 # 1.12.0
 Adding support for cloud template selection
 

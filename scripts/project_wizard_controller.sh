@@ -241,8 +241,6 @@ function createProjectFromTemplate() {
         cp "${TEMPLATES_BASE_DIRECTORY}jenkins_helm_values.yaml" "${ARG_PROJECT_DIRECTORY}/"
         # copy JcasC file to project
         cp "${TEMPLATES_BASE_DIRECTORY}jcasc_config.yaml" "${ARG_PROJECT_DIRECTORY}/"
-        # copy ingress values template
-        cp "${TEMPLATES_BASE_DIRECTORY}nginx_ingress_helm_values.yaml" "${ARG_PROJECT_DIRECTORY}/"
 
         if [[ -n "${ARG_PVC_CLAIM}" ]]; then
             cp "${TEMPLATES_BASE_DIRECTORY}pvc_claim.yaml" "${ARG_PROJECT_DIRECTORY}/"
