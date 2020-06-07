@@ -1,3 +1,6 @@
+# Hint #
+This tool is also available as Go-Version under https://github.com/Ragin-LundF/k8s-jcasc-management-go with enhanced features.
+
 # Table of content #
 
 * [Kubernetes Jenkins as Code management](#kubernetes-jenkins-as-code-management)
