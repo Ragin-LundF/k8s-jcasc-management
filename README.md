@@ -1,5 +1,5 @@
-# Hint #
-This tool is also available as Go-Version under https://github.com/Ragin-LundF/k8s-jcasc-management-go with enhanced features.
+# Deprecated and new tool #
+This tool is now available as Go-Version under https://github.com/Ragin-LundF/k8s-jcasc-management-go with enhanced features.
 
 # Table of content #
 
