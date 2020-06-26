@@ -275,6 +275,7 @@ The following arguments are supported:
 | `-p=` or `--projectdir=` | Defines the project directory (or project name) of the Jenkins configuration. This directory is a subdirectory of the configured `PROJECTS_BASE_DIRECTORY` | `-p=myproject` or `--projectdir=myproject` |
 | `-n=` or `--namespace=` | Defines the target namespace in Kubernetes. It is not used for encrypting or decrypting secrets. | `-n=jenkins-namespace` or `--namespace=jenkins-namespace` |
 | `-d=` or `--deploymentname=` | Defines the deployment name, which is relevant only for `install` and `uninstall`. This can also be configured globally for all projects as `JENKINS_MASTER_DEPLOYMENT_NAME` in the config file. | `-d=jenkins-master` or `--deploymentname=jenkins-master` |
+| `-o=` or `--output-dry-run-file` | Executes `helm` commands with `--dry-run --debug` option and writes the output into the given file | `-o=./debug.log` or `--output-dry-run-file=./debug.log` |
 | `--nodialog` | If `dialog` is installed, but you dont want to use it | n/a | 
 
 ## k8s-jcasc.sh commands ##
